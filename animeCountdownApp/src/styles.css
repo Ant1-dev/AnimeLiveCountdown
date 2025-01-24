@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    background-color: #0B0C10;
+    color: #C5C6C7;
+    font-family: "Roboto";
+    max-width: 1100px;
+    margin: auto;
+}
+
+.sectionHeader {
+    margin-top: 100px;
+}
+
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15%, 200px));
+    gap: 20px;
+    grid-auto-rows: auto;
+}
+
+.card {
+    width: 100%;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: center;
+    padding-top: 23px;
+    margin-top: -20px;
+    overflow: hidden;
+    font-size: 17px;
+}
+
+.poster {
+    width: 100%;
+    border-radius: 5px;
+}
