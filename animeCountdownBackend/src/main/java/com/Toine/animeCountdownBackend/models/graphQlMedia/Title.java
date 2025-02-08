@@ -11,15 +11,7 @@ public class Title {
         return english;
     }
 
-    public void setEnglish(String english) {
-        this.english = english;
-    }
-
     public String getRomaji() {
         return romaji;
-    }
-
-    public void setRomaji(String romaji) {
-        this.romaji = romaji;
     }
 }

@@ -7,7 +7,4 @@ public class AnimeResponse {
         return page;
     }
 
-    public void setPage(Page page) {
-        this.page = page;
-    }
 }

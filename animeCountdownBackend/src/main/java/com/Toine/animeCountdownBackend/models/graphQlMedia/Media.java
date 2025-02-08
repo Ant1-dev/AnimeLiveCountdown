@@ -15,14 +15,6 @@ public class Media {
         return title;
     }
 
-    public void setNextAiringEpisode(NextAiringEpisode nextAiringEpisode) {
-        this.nextAiringEpisode = nextAiringEpisode;
-    }
-
-    public void setCoverImage(CoverImage coverImage) {
-        this.coverImage = coverImage;
-    }
-
     public String getStatus() {
         return status;
     }
