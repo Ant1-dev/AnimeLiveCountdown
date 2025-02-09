@@ -1,0 +1,12 @@
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/AnimeCountdownBackendApplication.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/config/GraphQlClientConfig.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/controllers/ScheduleController.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/AnimeResponse.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/CoverImage.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/Media.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/NextAiringEpisode.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/Page.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/graphQlMedia/Title.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/models/postgreEntities/MediaEntity.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/repositories/MediaRepository.java
+/Users/antoinemorrison/Desktop/AnimeCountdown1/animeCountdownBackend/src/main/java/com/Toine/animeCountdownBackend/services/ScheduleService.java
