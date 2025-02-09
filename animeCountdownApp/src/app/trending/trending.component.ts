@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './trending.component.css'
 })
 export class TrendingComponent {
-   currentDate = new Date();
+   
 }

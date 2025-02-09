@@ -1,0 +1,24 @@
+
+.card {
+    width: 100%;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: center;
+    padding-top: 23px;
+    margin-top: -20px;
+    overflow: hidden;
+    font-size: 17px;
+}
+
+.poster {
+    width: 100%;
+    border-radius: 5px;
+}

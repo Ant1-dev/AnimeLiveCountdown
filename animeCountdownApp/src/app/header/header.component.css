@@ -28,12 +28,14 @@
 input[type=text] {
     color: #C5C6C7;
     background-color: #0B0C10;
+    width: 100%;
     font-size: 16px;
     padding: 10px;
     border-radius: 10px;
     border: none;
     outline: none;
     padding: 0.5rem;
+    border-radius: inherit;
 }
 
 .searchBar:hover {
@@ -62,5 +64,25 @@ input[type=text] {
 .newNotif:hover {
     background-color: #a9a9a9 ;
     color: #0B0C10;
+    cursor: pointer;
 }
 
+.notification {
+    border-radius: 100px;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+.notification:hover {
+    cursor: pointer;
+    background-color: #a9a9a945;
+}
+
+.profile {
+    border-radius: 100px;
+}
+
+.profile:hover {
+    cursor: pointer;
+    box-shadow: 0 0 5px #a9a9a9;
+}
