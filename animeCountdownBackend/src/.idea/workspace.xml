@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="70efb75b-d874-40ee-a38a-4168175d17a3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/airing-soon/airing-soon.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/airing-soon/airing-soon.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/airing-soon/airing-soon.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/footer/footer.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/footer/footer.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/header/header.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/header/header.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/header/header.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/header/header.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/schedule.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/schedule.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/trending/trending.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/trending/trending.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/trending/trending.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/shows/show/show.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/shows/show/show.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/shows/shows.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/shows/shows.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/weekly-schedule.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../animeCountdownApp/src/app/weekly-schedule/weekly-schedule.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Ant1-dev"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Ant1-dev/AnimeLiveCountdown.git",
+    "accountId": "c54bc028-dc4c-4ba2-9508-dfa7ec6e905e"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2sogEDIEXeUoAVoLHIiy6usbjmT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/antoinemorrison/Desktop/AnimeLiveCountdown/animeCountdownBackend/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.153" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="70efb75b-d874-40ee-a38a-4168175d17a3" name="Changes" comment="" />
+      <created>1739127227326</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739127227326</updated>
+      <workItem from="1739127228412" duration="737000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
+import { Media } from '../../../schedule.model';
 
 @Component({
   selector: 'app-show',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './show.component.html',
-  styleUrl: './show.component.css'
+  styleUrl: './show.component.css',
 })
-export class ShowComponent {
-  currentDate = new Date();
+export class ShowComponent implements OnInit {
+  media = input<Media | undefined>(undefined);
+  ngOnInit(): void {
+    console.log('show is:', this.media());
+  }
 }

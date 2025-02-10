@@ -1,7 +1,15 @@
 <div class="card">
   <div class="cardBody">
-    <div class="airingDate">{{ currentDate | date : "d:hh:mm:ss" }}</div>
-    <img class="poster" src="/oshikoseason2.jpg" alt="Oshi no ko" />
-    <div class="cardFooter">Oshi no Ko Season 2</div>
+    <div class="airingDate">
+      {{ media()?.next_Airing_At | date : "d:hh:mm:ss" }}
+    </div>
+    <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
+    <div class="cardFooter">
+      @if (media()?.title_English != null) {
+      {{ media()?.title_English }}
+      } @else {
+      {{ media()?.title_Romaji }}
+      }
+    </div>
   </div>
 </div>

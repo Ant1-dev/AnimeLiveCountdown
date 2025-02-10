@@ -1,9 +1,10 @@
 export interface Media {
     id: number;
-    titleRomaji: string;
+    title_Romaji: string;
+    title_English: string;
     status: string;
-    nextAiringAt: Date;
-    nextAiringEpisode: number;
-    coverImageUrl: string;
+    next_Airing_At: Date;
+    next_Airing_Episode: number;
+    cover_Image_Url: string;
     day: string;
 }

@@ -11,7 +11,7 @@
 .logo {
     height: 30px;
     width: 30px;
-    border-radius: 100%;
+    border-radius: 100px;
     outline: solid white;
 }
 
@@ -80,9 +80,11 @@ input[type=text] {
 
 .profile {
     border-radius: 100px;
+    overflow: visible;
 }
 
 .profile:hover {
     cursor: pointer;
+    overflow: visible;
     box-shadow: 0 0 5px #a9a9a9;
 }

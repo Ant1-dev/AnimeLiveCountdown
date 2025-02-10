@@ -1,1 +1,6 @@
-<div class="cardContainer"><app-show /></div>
+<div class="cardContainer">
+
+    @for (show of media(); track show.id; let i = $index) {
+        <app-show [media]="media()[i]"/>
+     }
+</div>
