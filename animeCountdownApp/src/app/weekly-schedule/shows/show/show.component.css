@@ -22,3 +22,9 @@
     width: 100%;
     border-radius: 5px;
 }
+
+.airingDate {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+}
