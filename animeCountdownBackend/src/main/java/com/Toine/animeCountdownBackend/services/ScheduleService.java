@@ -51,7 +51,7 @@ public class ScheduleService {
         entity.setTitle_English(media.getTitle().getEnglish());
         entity.setStatus(media.getStatus());
 
-        if (media.getNextAiringEpisode().getAiringAt() != null) {
+        if (media.getNextAiringEpisode() != null && media.getNextAiringEpisode().getAiringAt() != null) {
             Instant airingTime = Instant.ofEpochSecond(media.getNextAiringEpisode().getAiringAt());
             entity.setNext_Airing_At(airingTime);
             entity.setNext_Airing_Episode(media.getNextAiringEpisode().getEpisode());

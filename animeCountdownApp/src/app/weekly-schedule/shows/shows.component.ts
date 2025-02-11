@@ -23,8 +23,9 @@ export class ShowsComponent implements OnInit {
         .renderWeekdayMedia(this.weekDay(), this.error())
         .subscribe({
             next: (media) => {
-                this.media.set(media);
-                console.log(this.media());
+                if (media != undefined) {
+                    this.media.set(media);
+                }
             },
             error: (error) => {
                 console.log(error);

@@ -20,11 +20,16 @@
 
 .poster {
     width: 100%;
-    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;    
 }
 
 .airingDate {
     display: flex;
     justify-content: center;
-    font-size: 30px;
+    flex-direction: row;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 25px;
+    background-color: gray;
 }

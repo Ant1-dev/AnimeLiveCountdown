@@ -1,7 +1,11 @@
 <div class="card">
   <div class="cardBody">
     <div class="airingDate">
-      {{ media()?.next_Airing_At | date : "d:hh:mm:ss" }}
+      <!-- <div class="days"><div class="day">{{ day() }}</div></div>
+      <div class="hours"><div class="hour">{{ hour() }}</div></div>
+      <div class="minutes"><div class="minute">{{ minute() }}</div></div>
+      <div class="seconds"><div class="second">{{ day() }}</div></div> -->
+      {{ timeLeft() | date : "d'd 'hh'h 'mm'm 'ss's'" }}
     </div>
     <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
     <div class="cardFooter">
