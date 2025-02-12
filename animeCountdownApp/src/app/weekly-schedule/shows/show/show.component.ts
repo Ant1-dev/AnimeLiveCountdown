@@ -26,7 +26,8 @@ export class ShowComponent implements OnInit {
     // Early return if no media data
     if (!mediaData) {
         console.log('No media data available');
-        this.timeLeft.set("000000");
+        this.timeLeft.set("523");
+        console.log("no data");
         return;
     }
 
@@ -41,12 +42,15 @@ export class ShowComponent implements OnInit {
                 const remainingTime = this.airingTime - currentTime;
                 if (remainingTime > 0) {
                     this.timeLeft.set(new Date(remainingTime));
+                    console.log('its working');
                 } else {
                     this.timeLeft.set("0");
+                    console.log("Remaining time is 0");
                     subscription.unsubscribe();
                 }
             } else {
                 this.timeLeft.set("0");
+                console.log("not this one aldkf", this.airingTime, mediaData);
                 subscription.unsubscribe();
             }
         });

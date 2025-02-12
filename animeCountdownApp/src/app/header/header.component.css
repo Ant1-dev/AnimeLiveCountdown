@@ -88,3 +88,25 @@ input[type=text] {
     overflow: visible;
     box-shadow: 0 0 5px #a9a9a9;
 }
+
+@media screen and (max-width: 600px) {
+    .header {
+        position: relative;
+        min-height: 300px;
+    }
+    
+    .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: url(/hiroshima.jpg);
+        background-size: cover;
+        background-position: center;
+        width: 100%;
+        height: 100%;
+        opacity: 0.2;
+        z-index: -1;
+    }
+}
+

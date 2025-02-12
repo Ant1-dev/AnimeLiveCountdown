@@ -7,37 +7,16 @@
     margin: auto;
 }
 
-.sectionHeader {
-    margin-top: 100px;
-}
+@media screen and (max-width: 600px) {
+    :root {
+        margin: 10px;
+        max-width: 100vw;
+    }
 
-.cardContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15%, 200px));
-    gap: 20px;
-    grid-auto-rows: auto;
-}
-
-.card {
-    width: 100%;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.card:hover {
-    transform: scale(1.01);
-}
-
-.cardFooter {
-    display: flex;
-    justify-content: center;
-    padding-top: 23px;
-    margin-top: -20px;
-    overflow: hidden;
-    font-size: 17px;
-}
-
-.poster {
-    width: 100%;
-    border-radius: 5px;
+    .weekSection {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
 }

@@ -31,5 +31,19 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     font-size: 25px;
-    background-color: gray;
+    background-color: rgb(128, 128, 128, 0.2);
+}
+
+@media screen and (max-width: 600px) {
+    .airingDate {
+        font-size: 15px;
+    }
+    .cardFooter {
+        display: flex;
+        justify-content: start;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
 }

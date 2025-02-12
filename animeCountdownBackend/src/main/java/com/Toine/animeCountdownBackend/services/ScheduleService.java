@@ -4,17 +4,14 @@ import com.Toine.animeCountdownBackend.models.graphQlMedia.Media;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Page;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.graphql.client.HttpGraphQlClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 
 @Service
 public class ScheduleService {
@@ -36,8 +33,7 @@ public class ScheduleService {
 
     @Transactional
     public void saveCurrentlyAiringAnime() {
-        getCurrentlyAiringAnime()
-                .flatMapMany(page -> Flux.fromIterable(page.getMedia()))
+        fetchAllCurrentlyAiringAnime(1) // Start from page 1
                 .map(this::convertToEntity)
                 .collectList()
                 .doOnNext(mediaRepository::saveAll)
@@ -67,41 +63,44 @@ public class ScheduleService {
     }
 
 
-    public Mono<Page> getCurrentlyAiringAnime() {
+    public Flux<Media> fetchAllCurrentlyAiringAnime(int page) {
         String query = """
-                query {
-                  Page(page: 1, perPage: 500) {
-                    media(
-                      type: ANIME
-                      status: RELEASING
-                      sort: POPULARITY_DESC
-                    ) {
-                      id
-                      title {
-                        english
-                        romaji
-                      }
-                      status
-                      nextAiringEpisode {
-                        airingAt
-                        episode
-                      }
-                      coverImage {
-                        large
-                      }
-                    }
-                  }
-                }
-                """;
+        query ($page: Int) {
+          Page(page: $page, perPage: 50) {
+            media(
+              isAdult: false
+              type: ANIME
+              status: RELEASING
+              sort: POPULARITY_DESC
+            ) {
+              id
+              title {
+                english
+                romaji
+              }
+              status
+              nextAiringEpisode {
+                airingAt
+                episode
+              }
+              coverImage {
+                large
+              }
+            }
+          }
+        }
+    """;
+
         return graphQlClient.document(query)
+                .variable("page", page)
                 .retrieve("Page")
                 .toEntity(Page.class)
-                .doOnNext(page -> {
-                    try {
-                        System.out.println("raw api response: " + objectMapper.writeValueAsString(page));
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                .flatMapMany(p -> {
+                    if (p.getMedia().isEmpty()) {
+                        return Flux.empty(); // Stop when no more data
                     }
+                    return Flux.fromIterable(p.getMedia())
+                            .concatWith(fetchAllCurrentlyAiringAnime(page + 1)); // Recursively fetch next page
                 });
     }
 }

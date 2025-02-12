@@ -41,8 +41,8 @@ public class MediaEntity {
         this.status = status;
     }
 
-    public void setNext_Airing_At(Instant nextAiringAt) {
-        this.next_Airing_At = nextAiringAt;
+    public void setNext_Airing_At(Instant next_Airing_At) {
+        this.next_Airing_At = next_Airing_At;
     }
 
     public void setNext_Airing_Episode(Integer nextAiringEpisode) {
