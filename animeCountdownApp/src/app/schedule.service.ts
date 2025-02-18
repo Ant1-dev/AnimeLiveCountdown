@@ -10,7 +10,7 @@ export class ScheduleService {
   private url: string = 'http://localhost:8080/api/airing/'
   private httpClient = inject(HttpClient);
 
-  renderWeekdayMedia(weekDay: string, errorMessage: string) {
+  renderMedia(weekDay: string, errorMessage: string) {
     return this.fetchWeekAiring(this.url + weekDay, errorMessage);
   }
 

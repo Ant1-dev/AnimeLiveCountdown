@@ -20,7 +20,7 @@ export class ShowsComponent implements OnInit {
     ngOnInit(): void {
      this.isLoading.set(true);
      const subscription = this.scheduleService
-        .renderWeekdayMedia(this.weekDay(), this.error())
+        .renderMedia(this.weekDay(), this.error())
         .subscribe({
             next: (media) => {
                 if (media != undefined) {
