@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ScheduleService } from '../../schedule.service';
 import { Media } from '../../schedule.model';
-import { ShowComponent } from "../shows/show/show.component";
+import { ShowComponent } from '../shows/show/show.component';
 
 @Component({
   selector: 'app-airing-soon',
@@ -28,17 +28,16 @@ export class AiringSoonComponent implements OnInit {
           }
         },
         error: (error) => {
-            this.error.set(error);
-            console.log(error);
+          this.error.set(error);
+          console.log(error);
         },
         complete: () => {
-            this.isLoading.set(false);
-        }
+          this.isLoading.set(false);
+        },
       });
 
-      this.destroyRef.onDestroy(() => {
-        subscription.unsubscribe();
-      })
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
-
 }

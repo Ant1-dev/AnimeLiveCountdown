@@ -1,1 +1,6 @@
 <h1 class="weekSection">Trending</h1>
+<div class="cardContainer">
+  @for (show of media(); track show.id; let i = $index) {
+  <app-show [media]="show" />
+  }
+</div>

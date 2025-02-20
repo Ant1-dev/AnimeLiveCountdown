@@ -1,8 +1,10 @@
 
 .card {
+    position: relative;
     width: 100%;
     border-radius: 12px;
     cursor: pointer;
+    transition: ease-in 0.2s;
 }
 
 .card:hover {
@@ -21,23 +23,40 @@
 .poster {
     width: 100%;
     aspect-ratio: 2/3;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;    
+    border-radius: 0 0 5px 5px;  
 }
 
 .airingDate {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    grid-template-rows: repeat(2, auto); 
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    font-size: 25px;
+    padding: 5px;
+    gap: 5px;
+    font-size: 14px;
     background-color: rgb(128, 128, 128, 0.2);
+    box-sizing: border-box;
+    overflow:hidden;
+}
+
+.dateItem, .dateItemS {
+    display: flex;
+    justify-content: center;
+}
+
+.dateItemS {
+    color: #00a6fb;
+}
+
+.episode {
+    background-color: #00a6fb;
 }
 
 @media screen and (max-width: 600px) {
     .airingDate {
-        font-size: 15px;
+        font-size: 12px;
+        
     }
     .cardFooter {
         display: flex;

@@ -37,7 +37,7 @@ public class ScheduleController {
 
     @GetMapping("/airing/soon")
     public List<MediaEntity> getClosestAiring() {
-        Pageable pageable = PageRequest.of(0,100);
+        Pageable pageable = PageRequest.of(0,5);
         return mediaRepository.findAllByOrderByNext_Airing_AtAsc(pageable).getContent();
     }
 

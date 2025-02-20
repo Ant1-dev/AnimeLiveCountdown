@@ -9,7 +9,7 @@
 @media screen and (max-width: 600px) {
     .cardContainer {
         display: grid;
-        grid-template-columns: repeat(3, 28vw);
+        grid-template-columns: repeat(2, 45vw);
         grid-auto-rows: auto;
         margin: 20px 0;
     }

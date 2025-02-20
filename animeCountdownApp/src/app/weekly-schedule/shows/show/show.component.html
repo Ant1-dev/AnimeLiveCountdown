@@ -2,11 +2,14 @@
 <div class="card">
   <div class="cardBody">
     <div class="airingDate">
-      <!-- <div class="days"><div class="day">{{ day() }}</div></div>
-      <div class="hours"><div class="hour">{{ hour() }}</div></div>
-      <div class="minutes"><div class="minute">{{ minute() }}</div></div>
-      <div class="seconds"><div class="second">{{ day() }}</div></div> -->
-      {{ timeLeft() | date : "d'd 'hh'h 'mm'm 'ss's'" }}
+      <div class="dateItem">{{ timeLeft() | date : "d" }}</div>
+      <div class="dateItem">{{ timeLeft() | date : "hh" }}</div>
+      <div class="dateItem">{{ timeLeft() | date : "mm" }}</div>
+      <div class="dateItemS">{{ timeLeft() | date : "ss" }}</div>
+      <div class="dateItem">Days</div>
+      <div class="dateItem">Hours</div>
+      <div class="dateItem">Minutes</div>
+      <div class="dateItem">Seconds</div>
     </div>
     <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
     <div class="cardFooter">
@@ -17,5 +20,6 @@
       }
     </div>
   </div>
+  <div class="episode">Episode {{media()?.next_Airing_Episode}}</div>
 </div>
 }

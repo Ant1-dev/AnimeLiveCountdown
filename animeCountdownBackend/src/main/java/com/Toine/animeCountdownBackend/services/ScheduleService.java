@@ -25,7 +25,7 @@ public class ScheduleService {
         this.objectMapper = objectMapper;
     }
     @Transactional
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 300000)
     public void updateCurrentlyAiringAnime() {
         System.out.println("Fetching and updating currently airing anime from api..");
         saveCurrentlyAiringAnime();
