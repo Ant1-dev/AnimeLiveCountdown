@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Media } from '../../../schedule.model';
 import { interval } from 'rxjs';
 
@@ -11,57 +18,45 @@ import { interval } from 'rxjs';
 })
 export class ShowComponent implements OnInit {
   media = input<Media>();
-  timeLeft = signal<Date | undefined | string>(undefined);
-  private airingTime: number | undefined = this.media()?.next_Airing_At.getMilliseconds();
+  timeLeft = signal<number | undefined>(undefined);
+  private airingTime: number | undefined =
+    this.media()?.next_Airing_At.getMilliseconds();
   private destroyRef = inject(DestroyRef);
-  
-  
-  ngOnInit(): void {
 
+  ngOnInit(): void {
     if (typeof window === 'undefined') {
       return;
     }
     const mediaData = this.media();
-    
+
     // Early return if no media data
     if (!mediaData) {
-        console.log('No media data available');
-        this.timeLeft.set("523");
-        console.log("no data");
-        return;
+      console.log('No media data available');
+      this.timeLeft.set(undefined);
+      console.log('no data');
+      return;
     }
 
-    try {        
-        const airingDate = new Date(mediaData.next_Airing_At);
-        this.airingTime = airingDate.getTime();
+    try {
+      const airingDate = new Date(mediaData.next_Airing_At);
+      this.airingTime = airingDate.getTime();
 
-        const subscription = interval(1000).subscribe(() => {
-            const currentTime = Date.now();
-            
-            if (this.airingTime && this.airingTime > 0) {
-                const remainingTime = this.airingTime - currentTime;
-                if (remainingTime > 0) {
-                    this.timeLeft.set(new Date(remainingTime));
-                    console.log('its working');
-                } else {
-                    this.timeLeft.set("0");
-                    console.log("Remaining time is 0");
-                    subscription.unsubscribe();
-                }
-            } else {
-                this.timeLeft.set("0");
-                console.log("not this one aldkf", this.airingTime, mediaData);
-                subscription.unsubscribe();
-            }
-        });
+      const subscription = interval(1000).subscribe(() => {
+        const currentTime = Date.now();
 
-        this.destroyRef.onDestroy(() => {
-            subscription.unsubscribe();
-        });
+        if (this.airingTime && this.airingTime > 0) {
+          const remainingTime = this.airingTime - currentTime;
+          if (remainingTime > 0) {
+            this.timeLeft.set(remainingTime);
+          }
+        }
+      });
 
+      this.destroyRef.onDestroy(() => {
+        subscription.unsubscribe();
+      });
     } catch (error) {
-        console.error('Error processing date:', error);
-        this.timeLeft.set("000000");
+      console.error('Error processing date:', error);
     }
-}
+  }
 }

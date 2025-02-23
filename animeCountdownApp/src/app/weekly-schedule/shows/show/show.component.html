@@ -1,11 +1,22 @@
-@if (media()?.next_Airing_At) {
+@if (timeLeft()) {
 <div class="card">
   <div class="cardBody">
     <div class="airingDate">
-      <div class="dateItem">{{ timeLeft() | date : "d" }}</div>
-      <div class="dateItem">{{ timeLeft() | date : "hh" }}</div>
-      <div class="dateItem">{{ timeLeft() | date : "mm" }}</div>
-      <div class="dateItemS">{{ timeLeft() | date : "ss" }}</div>
+      <div class="dateItem">
+        {{ timeLeft()! / (1000 * 60 * 60 * 24) | number : "1.0-0" }}
+      </div>
+      <div class="dateItem">
+        {{
+          (timeLeft()! % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            | number : "2.0-0"
+        }}
+      </div>
+      <div class="dateItem">
+        {{ (timeLeft()! % (1000 * 60 * 60)) / (1000 * 60) | number : "2.0-0" }}
+      </div>
+      <div class="dateItemS">
+        {{ (timeLeft()! % (1000 * 60)) / 1000 | number : "2.0-0" }}
+      </div>
       <div class="dateItem">Days</div>
       <div class="dateItem">Hours</div>
       <div class="dateItem">Minutes</div>
@@ -20,6 +31,8 @@
       }
     </div>
   </div>
-  <div class="episode">Episode {{media()?.next_Airing_Episode}}</div>
+  <div class="animeInfo">
+    <div class="episode">EPISODE {{ media()?.next_Airing_Episode }}</div>
+  </div>
 </div>
 }
