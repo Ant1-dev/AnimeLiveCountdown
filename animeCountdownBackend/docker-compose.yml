@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  backend:
+    image: anime-countdown
+    ports:
+      - "8080:8080"
+    environment:
+      - NEON_ANIME_URL=${NEON_ANIME_URL}

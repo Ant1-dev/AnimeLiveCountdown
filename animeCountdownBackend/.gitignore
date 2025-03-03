@@ -1,0 +1,40 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# Maven build directory
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Docker files
+.docker/data/
+docker-compose.override.yml
+.env
+*.env
+
+# IDE-specific files
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.sw?
+.classpath
+.project
+.settings/
+bin/
+
+# Logs
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db

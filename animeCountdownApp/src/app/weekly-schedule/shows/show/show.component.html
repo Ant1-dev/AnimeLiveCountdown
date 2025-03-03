@@ -35,4 +35,8 @@
     <div class="episode">EPISODE {{ media()?.next_Airing_Episode }}</div>
   </div>
 </div>
+} @else {
+<div class="card">
+  <p-skeleton styleClass="zone1"></p-skeleton>
+</div>
 }

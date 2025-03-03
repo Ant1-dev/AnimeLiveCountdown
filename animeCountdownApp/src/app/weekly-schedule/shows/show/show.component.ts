@@ -7,20 +7,20 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { SkeletonModule } from 'primeng/skeleton'
 import { Media } from '../../../schedule.model';
 import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-show',
-  imports: [CommonModule],
+  imports: [CommonModule, SkeletonModule],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
 })
 export class ShowComponent implements OnInit {
   media = input<Media>();
   timeLeft = signal<number | undefined>(undefined);
-  private airingTime: number | undefined =
-    this.media()?.next_Airing_At.getMilliseconds();
+  private airingTime: number | undefined;
   private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {

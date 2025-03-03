@@ -7,7 +7,8 @@ import { catchError, map, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ScheduleService {
-  private url: string = 'http://localhost:8080/api/airing/'
+  private url: string =
+    'https://anime-countdown-latest.onrender.com/api/airing/';
   private httpClient = inject(HttpClient);
 
   renderMedia(weekDay: string, errorMessage: string) {
