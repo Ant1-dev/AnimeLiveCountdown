@@ -7,8 +7,6 @@
     width: 100%;
     display: flex;
     color: #00a6fb;
-    font-size: 2.125rem;
-    font-weight: bold;
     gap: 10px;
 }
 
@@ -43,4 +41,16 @@ img.right, img.down {
 img.down {
     transform: rotate(90deg);
     stroke: #00a6fb;
+  }
+
+  @media screen and (max-width: 600px) {
+
+    .weekSection {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        color: #00a6fb;
+        gap: 10px;
+        font-size: 1.8rem;
+    }
   }
