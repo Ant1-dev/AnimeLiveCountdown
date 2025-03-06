@@ -1,7 +1,13 @@
 <div class="collapsible-container">
   <div class="weekSection" (click)="toggleCollapse()">
     {{ title() }}
-    <span class="icon">{{ isCollapsed ? "▼" : "▲" }}</span>
+    <span class="icon">
+      @if (isCollapsed) {
+      <img class="right" src="rightArrow.svg" alt="collapsed arrow" />
+      } @else {
+      <img class="down" src="rightArrow.svg" alt="not collapsed arrow" />
+      }
+    </span>
   </div>
   <div class="bar"></div>
   <div class="collapsible-content" [ngClass]="{ collapsed: isCollapsed }">

@@ -6,10 +6,10 @@
 .weekSection {
     width: 100%;
     display: flex;
-    justify-content: center;
     color: #00a6fb;
     font-size: 2.125rem;
     font-weight: bold;
+    gap: 10px;
 }
 
 .weekSection:hover {
@@ -34,3 +34,13 @@
     height: 2px;
     background-color: #00a6fb;
 }
+
+img.right, img.down {
+    height: 1.5rem; 
+    stroke: #00a6fb;
+  }
+  
+img.down {
+    transform: rotate(90deg);
+    stroke: #00a6fb;
+  }
