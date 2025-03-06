@@ -1,0 +1,10 @@
+<div class="collapsible-container">
+  <div class="weekSection" (click)="toggleCollapse()">
+    {{ title() }}
+    <span class="icon">{{ isCollapsed ? "▼" : "▲" }}</span>
+  </div>
+  <div class="bar"></div>
+  <div class="collapsible-content" [ngClass]="{ collapsed: isCollapsed }">
+    <ng-content></ng-content>
+  </div>
+</div>

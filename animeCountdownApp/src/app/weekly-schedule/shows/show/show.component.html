@@ -31,12 +31,17 @@
       }
     </div>
   </div>
-  <div class="animeInfo">
-    <div class="episode">EPISODE {{ media()?.next_Airing_Episode }}</div>
-  </div>
 </div>
 } @else {
 <div class="card">
-  <p-skeleton styleClass="zone1"></p-skeleton>
+  <div class="skeleton-container">
+    <p-skeleton height="300px" styleClass="mb-2" width="100%"></p-skeleton>
+    <p-skeleton
+      width="100%"
+      height="calc(100% * 3/2)"
+      styleClass="poster-skeleton"
+    ></p-skeleton>
+    <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+  </div>
 </div>
 }

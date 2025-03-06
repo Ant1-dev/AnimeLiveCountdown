@@ -1,6 +1,6 @@
 @for (day of weekDays; track $index; let i = $index) {
-
-<h1 class="weekSection">{{ day }}</h1>
-<app-shows [weekDay]="weekDays[i]" />
+<app-collapsible [title]="day">
+  <app-shows [weekDay]="weekDays[i]" />
+</app-collapsible>
 
 }

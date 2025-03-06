@@ -9,6 +9,9 @@
 .weekSection {
     display: flex;
     justify-content: center;
+    color: #00a6fb;
+    font-size: 2.125rem;
+    font-weight: bold;
 }
 
 .cardContainer {
