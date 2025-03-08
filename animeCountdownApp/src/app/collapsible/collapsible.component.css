@@ -17,7 +17,7 @@
 .collapsible-content {
     transition: max-height 0.3s ease-out;
     overflow: hidden;
-    max-height: 2000px;
+    max-height: 5000px;
 }
 
 .collapsible-content.collapsed {
