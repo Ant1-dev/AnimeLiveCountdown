@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Media } from './schedule.model';
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
 
 @Injectable({
@@ -16,6 +16,7 @@ export class ScheduleService {
   }
 
   fetchWeekAiring(url: string, errorMessage: string) {
+    console.log('entities are being fetched');
     return this.httpClient.get<Media[]>(url).pipe(
       map((res) => res),
       catchError((error) => {

@@ -78,7 +78,7 @@ public class ScheduleService {
             logger.info("Clearing existing anime data from database...");
             mediaRepository.deleteAll();
 
-            logger.info("Saving fresh anime data to database...");
+            logger.info("Saving new anime data to database...");
             mediaRepository.saveAll(newEntities);
         } catch (Exception e) {
             logger.error("Error during database update: {}", e.getMessage(), e);
@@ -91,7 +91,7 @@ public class ScheduleService {
      * @return A Mono containing the list of fetched entities
      */
     public Mono<List<MediaEntity>> fetchAllCurrentlyAiringAnime() {
-        logger.info("Fetching fresh anime data from API...");
+        logger.info("Fetching new anime data from API...");
         return fetchAllCurrentlyAiringAnimePage(1) // Start from page 1
                 .map(this::convertToEntity)
                 .collectList();
