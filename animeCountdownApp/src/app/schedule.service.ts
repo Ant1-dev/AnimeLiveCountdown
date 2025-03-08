@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Media } from './schedule.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
 
 @Injectable({
