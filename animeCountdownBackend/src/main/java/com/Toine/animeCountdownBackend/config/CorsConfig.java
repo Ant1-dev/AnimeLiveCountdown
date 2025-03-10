@@ -14,7 +14,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         // specific origins:
-        config.addAllowedOrigin("https://your-angular-app.vercel.app");
+        config.addAllowedOrigin("https://anime-live-countdown.vercel.app");
         config.addAllowedOrigin("http://localhost:4200");
 
         // allow all HTTP methods
