@@ -1,5 +1,4 @@
-<style> h1 {color: #00a6fb; } </style>
-<div style="display:flex; justify-content:center; margin-bottom: 30px"><img style="height: 100px; align-self:" src="./animeCountdownApp/public/locon.png"></div>
+<div align="center" style="margin-bottom: 30px"><img style="height: 100px; align-self:" src="./animeCountdownApp/public/locon.png"></div>
 <h1 style="border-bottom: 0; text-align:center; margin-bottom: -30px;">Anime Countdown</h1>
 <h2 style="border-bottom: 0; text-align:center; font-weight:normal; margin-bottom: 50px;">A simple website to help you keep track of upcoming seasonal anime!</h2>
 <h1>About The Project</h1>
