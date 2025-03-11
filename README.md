@@ -22,3 +22,5 @@
     <li>Add user sign-in and authentication</li>
     <li>Add notifications set up</li>
 </ol>
+<h1>Issues</h1>
+<p>Due to me using the free tier of render hosting service the application only gives data after activity, so the site needs about 3 minutes for the backend to relaunch when activity is dicovered (meaning give it a couple minutes to launch after intial site visit and refresh).</p>
