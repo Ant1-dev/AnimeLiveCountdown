@@ -9,7 +9,7 @@ import {
   ElementRef,
   HostListener
 } from '@angular/core';
-import "primeicons/primeicons.css";
+import { MatIconModule } from '@angular/material/icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
 import { SearchService } from '../../search.service';
@@ -20,7 +20,7 @@ import { ResultComponent } from "./result/result.component";
 
 @Component({
   selector: 'app-searchbar',
-  imports: [ReactiveFormsModule, CommonModule, ResultComponent],
+  imports: [ReactiveFormsModule, CommonModule, ResultComponent, MatIconModule],
   templateUrl: './searchbar.component.html',
   styleUrl: './searchbar.component.css',
 })
