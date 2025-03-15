@@ -19,8 +19,12 @@
 <h1 style="margin-top: 10px;">Roadmap</h1>
 <ol>
     <li>Add functionality to the search bar along with result page</li>
-    <li>Add user sign-in and authentication</li>
-    <li>Add notifications set up</li>
+    <ul>
+        <li>Search bar to filter data from the database ✅</li>
+        <li>Search bar takes you to a page showing media's detailed description ☑️</li>
+    </ul>
+    <li>Add user sign-in and authentication ☑️</li>
+    <li>Add notifications set up ☑️</li>
 </ol>
 <h1>Issues</h1>
 <p>Due to me using the free tier of render hosting service the application only gives data after activity, so the site needs about 3 minutes for the backend to relaunch when activity is dicovered (meaning give it a couple minutes to launch after intial site visit and refresh).</p>
