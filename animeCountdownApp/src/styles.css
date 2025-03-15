@@ -5,6 +5,7 @@
     font-family: "Roboto";
     max-width: 1150px;
     margin: auto;
+    margin-top: .5rem;
 }
 .weekSection {
     display: flex;

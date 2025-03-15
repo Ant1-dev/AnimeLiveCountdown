@@ -1,0 +1,45 @@
+.result-item {
+    list-style-type: none;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .result-item:last-child {
+    border-bottom: none;
+  }
+  
+  .media-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    gap: 10px;
+    border-radius: 10px;
+  }
+  
+  .media-item:hover {
+    background-color: #323232;
+  }
+  
+  .media-details {
+    display: flex;
+    flex-direction: column; 
+    gap: 4px; 
+  }
+  
+  .cover-image {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .media-title {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .media-airing-date {
+    margin: 0;
+    font-size: .9rem;
+    color: #00a6fb;
+  }

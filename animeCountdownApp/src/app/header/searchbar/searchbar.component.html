@@ -1,0 +1,22 @@
+<div class="search-container">
+    <div class="search-wrapper">
+      <span class="pi pi-search"></span>
+      <input
+        type="text"
+        [formControl]="searchControl"
+        class="search-input"
+        placeholder="Search..."
+        (click)="onSearchInputClick()"
+      />
+    </div>
+  </div>
+  <!-- Only show results when both conditions are true -->
+  @if (searchResults().length > 0 && showResults()) {
+    <div class="search-results">
+      <ul class="result-list">
+        @for (resultMedia of searchResults(); track resultMedia.id) {
+          <app-result [result]="resultMedia" />
+        }
+      </ul>
+    </div>
+  }
