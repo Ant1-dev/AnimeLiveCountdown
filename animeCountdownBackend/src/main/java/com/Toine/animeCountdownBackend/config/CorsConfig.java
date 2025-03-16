@@ -16,6 +16,7 @@ public class CorsConfig {
         // specific origins:
         config.addAllowedOrigin("https://anime-live-countdown.vercel.app");
         config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("https://animelivecountdown.com");
 
         // allow all HTTP methods
         config.addAllowedMethod("*");

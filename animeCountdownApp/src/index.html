@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-ZGKZ0BCMWD"
-    ></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGKZ0BCMWD"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
-      gtag("config", "G-ZGKZ0BCMWD");
+    
+      gtag("config", "G-ZGKZ0BCMWD", { anonymize_ip: true });
     </script>
-
+    
     <meta charset="utf-8" />
-    <title>AnimeCountdownApp</title>
+    <title>Upcoming Anime Releases - Live Countdown & Reminders | animelivecountdown.com</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="locon.ico" />
+    <meta name="description" content="Stay up to date with all upcoming anime releases! Track airing schedules, view live countdowns, and set reminders to never miss an episode. Get real-time updates on your favorite anime and stay ahead of the latest releases." />
+    <meta name="keywords" content="release date, anime releases, anime countdown, upcoming anime, airing anime, anime reminders, anime schedule, anime premiere dates, countdown, live, release" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph (Facebook, LinkedIn, Discord) -->
+    <meta property="og:title" content="Upcoming Anime Releases - Live Countdown & Reminders" />
+    <meta property="og:description" content="Track upcoming anime releases with live countdowns and reminders. Never miss an episode again!" />
+    <meta property="og:image" content="https://animelivecountdown.com/preview-image.jpg" />
+    <meta property="og:url" content="https://animelivecountdown.com/" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter (X) Card -->
+    <meta name="twitter:card" content="Anime Countdowns" />
+    <meta name="twitter:title" content="Upcoming Anime Releases - Live Countdown & Reminders" />
+    <meta name="twitter:description" content="Track upcoming anime releases with live countdowns and reminders. Never miss an episode again!" />
+    <meta name="twitter:image" content="https://animelivecountdown.com/preview-image.jpg" />
+    <meta name="twitter:url" content="https://animelivecountdown.com/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/locon.ico" />
+    
+    <!-- Google Fonts (Optimized) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-      rel="stylesheet"
-    />
-      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
+  </head>
   <body>
     <app-root></app-root>
   </body>
