@@ -2,7 +2,7 @@
 <h1 style="border-bottom: 0; text-align:center; margin-bottom: -30px;">Anime Countdown</h1>
 <h2 style="border-bottom: 0; text-align:center; font-weight:normal; margin-bottom: 50px;">A simple website to help you keep track of upcoming seasonal anime!</h2>
 <h1>About The Project</h1>
-<img src="./animeCountdownApp/public/preview-image.png"/>
+<img src="./animeCountdownApp/public/preview-image.jpg"/>
 <p style="margin-top: 10px;">The purpose of this project is to provide a user friendly to view upcoming anime shows in the current season. So what makes this site different from the others that are out there, it groups the shows by days of the week. While this may seem simple it gives the numbers a meaning besides just a timer counting down, providing a more ease of use.</p>
 <h1 style="margin-top: 10px;">Made With</h1>
 <ul>
@@ -27,4 +27,3 @@
     <li>Add notifications set up ☑️</li>
 </ol>
 <h1>Issues</h1>
-<p>Due to me using the free tier of render hosting service the application only gives data after activity, so the site needs about 3 minutes for the backend to relaunch when activity is dicovered (meaning give it a couple minutes to launch after intial site visit and refresh).</p>

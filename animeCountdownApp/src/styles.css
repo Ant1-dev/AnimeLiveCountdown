@@ -16,7 +16,7 @@
 
 .cardContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15%, 200px));
+    grid-template-columns: repeat(auto-fill, minmax(15%, 202px));
     grid-auto-rows: auto;
     margin: 50px 0 ;
     gap: 30px;
