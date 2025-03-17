@@ -8,7 +8,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { inject } from '@angular/core';
 
@@ -23,6 +23,6 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
       },
-    }),
+    }), provideClientHydration(withEventReplay()),
   ],
 };
