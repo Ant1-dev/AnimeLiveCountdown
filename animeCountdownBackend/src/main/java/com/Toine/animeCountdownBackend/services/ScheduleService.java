@@ -103,6 +103,7 @@ public class ScheduleService {
         entity.setTitle_Romaji(media.getTitle().getRomaji());
         entity.setTitle_English(media.getTitle().getEnglish());
         entity.setStatus(media.getStatus());
+        entity.setPopularity(media.getPopularity());
 
         if (media.getNextAiringEpisode() != null && media.getNextAiringEpisode().getAiringAt() != null) {
             Instant airingTime = Instant.ofEpochSecond(media.getNextAiringEpisode().getAiringAt());
@@ -130,6 +131,7 @@ public class ScheduleService {
               sort: POPULARITY_DESC
             ) {
               id
+              popularity
               title {
                 english
                 romaji

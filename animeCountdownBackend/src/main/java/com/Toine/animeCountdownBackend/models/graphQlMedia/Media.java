@@ -6,10 +6,13 @@ public class Media {
     private String status;
     private NextAiringEpisode nextAiringEpisode;
     private CoverImage coverImage;
+    private Long popularity;
 
     public Long getId() {
         return id;
     }
+
+    public Long getPopularity() { return popularity; }
 
     public Title getTitle() {
         return title;

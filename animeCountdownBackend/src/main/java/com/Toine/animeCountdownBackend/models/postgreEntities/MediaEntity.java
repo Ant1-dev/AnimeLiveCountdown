@@ -24,6 +24,7 @@ public class MediaEntity {
     @Column(name = "cover_image_url")
     private String cover_Image_Url;
     private String day;
+    private Long popularity;
 
     public void setId(Long id) {
         this.id = id;
@@ -88,5 +89,13 @@ public class MediaEntity {
 
     public String getDay() {
         return day;
+    }
+
+    public Long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
     }
 }

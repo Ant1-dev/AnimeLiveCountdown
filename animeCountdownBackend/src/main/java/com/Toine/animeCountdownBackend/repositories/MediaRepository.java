@@ -21,4 +21,6 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
             "LOWER(e.title_Romaji) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
             "LOWER(e.title_English) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     List<MediaEntity> searchByFields(@Param("searchTerm") String searchTerm);
+
+    Page<MediaEntity> findAllByOrderByPopularityDesc(Pageable pageable);
 }

@@ -32,7 +32,7 @@ public class ScheduleController {
     @GetMapping("/airing/trending")
     public List<MediaEntity> getTrending() {
         Pageable pageable = PageRequest.of(0, 5);
-        return mediaRepository.findAllBy(pageable).getContent();
+        return mediaRepository.findAllByOrderByPopularityDesc(pageable).getContent();
     }
 
     @GetMapping("/airing/soon")
@@ -40,6 +40,7 @@ public class ScheduleController {
         Pageable pageable = PageRequest.of(0,5);
         return mediaRepository.findAllByOrderByNext_Airing_AtAsc(pageable).getContent();
     }
+
 
 
 }
