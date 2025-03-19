@@ -4,7 +4,6 @@ import com.Toine.animeCountdownBackend.models.graphQlMedia.Media;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Page;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -24,14 +24,12 @@ public class ScheduleService {
 
     private final MediaRepository mediaRepository;
     private final HttpGraphQlClient graphQlClient;
-    private final ObjectMapper objectMapper;
 
     private final AtomicBoolean isUpdating = new AtomicBoolean(false);
 
-    public ScheduleService(HttpGraphQlClient graphQlClient, MediaRepository mediaRepository, ObjectMapper objectMapper) {
+    public ScheduleService(HttpGraphQlClient graphQlClient, MediaRepository mediaRepository) {
         this.graphQlClient = graphQlClient;
         this.mediaRepository = mediaRepository;
-        this.objectMapper = objectMapper;
     }
 
     /**
@@ -58,7 +56,7 @@ public class ScheduleService {
                 // Then update the database in a transaction
                 updateDatabase(newEntities);
 
-                logger.info("Database refresh completed successfully with {} entries", newEntities.size());
+                logger.info("Database refresh completed successfully");
             } catch (Exception e) {
                 logger.error("Error during scheduled refresh: {}", e.getMessage(), e);
             } finally {
@@ -71,19 +69,99 @@ public class ScheduleService {
 
     /**
      * Updates the database with new entities in a transaction
+     * Uses an incremental approach that only updates changed records
      */
     @Transactional
     public void updateDatabase(List<MediaEntity> newEntities) {
         try {
-            logger.info("Clearing existing anime data from database...");
-            mediaRepository.deleteAll();
+            logger.info("Starting incremental database update...");
 
-            logger.info("Saving new anime data to database...");
-            mediaRepository.saveAll(newEntities);
+            // Get all existing IDs for efficient lookups and to track deletions
+            List<Long> existingIds = mediaRepository.findAllIds();
+            List<Long> newIds = newEntities.stream().map(MediaEntity::getId).toList();
+
+            int updates = 0;
+            int insertions = 0;
+            int deletions = 0;
+
+            // Process each new entity
+            for (MediaEntity newEntity : newEntities) {
+                // Check if this entity already exists
+                boolean exists = existingIds.contains(newEntity.getId());
+
+                if (exists) {
+                    // Get the existing entity
+                    MediaEntity existingEntity = mediaRepository.findById(newEntity.getId()).orElse(null);
+
+                    // Check if any important fields have changed
+                    if (existingEntity != null && hasSignificantChanges(existingEntity, newEntity)) {
+                        // Update the entity with new values
+                        updateEntityFields(existingEntity, newEntity);
+                        mediaRepository.save(existingEntity);
+                        updates++;
+                    }
+                } else {
+                    // This is a new entity, so insert it
+                    mediaRepository.save(newEntity);
+                    insertions++;
+                }
+            }
+
+            // Handle deletions (anime that are no longer airing)
+            // Only if we have a complete dataset (not empty)
+            if (!newIds.isEmpty()) {
+                List<Long> idsToDelete = existingIds.stream()
+                        .filter(id -> !newIds.contains(id))
+                        .toList();
+
+                if (!idsToDelete.isEmpty()) {
+                    mediaRepository.deleteAllById(idsToDelete);
+                    deletions = idsToDelete.size();
+                }
+            }
+
+            logger.info("Database update completed: {} updates, {} insertions, {} deletions",
+                    updates, insertions, deletions);
         } catch (Exception e) {
-            logger.error("Error during database update: {}", e.getMessage(), e);
+            logger.error("Error during incremental database update: {}", e.getMessage(), e);
             throw e; // Rethrow to trigger transaction rollback
         }
+    }
+
+    /**
+     * Check if an anime entity has significant changes that require an update
+     */
+    private boolean hasSignificantChanges(MediaEntity existing, MediaEntity newEntity) {
+        // Check for changes in next airing info
+        boolean nextAiringChanged = !Objects.equals(existing.getNext_Airing_At(), newEntity.getNext_Airing_At()) ||
+                                    !Objects.equals(existing.getNext_Airing_Episode(), newEntity.getNext_Airing_Episode());
+
+        // Check for changes in status or other metadata
+        boolean statusChanged = !Objects.equals(existing.getStatus(), newEntity.getStatus());
+        boolean titleChanged = !Objects.equals(existing.getTitle_English(), newEntity.getTitle_English()) ||
+                               !Objects.equals(existing.getTitle_Romaji(), newEntity.getTitle_Romaji());
+        boolean imageChanged = !Objects.equals(existing.getCover_Image_Url(), newEntity.getCover_Image_Url());
+        boolean popularityChanged = !Objects.equals(existing.getPopularity(), newEntity.getPopularity());
+        boolean dayChanged = !Objects.equals(existing.getDay(), newEntity.getDay());
+
+        return nextAiringChanged || statusChanged || titleChanged || imageChanged || popularityChanged || dayChanged;
+    }
+
+    /**
+     * Update the fields of an existing entity with values from a new entity
+     */
+    private void updateEntityFields(MediaEntity existing, MediaEntity newEntity) {
+        // Update basic info
+        existing.setTitle_English(newEntity.getTitle_English());
+        existing.setTitle_Romaji(newEntity.getTitle_Romaji());
+        existing.setStatus(newEntity.getStatus());
+        existing.setPopularity(newEntity.getPopularity());
+        existing.setCover_Image_Url(newEntity.getCover_Image_Url());
+
+        // Update airing info
+        existing.setNext_Airing_At(newEntity.getNext_Airing_At());
+        existing.setNext_Airing_Episode(newEntity.getNext_Airing_Episode());
+        existing.setDay(newEntity.getDay());
     }
 
     /**
@@ -99,7 +177,8 @@ public class ScheduleService {
 
     public MediaEntity convertToEntity(Media media) {
         MediaEntity entity = new MediaEntity();
-        entity.setId(media.getId());
+        // Make sure to convert from Integer to Long if needed
+        entity.setId(media.getId());  // Convert Integer to Long if needed
         entity.setTitle_Romaji(media.getTitle().getRomaji());
         entity.setTitle_English(media.getTitle().getEnglish());
         entity.setStatus(media.getStatus());
