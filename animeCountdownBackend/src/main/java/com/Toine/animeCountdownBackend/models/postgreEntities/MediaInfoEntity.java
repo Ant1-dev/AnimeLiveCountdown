@@ -2,6 +2,7 @@ package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -10,24 +11,49 @@ public class MediaInfoEntity {
     @Id
     private Long id;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
-    private MediaEntity mediaEntity;
-
+    @Column(name = "eng_title")
     private String engtitle;
+
+    @Column(name = "rom_title")
     private String romtitle;
+
+    @Column(name = "next_episode")
     private Integer nextepisode;
+
+    @Column(name = "total_episodes")
     private Integer totalepisodes;
+
+    @Column(name = "media_status")
     private String status;
+
+    @Column(name = "media_popularity")
     private Long popularity;
+
+    @Column(name = "episode_duration")
     private Integer duration;
+
     @ElementCollection
+    @CollectionTable(
+            name = "media_info_genres",
+            joinColumns = @JoinColumn(name = "media_info_id")
+    )
+    @Column(name = "genre")
     private List<String> genres;
+
+    @Column(name = "avg_score")
     private Integer avgscore;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "cover_image")
     private String coverimage;
+
+    @Column(name = "banner_image")
     private String banner;
+
+    @Column(name = "airing_at")
+    private Instant airingat;
 
     public Long getId() {
         return id;
@@ -35,14 +61,6 @@ public class MediaInfoEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public MediaEntity getMediaEntity() {
-        return mediaEntity;
-    }
-
-    public void setMediaEntity(MediaEntity mediaEntity) {
-        this.mediaEntity = mediaEntity;
     }
 
     public String getEngtitle() {
@@ -139,5 +157,13 @@ public class MediaInfoEntity {
 
     public void setBanner(String banner) {
         this.banner = banner;
+    }
+
+    public Instant getAiringat() {
+        return airingat;
+    }
+
+    public void setAiringat(Instant airingat) {
+        this.airingat = airingat;
     }
 }

@@ -3,6 +3,7 @@ package com.Toine.animeCountdownBackend.models.graphQlMedia;
 import java.util.List;
 
 public class MediaInfo {
+    private Long id;
     private Title title;
     private NextAiringEpisode nextAiringEpisode;
     private String bannerImage;
@@ -59,4 +60,8 @@ public class MediaInfo {
 
     private Integer averageScore;
     private String description;
+
+    public Long getId() {
+        return id;
+    }
 }

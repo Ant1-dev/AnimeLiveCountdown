@@ -12,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class searchController {
+public class SearchController {
     private final SearchService service;
 
-    public searchController(SearchService service) {
+    public SearchController(SearchService service) {
         this.service = service;
     }
 

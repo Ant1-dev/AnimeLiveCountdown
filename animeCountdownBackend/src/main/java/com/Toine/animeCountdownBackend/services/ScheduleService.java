@@ -132,19 +132,18 @@ public class ScheduleService {
      * Check if an anime entity has significant changes that require an update
      */
     private boolean hasSignificantChanges(MediaEntity existing, MediaEntity newEntity) {
-        // Check for changes in next airing info
-        boolean nextAiringChanged = !Objects.equals(existing.getNext_Airing_At(), newEntity.getNext_Airing_At()) ||
-                                    !Objects.equals(existing.getNext_Airing_Episode(), newEntity.getNext_Airing_Episode());
+        if (existing == null || newEntity == null) {
+            return true; // Null check to prevent NullPointerException
+        }
 
-        // Check for changes in status or other metadata
-        boolean statusChanged = !Objects.equals(existing.getStatus(), newEntity.getStatus());
-        boolean titleChanged = !Objects.equals(existing.getTitle_English(), newEntity.getTitle_English()) ||
-                               !Objects.equals(existing.getTitle_Romaji(), newEntity.getTitle_Romaji());
-        boolean imageChanged = !Objects.equals(existing.getCover_Image_Url(), newEntity.getCover_Image_Url());
-        boolean popularityChanged = !Objects.equals(existing.getPopularity(), newEntity.getPopularity());
-        boolean dayChanged = !Objects.equals(existing.getDay(), newEntity.getDay());
-
-        return nextAiringChanged || statusChanged || titleChanged || imageChanged || popularityChanged || dayChanged;
+        return !Objects.equals(existing.getNext_Airing_At(), newEntity.getNext_Airing_At()) ||
+               !Objects.equals(existing.getNext_Airing_Episode(), newEntity.getNext_Airing_Episode()) ||
+               !Objects.equals(existing.getStatus(), newEntity.getStatus()) ||
+               !Objects.equals(existing.getTitle_English(), newEntity.getTitle_English()) ||
+               !Objects.equals(existing.getTitle_Romaji(), newEntity.getTitle_Romaji()) ||
+               !Objects.equals(existing.getCover_Image_Url(), newEntity.getCover_Image_Url()) ||
+               !Objects.equals(existing.getPopularity(), newEntity.getPopularity()) ||
+               !Objects.equals(existing.getDay(), newEntity.getDay());
     }
 
     /**
@@ -177,8 +176,7 @@ public class ScheduleService {
 
     public MediaEntity convertToEntity(Media media) {
         MediaEntity entity = new MediaEntity();
-        // Make sure to convert from Integer to Long if needed
-        entity.setId(media.getId());  // Convert Integer to Long if needed
+        entity.setId(media.getId());
         entity.setTitle_Romaji(media.getTitle().getRomaji());
         entity.setTitle_English(media.getTitle().getEnglish());
         entity.setStatus(media.getStatus());
