@@ -6,11 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("api")
+@RestController
+@RequestMapping("/api")
 public class MediaInfoController {
 
-    private MediaInfoRepository mediaInfoRepository;
+    private final MediaInfoRepository mediaInfoRepository;
+
+    public MediaInfoController (MediaInfoRepository mediaInfoRepository) {
+        this.mediaInfoRepository = mediaInfoRepository;
+    }
 
     @GetMapping("/info/{id}")
     public ResponseEntity<MediaInfoEntity> getMediaInfoById(@PathVariable Long id) {

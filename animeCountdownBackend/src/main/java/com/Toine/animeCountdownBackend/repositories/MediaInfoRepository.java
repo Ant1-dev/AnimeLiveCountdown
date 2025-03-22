@@ -11,9 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long> {
-    @Query("SELECT m.id FROM MediaEntity m")
-    List<Long> findAllIds();
 
-    @Query("SELECT m FROM MediaInfoEntity m LEFT JOIN FETCH m.genres WHERE m.id = :id")
+    @Query("SELECT DISTINCT m FROM MediaInfoEntity m JOIN FETCH m.genres WHERE m.id = :id")
     Optional<MediaInfoEntity> findByIdWithGenres(@Param("id") Long id);
 }
