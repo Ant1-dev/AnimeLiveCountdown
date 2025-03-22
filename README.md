@@ -27,4 +27,4 @@
     <li>Add notifications set up ☑️</li>
 </ol>
 <h1>Issues</h1>
-<p>Trending goes out of order during databases refreshes from api</p>
+
