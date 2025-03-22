@@ -2,8 +2,11 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin: 0;
+    padding: 0;
     padding: 1rem;
     box-sizing: border-box;
+    position: relative;
   }
   
   .navbar {
@@ -83,14 +86,6 @@
     cursor: pointer;
     box-shadow: 0 0 5px #a9a9a9;
   }
-  
-  
-  .purpose {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 1.5rem;
-  }
-  
   
   @media screen and (max-width: 768px) {
     .navbar {

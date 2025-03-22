@@ -1,7 +1,46 @@
 .foot { 
     display: flex;
-    margin: 30px 0 30px 0;
-    justify-content: center;
+    margin: 30px 0 0 0;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    height: 50px;
+    padding-top: 10px;
+}
+.foot::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #00a6fb;
+
+}
+
+.logoimg {
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+}
+
+.logo {
+    overflow: hidden;
+    margin-top: -100px;
+}
+.contact , .github, .logo{
+    display: flex;
+    height: fit-content;
+    margin: 0;
+    position: relative;
+}
+
+.contact::after, .github::after {
+    content: '';
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    background-color: #C5C6C7;
+    bottom: 0;
 }
 
 a {
@@ -11,6 +50,6 @@ a {
     padding: 3px;
 }
 
-a:hover {
+.lolink:hover {
     background-color: rgba(197, 198, 199, 0.3);
 }

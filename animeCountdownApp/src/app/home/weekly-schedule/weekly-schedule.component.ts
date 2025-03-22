@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ShowsComponent } from "./shows/shows.component";
-import { CollapsibleComponent } from "../collapsible/collapsible.component";
+import { CollapsibleComponent } from '../collapsible/collapsible.component';
 
 @Component({
     selector: 'app-weekly-schedule',

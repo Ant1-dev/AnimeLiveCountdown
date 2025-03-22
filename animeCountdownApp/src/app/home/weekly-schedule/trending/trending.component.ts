@@ -1,23 +1,16 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { ShowComponent } from './show/show.component';
-import { Media } from '../../schedule.model';
-import { ScheduleService } from '../../schedule.service';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Media } from '../../../schedule.model';
+import { ScheduleService } from '../../../services/schedule.service';
+import { ShowComponent } from '../shows/show/show.component';
 
 @Component({
-  selector: 'app-shows',
-  imports: [ShowComponent],
-  templateUrl: './shows.component.html',
-  styleUrl: './shows.component.css',
+  selector: 'app-trending',
+  imports: [CommonModule, ShowComponent],
+  templateUrl: './trending.component.html',
+  styleUrl: './trending.component.css',
 })
-export class ShowsComponent implements OnInit {
-  weekDay = input<string>('');
+export class TrendingComponent {
   media = signal<Media[]>([]);
   isLoading = signal(false);
   error = signal<string>('');
@@ -26,8 +19,9 @@ export class ShowsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading.set(true);
+
     const subscription = this.scheduleService
-      .renderMedia(this.weekDay(), this.error())
+      .renderMedia('trending', this.error())
       .subscribe({
         next: (media) => {
           if (media != undefined) {
@@ -35,8 +29,8 @@ export class ShowsComponent implements OnInit {
           }
         },
         error: (error) => {
+          this.error.set(error);
           console.log(error);
-          this.error.set(error.message);
         },
         complete: () => {
           this.isLoading.set(false);

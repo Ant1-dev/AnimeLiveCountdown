@@ -37,6 +37,7 @@ public class MediaInfoEntity {
             name = "media_info_genres",
             joinColumns = @JoinColumn(name = "media_info_id")
     )
+
     @Column(name = "genre")
     private List<String> genres;
 

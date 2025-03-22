@@ -7,16 +7,16 @@ import {
   signal,
   Injector,
   ElementRef,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
-import { SearchService } from '../../search.service';
+import { SearchService } from '../../services/search.service';
 import { Media } from '../../schedule.model';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ResultComponent } from "./result/result.component";
+import { ResultComponent } from './result/result.component';
 
 @Component({
   selector: 'app-searchbar',
@@ -34,7 +34,7 @@ export class SearchbarComponent implements OnInit {
   injector = inject(Injector);
   private searchTerm$ = toObservable(this.searchTerm);
   private elementRef = inject(ElementRef);
-  
+
   constructor() {
     effect(() => {
       this.searchTerm$
@@ -57,7 +57,7 @@ export class SearchbarComponent implements OnInit {
         tap((newValue) => this.searchTerm.set(newValue || ''))
       )
       .subscribe();
-      
+
     this.destroyRef.onDestroy(() => {
       subscription1.unsubscribe();
     });

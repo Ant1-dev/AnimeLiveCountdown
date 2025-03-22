@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./header/header.component";
-import { TrendingComponent } from "./weekly-schedule/trending/trending.component";
 import { FooterComponent } from "./footer/footer.component";
-import { AiringSoonComponent } from "./weekly-schedule/airing-soon/airing-soon.component";
-import { WeeklyScheduleComponent } from "./weekly-schedule/weekly-schedule.component";
+import { HomeComponent } from './home/home.component';
 
 
 @Component({
     selector: 'app-root',
-    imports: [HeaderComponent, TrendingComponent, FooterComponent, AiringSoonComponent, WeeklyScheduleComponent],
+    imports: [HeaderComponent, FooterComponent, RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })

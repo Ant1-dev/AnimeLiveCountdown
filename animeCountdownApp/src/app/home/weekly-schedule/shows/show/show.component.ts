@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton'
-import { Media } from '../../../schedule.model';
+import { Media } from '../../../../schedule.model';
 import { interval } from 'rxjs';
 
 @Component({
