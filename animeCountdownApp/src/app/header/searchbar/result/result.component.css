@@ -46,3 +46,8 @@
     font-size: .9rem;
     color: #00a6fb;
   }
+
+  a {
+    text-decoration: inherit;
+    color: inherit;
+  }
