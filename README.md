@@ -18,13 +18,15 @@
 </ul>
 <h1 style="margin-top: 10px;">Roadmap</h1>
 <ol>
-    <li>Add functionality to the search bar along with result page</li>
+    <li>Add functionality to the search bar along with result page ✅</li>
     <ul>
         <li>Search bar to filter data from the database ✅</li>
-        <li>Search bar takes you to a page showing media's detailed description ☑️</li>
+        <li>Search bar takes you to a page showing media's detailed description ✅</li>
     </ul>
     <li>Add user sign-in and authentication ☑️</li>
     <li>Add notifications set up ☑️</li>
 </ol>
 <h1>Issues</h1>
-
+<p>After search the search bar remains open and doesn't close till user clicks elsewhere on screen.</p>
+<p>The pre-loading skeleton doesnt have a skeleton for the airing dates 2/3 completed.</p>
+<p>No Sitemap as well as performance optimzation to improve SEO and lighthouse rating.</p>
