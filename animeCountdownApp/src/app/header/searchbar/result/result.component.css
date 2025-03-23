@@ -2,10 +2,12 @@
     list-style-type: none;
     padding: 8px;
     border-bottom: 1px solid #eee;
+    z-index: 5;
   }
   
   .result-item:last-child {
     border-bottom: none;
+    z-index: 5;
   }
   
   .media-item {
@@ -14,6 +16,7 @@
     align-items: center; 
     gap: 10px;
     border-radius: 10px;
+    z-index: 4;
   }
   
   .media-item:hover {

@@ -1,56 +1,76 @@
-.collapsible-container {
-    margin-bottom: 20px;
-    
-}
+:root {
+    --primary-color: #00a6fb;
+    --bg-dark: #0B0C10;
+    --bg-slightly-lighter: #131419; 
+    --text-color: #C5C6C7;
+  }
   
-.weekSection {
+  .collapsible-container {
+    margin-bottom: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .weekSection {
     width: 100%;
     display: flex;
-    color: #00a6fb;
-    gap: 10px;
-}
-
-.weekSection:hover {
+    color: var(--primary-color);
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 12px 0;
+  }
+  
+  .weekSection:hover {
     cursor: pointer;
-}
-
-.collapsible-content {
+  }
+  
+  .gradient-bar {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      var(--primary-color) 0%, 
+      rgba(0, 166, 251, 0.7) 50%, 
+      rgba(0, 166, 251, 0.1) 100%);
+    margin-bottom: 10px;
+  }
+  
+  .collapsible-content {
     transition: max-height 0.3s ease-out;
     overflow: hidden;
     max-height: 5000px;
-}
-
-.collapsible-content.collapsed {
+  }
+  
+  .collapsible-content.collapsed {
     max-height: 0;
     padding-top: 0;
     padding-bottom: 0;
     border-top: none;
-}
-
-.bar {
-    width: 100%;
-    height: 2px;
-    background-color: #00a6fb;
-}
-
-img.right, img.down {
-    height: 1.5rem; 
-    stroke: #00a6fb;
   }
   
-img.down {
-    transform: rotate(90deg);
-    stroke: #00a6fb;
+  .toggle-icon {
+    display: flex;
+    align-items: center;
   }
-
+  
+  .right-arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .down-arrow {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+  }
+  
   @media screen and (max-width: 600px) {
-
     .weekSection {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        color: #00a6fb;
-        gap: 10px;
-        font-size: 1.8rem;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      color: var(--primary-color);
+      gap: 10px;
+      font-size: 1.25rem;
     }
   }

@@ -1,12 +1,92 @@
-<img src="" alt="">
-<div class="content-body">
-    <div class="poster"></div>
-    <div class="media-info">
-        <div class="title"></div>
-        <div class="description"></div>
-        <div class="details"></div>
+<div class="anime-container">
+  @if (mediaDetails()?.banner) {
+  <div class="banner-container">
+    <img [src]="mediaDetails()?.banner" alt="Anime Banner" class="img-banner" />
+    <div class="banner-gradient"></div>
+  </div>
+  } @else {
+  <div class="banner-container">
+    <img src="defaultBanner.png" alt="Anime Banner" class="img-banner" />
+    <div class="banner-gradient"></div>
+  </div>
+  }
+
+  <div class="content-body">
+    <div class="poster">
+      <img
+        [src]="mediaDetails()?.coverimage"
+        alt="Anime Cover Image"
+        class="cover-art"
+      />
+      <div class="score-container">
+        <div class="progress-bar-container">
+          <div
+            class="progress-bar"
+            [style.width]="mediaDetails()?.avgscore + '%'"
+          ></div>
+        </div>
+        <div class="score-badge">
+          <span>{{ mediaDetails()?.avgscore  }}%</span>
+        </div>
+      </div>
     </div>
-</div>
-<div class="time">
-    <div class="remaining-time"></div>
+
+    <div class="media-info">
+      <div class="title">
+        <h1 class="english-title">{{ mediaDetails()?.engtitle }}</h1>
+        <h3 class="romaji-title">{{ mediaDetails()?.romtitle }}</h3>
+      </div>
+
+      @if (mediaDetails()?.airingat) {
+      <div class="airing-info">
+        <div
+          class="badge"
+          [class.airing]="mediaDetails()?.status === 'RELEASING'"
+        >
+          Releasing
+        </div>
+
+        @if (mediaDetails()?.status === 'RELEASING') {
+        <div class="next-episode">
+          <span class="ep-label"
+            >Episode: {{ mediaDetails()?.nextepisode }}</span
+          >
+          <span class="airing-at">{{
+            mediaDetails()?.airingat | date : "MMM d, h:mm a"
+          }}</span>
+        </div>
+        }
+      </div>
+      }
+
+      <div class="genres-container">
+        <div class="genre-title">Genres:</div>
+        @for (genre of mediaDetails()?.genres; track genre) {
+        <span class="genre-tag">{{ genre }}</span>
+        }
+      </div>
+
+      <div class="description" [innerHTML]="mediaDetails()?.description"></div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          @if (mediaDetails()?.totalepisodes) {
+          <div class="detail-label">Episodes</div>
+          <div class="detail-value">{{ mediaDetails()?.totalepisodes }}</div>
+          } @else {
+          <div class="detail-label">Episodes</div>
+          <div class="detail-value">Not Known</div>
+          }
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Duration</div>
+          <div class="detail-value">{{ mediaDetails()?.duration }} min</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Popularity</div>
+          <div class="detail-value">{{ mediaDetails()?.popularity }} 🧑‍💻 </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

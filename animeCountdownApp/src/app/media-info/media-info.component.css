@@ -1,0 +1,252 @@
+:root {
+    --primary-color: #FF5E7D;    
+    --secondary-color: #7DF9FF;  
+    --text-color: #E0E0FF;       
+    --bg-dark: #121420;          
+    --bg-card: #1B2032;          
+    --bg-lighter: #2A2F45;       
+    --font-main: 'Poppins', sans-serif;
+  }
+  
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  
+  .anime-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .banner-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  .img-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.01); 
+  }
+  
+  .banner-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    background-image: linear-gradient(to bottom, rgba(36, 39, 58, 0), rgba(36, 39, 58, 1));
+    z-index: 0;
+  }
+  
+  .content-body {
+    display: grid;
+    grid-template-columns: minmax(200px, 1fr) 3fr;
+    gap: 30px;
+    padding: 30px;
+    position: relative;
+    margin-top: -100px;
+    z-index: 0;
+  }
+  
+  .poster {
+    position: relative;
+  }
+  
+  .cover-art {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .score-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .progress-bar-container {
+    position: relative;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(to right, 
+      #7DF9FF 0%,    
+      #46CDFF 25%,   
+      #00A6FB 50%,   
+      #0078D4 75%,   
+      #0051A8 100%   
+    );
+
+    background-size: 100% 100%;
+    transition: width 0.3s ease;
+  }
+  
+  .score-badge {
+    background-color: var(--bg-lighter);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    min-width: 45px;
+    text-align: center;
+  }
+
+  .media-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .title {
+    margin-bottom: 10px;
+  }
+  
+  .english-title {
+    font-size: 2.2rem;
+    margin: 0 0 5px 0;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+  }
+  
+  .romaji-title {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #b4b7c5;
+    font-weight: 400;
+  }
+  
+  .airing-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 5px 0 10px 0;
+  }
+  
+  .badge {
+    background-color: var(--bg-lighter);
+    border-radius: 6px;
+    font-size: 1.2rem;
+    text-transform: none;
+  }
+  
+  .badge.airing {
+    background-color: var(--secondary-color);
+  }
+  
+  .next-episode {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .ep-label {
+    font-size: 1.2rem;
+  }
+  
+  .airing-at {
+    font-size: 1.1rem;
+  }
+  
+  .genres-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-bottom: 15px;
+  }
+  
+  .genre-tag {
+    background-color: var(--bg-lighter);
+    color: var(--text-color);
+    border-radius: 20px;
+    padding: 5px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .genre-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .description {
+    color: #b4b7c5;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 90%;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .detail-item {
+    background-color: var(--bg-lighter);
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .detail-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .detail-label {
+    font-size: 0.8rem;
+    color: #a0a3b1;
+    margin-bottom: 3px;
+  }
+  
+  .detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .content-body {
+      grid-template-columns: 1fr;
+      margin-top: -60px;
+    }
+  
+    .poster {
+      max-width: 200px;
+      margin: 0 auto;
+    }
+  
+    .banner-container {
+      height: 200px;
+    }
+  
+    .description {
+      max-width: 100%;
+    }
+  }

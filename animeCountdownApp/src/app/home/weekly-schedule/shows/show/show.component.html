@@ -1,37 +1,41 @@
-@if (timeLeft()) {
-<div class="card">
-  <div class="cardBody">
-    <div class="airingDate">
-      <div class="dateItem">
-        {{ timeLeft()! / (1000 * 60 * 60 * 24) | number : "1.0-0" }}
+@if (timeLeft() != undefined && timeLeft()! > 0) {
+<a class="link" [routerLink]="['/media', media()!.id]">
+  <div (click)="retrieveId($event)" class="card">
+    <div class="cardBody">
+      <div class="airingDate">
+        <div class="dateItem">
+          {{ timeLeft()! / (1000 * 60 * 60 * 24) | number : "1.0-0" }}
+        </div>
+        <div class="dateItem">
+          {{
+            (timeLeft()! % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+              | number : "2.0-0"
+          }}
+        </div>
+        <div class="dateItem">
+          {{
+            (timeLeft()! % (1000 * 60 * 60)) / (1000 * 60) | number : "2.0-0"
+          }}
+        </div>
+        <div class="dateItemS">
+          {{ (timeLeft()! % (1000 * 60)) / 1000 | number : "2.0-0" }}
+        </div>
+        <div class="dateItem">Days</div>
+        <div class="dateItem">Hours</div>
+        <div class="dateItem">Minutes</div>
+        <div class="dateItem">Seconds</div>
       </div>
-      <div class="dateItem">
-        {{
-          (timeLeft()! % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            | number : "2.0-0"
-        }}
+      <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
+      <div class="cardFooter">
+        @if (media()?.title_English != null) {
+        {{ media()?.title_English }}
+        } @else {
+        {{ media()?.title_Romaji }}
+        }
       </div>
-      <div class="dateItem">
-        {{ (timeLeft()! % (1000 * 60 * 60)) / (1000 * 60) | number : "2.0-0" }}
-      </div>
-      <div class="dateItemS">
-        {{ (timeLeft()! % (1000 * 60)) / 1000 | number : "2.0-0" }}
-      </div>
-      <div class="dateItem">Days</div>
-      <div class="dateItem">Hours</div>
-      <div class="dateItem">Minutes</div>
-      <div class="dateItem">Seconds</div>
-    </div>
-    <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
-    <div class="cardFooter">
-      @if (media()?.title_English != null) {
-      {{ media()?.title_English }}
-      } @else {
-      {{ media()?.title_Romaji }}
-      }
     </div>
   </div>
-</div>
+</a>
 } @else {
 <div class="card">
   <div class="skeleton-container">

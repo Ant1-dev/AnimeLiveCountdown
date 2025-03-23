@@ -1,45 +1,90 @@
-/* You can add global styles to this file, and also import other style files */
+/* Modern Global Styles */
 :root {
-    background-color: #0B0C10;
-    color: #C5C6C7;
-    font-family: "Roboto";
-    max-width: 1150px;
-    margin: auto;
-    margin-top: .5rem;
-}
-.weekSection {
+    /* Color variables */
+    --bg-dark: #0B0C10;
+    --bg-card: #1F2833;
+    --text-primary: #C5C6C7;
+    --accent: #00a6fb;
+    --border: rgba(102, 252, 241, 0.1);
+    
+    /* Typography variables */
+    --font-main: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    
+    /* Layout variables */
+    --container-width: 1200px;
+    --grid-gap: 30px;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    
+    /* System settings */
+    color-scheme: dark;
+    
+    /* Global application */
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    max-width: var(--container-width);
+    margin: var(--spacing-sm) auto 0;
+    padding: 0 var(--spacing-md);
+    
+    /* Better font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Container for week sections */
+  .weekSection {
     display: flex;
-    color: #00a6fb;
+    align-items: center;
+    color: var(--accent);
     font-size: 2.125rem;
-    font-weight: bold;
-}
-
-.cardContainer {
+    font-weight: 700;
+    margin: var(--spacing-lg) 0 var(--spacing-md);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--spacing-sm);
+  }
+  
+  .cardContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15%, 202px));
-    grid-auto-rows: auto;
-    margin: 50px 0 ;
-    gap: 30px;
-}
-
-@media screen and (max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--grid-gap);
+    margin: var(--spacing-lg) 0;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Card hover animations for better interactivity */
+  .cardContainer > * {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .cardContainer > *:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Responsive Breakpoints */
+  /* Tablet */
+  @media screen and (max-width: 900px) {
+    .cardContainer {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+  }
+  
+  /* Mobile */
+  @media screen and (max-width: 600px) {
     :root {
-        margin: 10px;
-        display: flex;
-        max-width: 100%;
-        width: 100vw;
-        justify-content: center;
+      padding: 0 var(--spacing-sm);
     }
-
+    
     .weekSection {
-        width: 100vw;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 5px;
-        overflow: hidden;
+      width: 100%;
+      justify-content: space-between;
+      font-size: 1.75rem;
+      padding: var(--spacing-sm);
     }
-
+    
     .cardContainer {
         display: grid;
         justify-content: center;
@@ -47,5 +92,44 @@
         grid-auto-rows: auto;
         gap: 15px;
     }
-    
-}
+  }
+  
+  @media screen and (max-width: 400px) {
+    .cardContainer {
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(2, 45vw);
+        grid-auto-rows: auto;
+        gap: 15px;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--bg-card);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }

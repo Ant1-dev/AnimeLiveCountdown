@@ -63,6 +63,8 @@ export class SearchbarComponent implements OnInit {
     });
   }
 
+  
+
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {

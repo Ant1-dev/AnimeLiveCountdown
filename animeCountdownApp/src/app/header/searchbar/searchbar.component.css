@@ -8,6 +8,7 @@
     border: none;
     font-size: 16px;
     line-height: normal;
+    z-index: 3;
   }
   
   .search-wrapper {
@@ -20,23 +21,29 @@
     border-radius: 10px;
     box-sizing: border-box;
     position: relative;
+    z-index: 3;
   }
   
   .search-container {
     position: relative;
     width: 100%;
-    z-index: 1;
+    z-index: 9999;
   }
   
   .pi-search {
     margin-right: 8px;
     color: #666;
   }
+
+  mat-icon {
+    margin-right: 8px;
+    color: #00a6fb; 
+  }
   
   .search-results {
     margin-top: 0.5rem;
     width: inherit;
-    z-index: 10;
+    z-index: 5;
     background-color: #141414;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -58,4 +65,5 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    z-index: 3;
   }

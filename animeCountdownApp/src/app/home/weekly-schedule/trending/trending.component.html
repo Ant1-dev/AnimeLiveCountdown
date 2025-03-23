@@ -1,5 +1,7 @@
-<h1 class="weekSection">Trending</h1>
-<div class="bar"></div>
+<div class="section-header">
+  <h1 class="section-title">Trending</h1>
+  <div class="gradient-bar"></div>
+</div>
 <div class="cardContainer">
   @for (show of media(); track show.id; let i = $index) {
   <app-show [media]="show" />
