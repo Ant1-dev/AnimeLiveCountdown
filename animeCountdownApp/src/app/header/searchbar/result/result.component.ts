@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { Media } from '../../../schedule.model';
+import { Media } from '../../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { MediaInfoService } from '../../../services/media.info.service';
 import { RouterLink } from '@angular/router';
@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-result',
   imports: [CommonModule, RouterLink],
   templateUrl: './result.component.html',
-  styleUrl: './result.component.css'
+  styleUrl: './result.component.css',
 })
 export class ResultComponent {
   result = input<Media>();

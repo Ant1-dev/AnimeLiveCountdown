@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
 import { SearchService } from '../../services/search.service';
-import { Media } from '../../schedule.model';
+import { Media } from '../../models/schedule.model';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ResultComponent } from './result/result.component';
@@ -62,8 +62,6 @@ export class SearchbarComponent implements OnInit {
       subscription1.unsubscribe();
     });
   }
-
-  
 
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event): void {

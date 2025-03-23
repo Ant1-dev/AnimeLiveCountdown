@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { MediaInfo } from '../media-info.model';
+import { MediaInfo } from '../models/media-info.model';
 import { catchError, map, throwError } from 'rxjs';
 
 @Injectable({

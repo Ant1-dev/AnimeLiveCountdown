@@ -1,5 +1,20 @@
 .purpose {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 1.5rem;
-  }
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.schedule-placeholder {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: #666;
+}

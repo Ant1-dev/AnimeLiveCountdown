@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { Media } from '../../../schedule.model';
+import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
 import { ShowComponent } from '../shows/show/show.component';
 

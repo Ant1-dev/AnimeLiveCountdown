@@ -3,4 +3,10 @@
 </h1>
 <app-trending/>
 <app-airing-soon/>
-<app-weekly-schedule/>
+@defer (on viewport) {
+    <app-weekly-schedule/>
+  } @placeholder {
+    <div class="schedule-placeholder" aria-label="Loading weekly schedule">
+      <div class="loading-text">Loading weekly schedule...</div>
+    </div>
+  }

@@ -1,51 +1,50 @@
-@if (timeLeft() != undefined && timeLeft()! > 0) {
-<a class="link" [routerLink]="['/media', media()!.id]">
-  <div (click)="retrieveId($event)" class="card">
-    <div class="cardBody">
+@if (timeRemaining(); as remaining) {
+  <a class="link" [routerLink]="['/media', media()!.id]" (click)="retrieveId()">
+    <div class="card">
       <div class="airingDate">
-        <div class="dateItem">
-          {{ timeLeft()! / (1000 * 60 * 60 * 24) | number : "1.0-0" }}
-        </div>
-        <div class="dateItem">
-          {{
-            (timeLeft()! % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-              | number : "2.0-0"
-          }}
-        </div>
-        <div class="dateItem">
-          {{
-            (timeLeft()! % (1000 * 60 * 60)) / (1000 * 60) | number : "2.0-0"
-          }}
-        </div>
-        <div class="dateItemS">
-          {{ (timeLeft()! % (1000 * 60)) / 1000 | number : "2.0-0" }}
-        </div>
+        <div class="dateItem">{{remaining.days}}</div>
+        <div class="dateItem">{{remaining.hours | number:'2.0-0'}}</div>
+        <div class="dateItem">{{remaining.minutes | number:'2.0-0'}}</div>
+        <div class="dateItemS">{{remaining.seconds | number:'2.0-0'}}</div>
         <div class="dateItem">Days</div>
         <div class="dateItem">Hours</div>
         <div class="dateItem">Minutes</div>
-        <div class="dateItem">Seconds</div>
+        <div class="dateItem">Sec</div>
       </div>
-      <img [src]="media()?.cover_Image_Url" alt="Cover Art" class="poster" />
+      
+      <!-- Use picture element for WebP support once generated WebP images -->
+      <picture>
+        <!-- WebP fallback - uncomment when WebP images are available -->
+        <!--<source type="image/webp" [srcset]="getWebpUrl(media()?.cover_Image_Url)">-->
+        <img
+          [src]="media()?.cover_Image_Url"
+          [alt]="displayTitle()"
+          class="poster"
+          width="168"
+          height="252"
+          [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
+          [style.aspect-ratio]="'2/3'"
+        />
+      </picture>
+      
       <div class="cardFooter">
-        @if (media()?.title_English != null) {
-        {{ media()?.title_English }}
-        } @else {
-        {{ media()?.title_Romaji }}
-        }
+        {{displayTitle()}}
       </div>
     </div>
-  </div>
-</a>
+  </a>
 } @else {
-<div class="card">
-  <div class="skeleton-container">
-    <p-skeleton height="300px" styleClass="mb-2" width="100%"></p-skeleton>
-    <p-skeleton
-      width="100%"
-      height="calc(100% * 3/2)"
-      styleClass="poster-skeleton"
-    ></p-skeleton>
-    <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+  <div class="card">
+    <div class="skeleton-container">
+      <div class="airingDate-skeleton">
+        <p-skeleton width="100%" height="60px"></p-skeleton>
+      </div>
+      <p-skeleton
+        width="100%"
+        height="252px"
+        styleClass="poster-skeleton"
+      ></p-skeleton>
+      <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+    </div>
   </div>
-</div>
 }

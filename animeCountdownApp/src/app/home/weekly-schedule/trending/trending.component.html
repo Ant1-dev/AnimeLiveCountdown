@@ -2,8 +2,29 @@
   <h1 class="section-title">Trending</h1>
   <div class="gradient-bar"></div>
 </div>
-<div class="cardContainer">
-  @for (show of media(); track show.id; let i = $index) {
-  <app-show [media]="show" />
-  }
-</div>
+
+@if (isLoading()) {
+  <div class="card-container-skeleton">
+    <div class="skeleton-grid">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="show-skeleton">
+          <div class="airing-date-skeleton"></div>
+          <p-skeleton width="100%" height="252px" styleClass="poster-skeleton"></p-skeleton>
+          <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+        </div>
+      }
+    </div>
+  </div>
+} @else if (error() !== '') {
+  <div class="error-container">
+    <div class="error-message">{{error()}}</div>
+  </div>
+} @else {
+  <div class="cardContainer">
+    @for (show of media(); track show.id; let i = $index) {
+      <app-show 
+        [media]="show" 
+        [renderPriority]="getShowPriority(i)" />
+    }
+  </div>
+}

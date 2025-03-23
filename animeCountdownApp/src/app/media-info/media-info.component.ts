@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MediaInfoService } from '../services/media.info.service';
-import { MediaInfo } from '../media-info.model';
+import { MediaInfo } from '../models/media-info.model';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';

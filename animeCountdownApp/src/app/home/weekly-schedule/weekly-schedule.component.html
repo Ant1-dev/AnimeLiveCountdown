@@ -1,6 +1,29 @@
 @for (day of weekDays; track $index;) {
-  <app-collapsible [title]="day">
-    <app-shows [weekDay]="day" />
-  </app-collapsible>
-
+  @if ($index < 2) {
+    <!-- First two days loaded immediately for better user experience -->
+    <app-collapsible [title]="day">
+      <app-shows [weekDay]="day" [renderPriority]="$index === 0 ? 'high' : 'medium'" />
+    </app-collapsible>
+  } @else {
+    <!-- Defer loading of other days -->
+    @defer (on viewport) {
+      <app-collapsible [title]="day">
+        <app-shows [weekDay]="day" renderPriority="low" />
+      </app-collapsible>
+    } @placeholder {
+      <app-collapsible [title]="day">
+        <div class="card-container-skeleton">
+          <div class="skeleton-grid">
+            @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+              <div class="show-skeleton">
+                <div class="airing-date-skeleton"></div>
+                <p-skeleton width="100%" height="252px" styleClass="poster-skeleton"></p-skeleton>
+                <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+              </div>
+            }
+          </div>
+        </div>
+      </app-collapsible>
+    }
+  }
 }
