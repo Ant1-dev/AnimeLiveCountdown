@@ -7,7 +7,6 @@ import { ShowComponent } from '../shows/show/show.component';
 
 @Component({
   selector: 'app-trending',
-  standalone: true,
   imports: [CommonModule, ShowComponent, SkeletonModule],
   templateUrl: './trending.component.html',
   styleUrl: './trending.component.css',

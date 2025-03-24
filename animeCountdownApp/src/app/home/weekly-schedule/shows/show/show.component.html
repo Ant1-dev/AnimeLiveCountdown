@@ -11,14 +11,10 @@
         <div class="dateItem">Minutes</div>
         <div class="dateItem">Sec</div>
       </div>
-      
-      <!-- Use picture element for WebP support once generated WebP images -->
       <picture>
-        <!-- WebP fallback - uncomment when WebP images are available -->
-        <!--<source type="image/webp" [srcset]="getWebpUrl(media()?.cover_Image_Url)">-->
         <img
           [src]="media()?.cover_Image_Url"
-          [alt]="displayTitle()"
+          [alt]="getDisplayTitle()"
           class="poster"
           width="168"
           height="252"
@@ -27,9 +23,8 @@
           [style.aspect-ratio]="'2/3'"
         />
       </picture>
-      
       <div class="cardFooter">
-        {{displayTitle()}}
+        {{getDisplayTitle()}}
       </div>
     </div>
   </a>

@@ -162,7 +162,13 @@
   }
   
   .ep-label {
+    display: flex;
+    gap: 5px;
     font-size: 1.2rem;
+  }
+  .ep-label div {
+    font-weight: 600;
+    color:#00A6FB;
   }
   
   .airing-at {
@@ -220,18 +226,83 @@
   }
   
   .detail-label {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #a0a3b1;
     margin-bottom: 3px;
   }
   
   .detail-value {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: white;
   }
   
+  .countdown-container {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .countdown-header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .countdown-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    background-color: var(--bg-lighter);
+    border-radius: 8px;
+    padding: 10px 15px;
+    min-width: 70px;
+    text-align: center;
+  }
+  
+  .countdown-label {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: 5px;
+  }
+  
+  .countdown-message {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    text-align: center;
+    padding: 15px;
+  }
+
   @media (max-width: 768px) {
+    .next-episode {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    
+    .airing-at {
+      margin-left: 0;
+      margin-top: 5px;
+      display: block;
+    }
+
     .content-body {
       grid-template-columns: 1fr;
       margin-top: -60px;
@@ -249,4 +320,9 @@
     .description {
       max-width: 100%;
     }
+    
+    .countdown-value {
+      font-size: 2rem;
+      min-width: 50px;
+    }  
   }

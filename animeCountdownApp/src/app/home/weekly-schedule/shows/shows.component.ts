@@ -16,7 +16,6 @@ type RenderPriority = 'high' | 'medium' | 'low';
 
 @Component({
   selector: 'app-shows',
-  standalone: true,
   imports: [ShowComponent, CommonModule, SkeletonModule],
   templateUrl: './shows.component.html',
   styleUrl: './shows.component.css',

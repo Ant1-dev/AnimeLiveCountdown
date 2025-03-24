@@ -1,14 +1,17 @@
+// media-info.component.ts
 import {
   Component,
   DestroyRef,
   inject,
-  input,
   OnInit,
   signal,
+  computed
 } from '@angular/core';
 import { MediaInfoService } from '../services/media.info.service';
+import { MediaTimeService } from '../services/media-time.service';
 import { MediaInfo } from '../models/media-info.model';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { TimeRemaining } from '../models/time-remaining.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -21,11 +24,18 @@ import { CommonModule } from '@angular/common';
 })
 export class MediaInfoComponent implements OnInit {
   private mediaInfoService = inject(MediaInfoService);
+  private mediaTimeService = inject(MediaTimeService);
   private destroyRef = inject(DestroyRef);
   public mediaDetails = signal<MediaInfo | undefined>(undefined);
   private error = signal<string>('');
   private route = inject(ActivatedRoute);
-
+  
+  timeRemaining = computed<TimeRemaining | null>(() => {
+    const media = this.mediaDetails();
+    if (!media || !media.id) return null;
+    return this.mediaTimeService.getTimeRemaining(media.id);
+  });
+  
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
@@ -40,6 +50,7 @@ export class MediaInfoComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.mediaDetails.set(data);
+          this.mediaTimeService.initializeTimerFromMediaInfo(data);
           console.log(data);
         },
         error: (err) =>

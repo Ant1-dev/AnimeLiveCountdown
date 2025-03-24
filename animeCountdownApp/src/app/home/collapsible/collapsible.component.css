@@ -11,6 +11,10 @@
     overflow: hidden;
   }
   
+  .week-day {
+    color: inherit;
+  }
+  
   .weekSection {
     width: 100%;
     display: flex;

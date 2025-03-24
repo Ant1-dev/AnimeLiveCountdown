@@ -39,17 +39,11 @@
 
       @if (mediaDetails()?.airingat) {
       <div class="airing-info">
-        <div
-          class="badge"
-          [class.airing]="mediaDetails()?.status === 'RELEASING'"
-        >
-          Releasing
-        </div>
 
         @if (mediaDetails()?.status === 'RELEASING') {
         <div class="next-episode">
           <span class="ep-label"
-            >Episode: {{ mediaDetails()?.nextepisode }}</span
+            >Next Airing Episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
           >
           <span class="airing-at">{{
             mediaDetails()?.airingat | date : "MMM d, h:mm a"
@@ -62,7 +56,7 @@
       <div class="genres-container">
         <div class="genre-title">Genres:</div>
         @for (genre of mediaDetails()?.genres; track genre) {
-        <span class="genre-tag">{{ genre }}</span>
+        <span class="genre-tag">{{ genre }},</span>
         }
       </div>
 
@@ -70,11 +64,10 @@
 
       <div class="details-grid">
         <div class="detail-item">
+          <div class="detail-label">Expected: Episodes</div>
           @if (mediaDetails()?.totalepisodes) {
-          <div class="detail-label">Episodes</div>
           <div class="detail-value">{{ mediaDetails()?.totalepisodes }}</div>
           } @else {
-          <div class="detail-label">Episodes</div>
           <div class="detail-value">Not Known</div>
           }
         </div>
@@ -83,10 +76,35 @@
           <div class="detail-value">{{ mediaDetails()?.duration }} min</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">Popularity</div>
+          <div class="detail-label">Followers</div>
           <div class="detail-value">{{ mediaDetails()?.popularity }} 🧑‍💻 </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div class="countdown-container">
+  @if (mediaDetails()?.status === 'RELEASING' && timeRemaining(); as remaining) {
+    <div class="countdown-header">Next Episode Countdown</div>
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value">{{remaining.days}}</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value">{{remaining.hours | number:'2.0-0'}}</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value">{{remaining.minutes | number:'2.0-0'}}</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value" style="color: #00a6fb">{{remaining.seconds | number:'2.0-0'}}</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+  } @else if (mediaDetails()?.status === 'RELEASING') {
+    <div class="countdown-message">Countdown data not available</div>
+  }
 </div>
