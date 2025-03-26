@@ -14,6 +14,8 @@
   <div class="error-container">
     <div class="error-message">{{error()}}</div>
   </div>
+} @else if (media().length <= 0) {
+  <h2>No shows airing this day</h2>
 } @else {
   <div class="cardContainer">
     @for (show of media(); track show.id; let i = $index) {

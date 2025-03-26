@@ -14,4 +14,9 @@ public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long
 
     @Query("SELECT DISTINCT m FROM MediaInfoEntity m JOIN FETCH m.genres WHERE m.id = :id")
     Optional<MediaInfoEntity> findByIdWithGenres(@Param("id") Long id);
+
+    @Query("SELECT e FROM MediaInfoEntity e WHERE " +
+           "LOWER(e.romtitle) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "LOWER(e.engtitle) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    List<MediaInfoEntity> searchByFields(@Param("searchTerm") String searchTerm);
 }

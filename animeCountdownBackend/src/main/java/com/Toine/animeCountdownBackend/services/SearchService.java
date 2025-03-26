@@ -1,7 +1,7 @@
 package com.Toine.animeCountdownBackend.services;
 
-import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
-import com.Toine.animeCountdownBackend.repositories.MediaRepository;
+import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
+import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,13 +9,13 @@ import java.util.List;
 
 @Service
 public class SearchService {
-    private final MediaRepository repository;
+    private final MediaInfoRepository repository;
 
-    public SearchService(MediaRepository repository) {
+    public SearchService(MediaInfoRepository repository) {
         this.repository = repository;
     }
 
-    public List<MediaEntity> searchEntities(String searchTerm) {
+    public List<MediaInfoEntity> searchEntities(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             return new ArrayList<>();
         }

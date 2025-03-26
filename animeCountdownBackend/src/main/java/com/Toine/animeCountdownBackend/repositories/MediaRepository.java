@@ -17,11 +17,6 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     @Query("SELECT m FROM MediaEntity m ORDER BY m.next_Airing_At ASC")
     Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);
 
-    @Query("SELECT e FROM MediaEntity e WHERE " +
-            "LOWER(e.title_Romaji) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "LOWER(e.title_English) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
-    List<MediaEntity> searchByFields(@Param("searchTerm") String searchTerm);
-
     Page<MediaEntity> findAllByOrderByPopularityDesc(Pageable pageable);
 
     @Query("SELECT m.id FROM MediaEntity m")

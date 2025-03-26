@@ -1,8 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { Media } from '../models/schedule.model';
+import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
+import { MediaInfo } from '../models/media-info.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +18,8 @@ export class SearchService {
 
     const params = new HttpParams().set('term', term.trim());
     return this.httpClient
-      .get<Media[]>(this.url, { params })
-      .pipe(catchError(this.handleError<Media[]>('search', [])));
+      .get<MediaInfo[]>(this.url, { params })
+      .pipe(catchError(this.handleError<MediaInfo[]>('search', [])));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

@@ -45,13 +45,6 @@ public class MediaInfoService {
         }
     }
 
-
-    @Transactional
-    public void updateDatabase(List<MediaInfoEntity> newEntities) {
-
-    }
-
-
     public MediaInfoEntity convertToEntity(MediaInfo mediaInfo) {
         MediaInfoEntity entity = new MediaInfoEntity();
 
@@ -98,7 +91,7 @@ public class MediaInfoService {
                     media(
                       isAdult: false
                       type: ANIME
-                      status: RELEASING
+                      status_in: [RELEASING, NOT_YET_RELEASED]
                       sort: POPULARITY_DESC
                     ) {
                       id

@@ -108,7 +108,7 @@ public class ScheduleService {
             }
 
             // Handle deletions (anime that are no longer airing)
-            // Only if we have a complete dataset (not empty)
+            // Only if there is a complete dataset (not empty)
             if (!newIds.isEmpty()) {
                 List<Long> idsToDelete = existingIds.stream()
                         .filter(id -> !newIds.contains(id))

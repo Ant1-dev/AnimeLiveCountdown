@@ -13,10 +13,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
 import { SearchService } from '../../services/search.service';
-import { Media } from '../../models/schedule.model';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ResultComponent } from './result/result.component';
+import { MediaInfo } from '../../models/media-info.model';
 
 @Component({
   selector: 'app-searchbar',
@@ -25,7 +25,7 @@ import { ResultComponent } from './result/result.component';
   styleUrl: './searchbar.component.css',
 })
 export class SearchbarComponent implements OnInit {
-  searchResults = signal<Media[]>([]);
+  searchResults = signal<MediaInfo[]>([]);
   showResults = signal<boolean>(true);
   searchControl = new FormControl('');
   searchTerm = signal<string>('');

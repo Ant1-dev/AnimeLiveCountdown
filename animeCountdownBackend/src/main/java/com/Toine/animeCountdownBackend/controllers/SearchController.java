@@ -1,6 +1,6 @@
 package com.Toine.animeCountdownBackend.controllers;
 
-import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
+import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.services.SearchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +20,8 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<MediaEntity>> search(@RequestParam(required = false) String term) {
-        List<MediaEntity> results = service.searchEntities(term);
+    public ResponseEntity<List<MediaInfoEntity>> search(@RequestParam(required = false) String term) {
+        List<MediaInfoEntity> results = service.searchEntities(term);
         return ResponseEntity.ok(results);
     }
 }

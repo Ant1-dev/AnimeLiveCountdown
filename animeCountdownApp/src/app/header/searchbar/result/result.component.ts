@@ -3,6 +3,7 @@ import { Media } from '../../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { MediaInfoService } from '../../../services/media.info.service';
 import { RouterLink } from '@angular/router';
+import { MediaInfo } from '../../../models/media-info.model';
 
 @Component({
   selector: 'app-result',
@@ -11,7 +12,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './result.component.css',
 })
 export class ResultComponent {
-  result = input<Media>();
+  result = input<MediaInfo>();
   mediaInfoServe = inject(MediaInfoService);
 
   retrieveId() {

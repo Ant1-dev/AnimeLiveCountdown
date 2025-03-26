@@ -1,15 +1,15 @@
 <a [routerLink]="['/media', result()!.id]">
 <li (click)="retrieveId()" class="result-item">
     <div class="media-item">
-      <img [src]="result()?.cover_Image_Url" class="cover-image">
+      <img [src]="result()?.coverimage" class="cover-image">
       <div class="media-details">
-          @if (result()?.title_English) {
-              <h3 class="media-title">{{result()?.title_English}}</h3>
+          @if (result()?.engtitle) {
+              <h3 class="media-title">{{result()?.engtitle}}</h3>
           } @else {
-              <h3 class="media-title">{{result()?.title_Romaji}}</h3>
+              <h3 class="media-title">{{result()?.romtitle}}</h3>
           }
-        @if (result()?.next_Airing_At) {
-          <div class="media-airing-date">{{result()?.day}} {{ result()?.next_Airing_At | date:'shortTime'}}</div>
+        @if (result()?.airingat) {
+          <div class="media-airing-date">{{ result()?.airingat | date:'shortTime'}}</div>
         } @else {
           <p class="media-airing-date">Unkown airing time</p>
         }

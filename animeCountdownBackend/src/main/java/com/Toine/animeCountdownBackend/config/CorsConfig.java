@@ -14,7 +14,6 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         // specific origins:
-        config.addAllowedOrigin("https://anime-live-countdown.vercel.app");
         config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedOrigin("https://animelivecountdown.com");
 
@@ -27,7 +26,7 @@ public class CorsConfig {
         // allow credentials like cookies, authentication in the future???
         config.setAllowCredentials(true);
 
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
