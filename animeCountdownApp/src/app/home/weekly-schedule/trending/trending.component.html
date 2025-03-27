@@ -15,11 +15,7 @@
       }
     </div>
   </div>
-} @else if (error() !== '') {
-  <div class="error-container">
-    <div class="error-message">{{error()}}</div>
-  </div>
-} @else {
+}  @else {
   <div class="cardContainer">
     @for (show of media(); track show.id; let i = $index) {
       <app-show 

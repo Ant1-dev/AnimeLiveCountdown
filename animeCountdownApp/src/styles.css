@@ -1,7 +1,6 @@
-/* Modern Global Styles */
 :root {
     /* Color variables */
-    --bg-dark: #0B0C10;
+    --bg-dark: #101116;
     --bg-card: #1F2833;
     --text-primary: #C5C6C7;
     --accent: #00a6fb;
@@ -40,8 +39,6 @@
     color: var(--accent);
     font-size: 2.125rem;
     font-weight: 700;
-    margin: var(--spacing-lg) 0 var(--spacing-md);
-    border-bottom: 1px solid var(--border);
     padding-bottom: var(--spacing-sm);
   }
   

@@ -3,12 +3,13 @@ import { catchError, Observable, of } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { MediaInfo } from '../models/media-info.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
-  private url = 'https://anime-countdown-latest.onrender.com/api/search';
+  private url = environment.apiUrl + 'search';
   private httpClient = inject(HttpClient);
 
   search(term: string) {

@@ -2,13 +2,13 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Media } from '../models/schedule.model';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleService {
-  private url: string =
-    'https://anime-countdown-latest.onrender.com/api/airing/';
+  private url: string = environment.apiUrl + 'airing/';
   private httpClient = inject(HttpClient);
 
   renderMedia(weekDay: string, errorMessage: string) {

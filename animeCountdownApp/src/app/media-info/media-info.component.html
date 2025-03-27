@@ -1,110 +1,118 @@
-<div class="anime-container">
-  @if (mediaDetails()?.banner) {
-  <div class="banner-container">
-    <img [src]="mediaDetails()?.banner" alt="Anime Banner" class="img-banner" />
-    <div class="banner-gradient"></div>
-  </div>
-  } @else {
-  <div class="banner-container">
-    <img src="defaultBanner.png" alt="Anime Banner" class="img-banner" />
-    <div class="banner-gradient"></div>
-  </div>
-  }
-
-  <div class="content-body">
-    <div class="poster">
-      <img
-        [src]="mediaDetails()?.coverimage"
-        alt="Anime Cover Image"
-        class="cover-art"
-      />
-      <div class="score-container">
-        <div class="progress-bar-container">
-          <div
-            class="progress-bar"
-            [style.width]="mediaDetails()?.avgscore + '%'"
-          ></div>
-        </div>
-        <div class="score-badge">
-          <span>{{ mediaDetails()?.avgscore  }}%</span>
-        </div>
-      </div>
+@defer (when mediaDetails()) {
+  <div class="anime-container">
+    @if (mediaDetails()?.banner) {
+    <div class="banner-container">
+      <img [src]="mediaDetails()?.banner" alt="Anime Banner" class="img-banner" />
+      <div class="banner-gradient"></div>
     </div>
-
-    <div class="media-info">
-      <div class="title">
-        <h1 class="english-title">{{ mediaDetails()?.engtitle }}</h1>
-        <h3 class="romaji-title">{{ mediaDetails()?.romtitle }}</h3>
-      </div>
-
-      @if (mediaDetails()?.airingat) {
-      <div class="airing-info">
-
-        @if (mediaDetails()?.status === 'RELEASING') {
-        <div class="next-episode">
-          <span class="ep-label"
-            >Next Airing Episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
-          >
-          <span class="airing-at">{{
-            mediaDetails()?.airingat | date : "MMM d, h:mm a"
-          }}</span>
+    } @else {
+    <div class="banner-container">
+      <img src="defaultBanner.png" alt="Anime Banner" class="img-banner" />
+      <div class="banner-gradient"></div>
+    </div>
+    }
+  
+    <div class="content-body">
+      <div class="poster">
+        <img
+          [src]="mediaDetails()?.coverimage"
+          alt="Anime Cover Image"
+          class="cover-art"
+        />
+        <div class="score-container">
+          <div class="progress-bar-container">
+            <div
+              class="progress-bar"
+              [style.width]="mediaDetails()?.avgscore + '%'"
+            ></div>
+          </div>
+          <div class="score-badge">
+            <span>{{ mediaDetails()?.avgscore  }}%</span>
+          </div>
         </div>
-        }
       </div>
-      }
-
-      <div class="genres-container">
-        <div class="genre-title">Genres:</div>
-        @for (genre of mediaDetails()?.genres; track genre) {
-        <span class="genre-tag">{{ genre }},</span>
-        }
-      </div>
-
-      <div class="description" [innerHTML]="mediaDetails()?.description"></div>
-
-      <div class="details-grid">
-        <div class="detail-item">
-          <div class="detail-label">Expected: Episodes</div>
-          @if (mediaDetails()?.totalepisodes) {
-          <div class="detail-value">{{ mediaDetails()?.totalepisodes }}</div>
-          } @else {
-          <div class="detail-value">Not Known</div>
+  
+      <div class="media-info">
+        <div class="title">
+          <h1 class="english-title">{{ mediaDetails()?.engtitle }}</h1>
+          <h3 class="romaji-title">{{ mediaDetails()?.romtitle }}</h3>
+        </div>
+  
+        @if (mediaDetails()?.airingat) {
+        <div class="airing-info">
+  
+          @if (mediaDetails()?.status === 'RELEASING') {
+          <div class="next-episode">
+            <span class="ep-label"
+              >Next Airing Episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
+            >
+            <span class="airing-at">{{
+              mediaDetails()?.airingat | date : "MMM d, h:mm a"
+            }}</span>
+          </div>
           }
         </div>
-        <div class="detail-item">
-          <div class="detail-label">Duration</div>
-          <div class="detail-value">{{ mediaDetails()?.duration }} min</div>
+        }
+  
+        <div class="genres-container">
+          <div class="genre-title">Genres:</div>
+          @for (genre of mediaDetails()?.genres; track genre) {
+          <span class="genre-tag">{{ genre }},</span>
+          }
         </div>
-        <div class="detail-item">
-          <div class="detail-label">Followers</div>
-          <div class="detail-value">{{ mediaDetails()?.popularity }} 🧑‍💻 </div>
+  
+        <div class="description" [innerHTML]="mediaDetails()?.description"></div>
+  
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-label">Expected: Episodes</div>
+            @if (mediaDetails()?.totalepisodes) {
+            <div class="detail-value">{{ mediaDetails()?.totalepisodes }}</div>
+            } @else {
+            <div class="detail-value">Not Known</div>
+            }
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Duration</div>
+            @if (mediaDetails()?.duration) {
+              <div class="detail-value">{{ mediaDetails()?.duration }} min</div>
+            } @else {
+              <div class="detail-value">Not Known</div>
+            }
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Followers</div>
+            <div class="detail-value">{{ mediaDetails()?.popularity }} 🧑‍💻 </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="countdown-container">
-  @if (mediaDetails()?.status === 'RELEASING' && timeRemaining(); as remaining) {
-    <div class="countdown-header">Next Episode Countdown</div>
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value">{{remaining.days}}</div>
-        <div class="countdown-label">Days</div>
+  <div class="countdown-container">
+    @if (timeRemaining(); as remaining) {
+      <div class="countdown-header">Next Episode Countdown</div>
+      <div class="countdown-timer">
+        <div class="countdown-item">
+          <div class="countdown-value">{{remaining.days}}</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value">{{remaining.hours | number:'2.0-0'}}</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value">{{remaining.minutes | number:'2.0-0'}}</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value" style="color: #00a6fb">{{remaining.seconds | number:'2.0-0'}}</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
       </div>
-      <div class="countdown-item">
-        <div class="countdown-value">{{remaining.hours | number:'2.0-0'}}</div>
-        <div class="countdown-label">Hours</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value">{{remaining.minutes | number:'2.0-0'}}</div>
-        <div class="countdown-label">Minutes</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value" style="color: #00a6fb">{{remaining.seconds | number:'2.0-0'}}</div>
-        <div class="countdown-label">Seconds</div>
-      </div>
-    </div>
-  } @else if (mediaDetails()?.status === 'RELEASING') {
-    <div class="countdown-message">Countdown data not available</div>
-  }
-</div>
+    } @else if (mediaDetails()?.status != 'RELEASING') {
+      <div class="countdown-message">Countdown data not available</div>
+    }
+  </div>
+} @placeholder {
+  <h1></h1>
+}

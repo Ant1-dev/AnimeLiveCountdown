@@ -12,13 +12,12 @@ import {
 import { Media } from '../../../../models/schedule.model';
 import { MediaInfoService } from '../../../../services/media.info.service';
 import { MediaTimeService } from '../../../../services/media-time.service';
-import { RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TimeRemaining } from '../../../../models/time-remaining.model';
 
 @Component({
   selector: 'app-show',
-  imports: [CommonModule, SkeletonModule, RouterLink],
+  imports: [CommonModule, SkeletonModule],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,4 @@
-<a [routerLink]="['/media', result()!.id]">
+<a [href]="'/media/' + result()!.id">
 <li (click)="retrieveId()" class="result-item">
     <div class="media-item">
       <img [src]="result()?.coverimage" class="cover-image">
@@ -9,7 +9,7 @@
               <h3 class="media-title">{{result()?.romtitle}}</h3>
           }
         @if (result()?.airingat) {
-          <div class="media-airing-date">{{ result()?.airingat | date:'shortTime'}}</div>
+          <div class="media-airing-date">{{ result()?.airingat | date:'medium'}}</div>
         } @else {
           <p class="media-airing-date">Unkown airing time</p>
         }

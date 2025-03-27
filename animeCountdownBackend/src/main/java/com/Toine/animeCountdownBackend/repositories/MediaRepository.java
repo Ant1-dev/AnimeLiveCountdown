@@ -12,7 +12,8 @@ import java.util.List;
 
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
-    List<MediaEntity> findByDayIgnoreCase(String day);
+    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND LOWER(m.day) = LOWER(:day)")
+    List<MediaEntity> findByDayIgnoreCase(@Param("day") String day);
 
     @Query("SELECT m FROM MediaEntity m ORDER BY m.next_Airing_At ASC")
     Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);

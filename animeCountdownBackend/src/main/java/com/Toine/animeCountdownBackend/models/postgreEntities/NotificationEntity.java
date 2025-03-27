@@ -16,7 +16,6 @@ public class NotificationEntity {
     @Column(name = "send_date")
     private Instant sendDate;
 
-    // Fix relationship - assuming notification belongs to a user
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -22,6 +23,12 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<List<MediaInfoEntity>> search(@RequestParam(required = false) String term) {
         List<MediaInfoEntity> results = service.searchEntities(term);
-        return ResponseEntity.ok(results);
+
+
+        List<MediaInfoEntity> limitedResults = results.stream()
+                .limit(5)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(limitedResults);
     }
 }

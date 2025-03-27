@@ -204,7 +204,7 @@ public class ScheduleService {
             media(
               isAdult: false
               type: ANIME
-              status: RELEASING
+              status_in: [RELEASING, NOT_YET_RELEASED]
               sort: POPULARITY_DESC
             ) {
               id

@@ -1,5 +1,5 @@
 @if (timeRemaining(); as remaining) {
-  <a class="link" [routerLink]="['/media', media()!.id]" (click)="retrieveId()">
+  <a class="link" [href]="'/media/' + media()!.id" (click)="retrieveId()">
     <div class="card">
       <div class="airingDate">
         <div class="dateItem">{{remaining.days}}</div>

@@ -1,6 +1,5 @@
 import {
   ApplicationConfig,
-  isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -10,7 +9,6 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { inject } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
