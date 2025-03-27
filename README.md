@@ -25,6 +25,7 @@
     </ul>
     <li>Add user sign-in and authentication ☑️</li>
     <li>Add notifications set up ☑️</li>
+    <li>Toggle to show airing media englished dubbed ☑️</li>
 </ol>
 <h1>Issues</h1>
 <p>After search the search bar remains open and doesn't close till user clicks elsewhere on screen.</p>
