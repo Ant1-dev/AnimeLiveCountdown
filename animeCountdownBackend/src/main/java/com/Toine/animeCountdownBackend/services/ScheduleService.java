@@ -36,7 +36,7 @@ public class ScheduleService {
      * Scheduled task to update the anime database
      * Runs every 5 min (300000 ms)
      */
-    @Scheduled(fixedRate = 300000) // Every 5min
+   // @Scheduled(fixedRate = 300000) // Every 5min
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {

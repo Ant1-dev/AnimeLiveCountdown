@@ -1,140 +1,108 @@
 .header {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 0 0 1rem 0;
-    box-sizing: border-box;
-    position: relative;
-  }
-  
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #101116;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  gap: 1rem;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.searchBar {
+  flex: 1;
+  height: 2.3rem;
+  border-radius: 100px;
+  outline: #a9a9a9 solid 1px;
+  margin: 0 0.5rem;
+  min-width: 120px;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.language-toggle {
+  min-width: fit-content;
+}
+
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notification, .profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.notification:hover, .profile:hover {
+  cursor: pointer;
+  background-color: rgba(240, 240, 240, 0.8);
+}
+
+@media screen and (max-width: 768px) {
   .navbar {
-    display: flex;
-    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
   }
   
-
-  .logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 40px; 
-  }
-  
-  .logo-img {
-    width: 40px;
-    height: auto; 
-    border-radius: 50%;
-    object-fit: contain; 
-  }
-  
-
   .searchBar {
-    flex: 1; 
-    max-width: 600px; 
-    min-width: 100px; 
-    height: 2.5rem;
-    border-radius: 100px;
-    outline: #a9a9a9 solid 1px;
-    margin: 0 1rem; 
-    z-index: 1;
+    order: 3;
+    width: 100%;
+    margin: 0.5rem 0 0 0;
   }
   
-  
-  .itemHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem; 
-    min-width: fit-content; 
+  .logo-container {
+    order: 1;
   }
   
-  .newNotif {
-    background-color: #C5C6C7;
-    color: #0B0C10;
-    display: flex;
-    align-items: center;
-    border-radius: 100px;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    transition: background-color 0.3s ease;
+  .navbar-actions {
+    order: 2;
+    margin-left: auto;
   }
-  
-  .newNotif:hover {
-    background-color: #a9a9a9;
-    cursor: pointer;
-  }
-  
-  .notification, .profile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
+}
+
+@media screen and (max-width: 480px) {
+  .navbar {
     padding: 0.5rem;
-    transition: all 0.3s ease;
   }
   
-  .notification:hover {
-    cursor: pointer;
-    background-color: rgba(169, 169, 169, 0.2);
+  .navbar-actions {
+    gap: 0.5rem;
   }
   
-  .profile:hover {
-    cursor: pointer;
-    box-shadow: 0 0 5px #a9a9a9;
+  .language-toggle {
+    transform: scale(0.9);
+    transform-origin: right center;
   }
-  
-  @media screen and (max-width: 768px) {
-    .navbar {
-      flex-wrap: wrap; 
-      gap: 0.75rem;
-    }
-    
-    .logo-container {
-      order: 1; 
-    }
-    
-    .searchBar {
-      order: 2; 
-      width: 100%;
-      max-width: none;
-      margin: 0.5rem 0;
-    }
-    
-    .itemHeader {
-      order: 3; 
-      margin-left: auto;
-    }
-    .newNotif {
-        display: none;
-    }
-    
-    .newNotif-text {
-      display: none; 
-    }
-    
-    .purpose {
-      font-size: 1.25rem;
-      margin-top: 0.75rem;
-    }
-  }
-  
-  
-  @media screen and (max-width: 480px) {
-    .header {
-      padding: 0.75rem;
-    }
-    
-    .itemHeader {
-      gap: 0.5rem;
-    }
-    
-    .notification, .profile, .newNotif {
-      padding: 0.4rem;
-    }
-    
-    .purpose {
-      font-size: 1rem;
-    }
-  }
+}

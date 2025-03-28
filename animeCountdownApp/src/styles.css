@@ -12,7 +12,6 @@
     /* Layout variables */
     --container-width: 1200px;
     --grid-gap: 30px;
-    --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 2rem;
     
@@ -24,7 +23,7 @@
     color: var(--text-primary);
     font-family: var(--font-main);
     max-width: var(--container-width);
-    margin: var(--spacing-sm) auto 0;
+    margin: 0 auto 0;
     padding: 0 var(--spacing-md);
     
     /* Better font rendering */

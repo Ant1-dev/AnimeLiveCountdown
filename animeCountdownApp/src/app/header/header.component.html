@@ -4,18 +4,25 @@
       <a routerLink=""><img src="favicon.png" alt="logo" class="logo-img" /></a>
     </div>
     
-    <app-searchbar class="searchBar"/>
+    <app-searchbar class="searchBar" />
     
-    <div class="itemHeader">
-      <div class="newNotif">
-        <img src="plusSymbol.svg" alt="Add New Notif" />
-        <span class="newNotif-text">Add</span>
-      </div>
-      <div class="notification">
-        <img src="bell.svg" alt="Notification Bell" />
-      </div>
-      <div class="profile">
-        <img src="profileCircle.svg" alt="Profile Icon" />
+    <div class="navbar-actions">
+      <form [formGroup]="language" class="language-toggle">
+        <p-selectButton
+          [options]="stateOptions"
+          formControlName="value"
+          optionLabel="label"
+          optionValue="value"
+        />
+      </form>
+      
+      <div class="navbar-icons">
+        <div class="notification">
+          <img src="bell.svg" alt="Notification Bell" />
+        </div>
+        <div class="profile">
+          <img src="profileCircle.svg" alt="Profile Icon" />
+        </div>
       </div>
     </div>
   </div>

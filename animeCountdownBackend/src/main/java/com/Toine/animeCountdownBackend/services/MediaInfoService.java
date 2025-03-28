@@ -27,7 +27,7 @@ public class MediaInfoService {
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    @Scheduled(fixedRate = 43200000) //every 12hr
+    // @Scheduled(fixedRate = 43200000) //every 12hr
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         logger.info("Starting scheduled media_info refresh at {}", Instant.now());
@@ -35,6 +35,7 @@ public class MediaInfoService {
         // First fetch the data outside the transaction
         List<MediaInfoEntity> newEntities = fetchAllCurrentlyAiringAnimeInfo().block();
 
+        logger.info("Clearing Database");
         mediaInfoRepository.deleteAll();
         if (newEntities != null) {
             logger.info("Successfully fetched {} anime info entries", newEntities.size());

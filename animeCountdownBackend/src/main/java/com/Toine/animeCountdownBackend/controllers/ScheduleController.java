@@ -26,7 +26,7 @@ public class ScheduleController {
 
     @GetMapping("/airing/{weekDay}")
     public List<MediaEntity> getAnimeOnDay(@PathVariable String weekDay) {
-        return mediaRepository.findByDayIgnoreCase(weekDay);
+        return mediaRepository.findAiringMediaByDayOrderedByPopularity(weekDay);
     }
 
     @GetMapping("/airing/trending")
