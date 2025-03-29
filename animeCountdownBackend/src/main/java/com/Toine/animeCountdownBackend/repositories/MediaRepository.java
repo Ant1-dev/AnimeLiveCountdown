@@ -18,8 +18,6 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     @Query("SELECT m FROM MediaEntity m ORDER BY m.next_Airing_At ASC")
     Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);
 
-    Page<MediaEntity> findAllByOrderByPopularityDesc(Pageable pageable);
-
     @Query("SELECT m.id FROM MediaEntity m")
     List<Long> findAllIds();
 }

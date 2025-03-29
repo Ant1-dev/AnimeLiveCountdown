@@ -7,33 +7,37 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import compression from 'compression'
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
-
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+// Add compression middleware - this is the key addition
+app.use(compression({
+  level: 6, // Default compression level is 6, can increase up to 9 for max compression
+  threshold: 0, // Compress all responses
+  filter: (req, res) => {
+    // Compress everything except images and videos
+    if (req.headers['accept']?.includes('image/') || 
+        req.headers['accept']?.includes('video/')) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
+}));
 
 /**
- * Serve static files from /browser
+ * Serve static files from /browser with improved cache settings
  */
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
     index: false,
     redirect: false,
+    etag: true, // Enable ETags
+    lastModified: true, // Enable Last-Modified
   }),
 );
 
@@ -51,7 +55,6 @@ app.use('/**', (req, res, next) => {
 
 /**
  * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
@@ -61,6 +64,6 @@ if (isMainModule(import.meta.url)) {
 }
 
 /**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
+ * Request handler used by the Angular CLI or Firebase Cloud Functions.
  */
 export const reqHandler = createNodeRequestHandler(app);

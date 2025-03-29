@@ -1,4 +1,3 @@
-// media-time.service.ts (updated to handle MediaInfo)
 import { Injectable, signal, DestroyRef, inject } from '@angular/core';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

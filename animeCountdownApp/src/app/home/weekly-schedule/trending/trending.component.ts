@@ -1,38 +1,38 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Media } from '../../../models/schedule.model';
-import { ScheduleService } from '../../../services/schedule.service';
-import { ShowComponent } from '../shows/show/show.component';
+import { HeroCarouselComponent } from "./hero-carousel/hero-carousel.component";
+import { MediaInfo } from '../../../models/media-info.model';
+import { MediaInfoService } from '../../../services/media.info.service';
 
 @Component({
   selector: 'app-trending',
-  imports: [CommonModule, ShowComponent, SkeletonModule],
+  imports: [CommonModule, SkeletonModule, HeroCarouselComponent],
   templateUrl: './trending.component.html',
   styleUrl: './trending.component.css',
 })
 export class TrendingComponent implements OnInit {
-  media = signal<Media[]>([]);
+  media = signal<MediaInfo[]>([]);
   error = signal<string>('');
   isLoading = signal(true);
-
-  private scheduleService = inject(ScheduleService);
+  private mediaInfoService = inject(MediaInfoService);
   private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    const subscription = this.scheduleService
-      .renderMedia('trending', this.error())
+    const subscription = this.mediaInfoService
+      .getTrendingMedia(this.error())
       .subscribe({
         next: (media) => {
           if (media != undefined) {
-            const limitedMedia = media;
-            this.media.set(limitedMedia);
-
-            for (let i = 0; i < limitedMedia.length; i++) {
-              if (limitedMedia[i].cover_Image_Url) {
-                const img = new Image();
-                img.src = limitedMedia[i].cover_Image_Url;
-              }
+            this.media.set(media);
+            
+            // Only preload the first banner image - rest will be lazy loaded
+            if (media.length > 0 && media[0].banner) {
+              // Preload just the first image with high priority
+              const img = new Image();
+              img.src = media[0].banner;
+              // not all browsers support this but worth trying
+              img.fetchPriority = 'high';
             }
           }
           this.isLoading.set(false);
@@ -43,14 +43,9 @@ export class TrendingComponent implements OnInit {
           this.isLoading.set(false);
         },
       });
-
+    
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
     });
-  }
-
-  // Determine priority based on index
-  getShowPriority(index: number): 'high' | 'medium' | 'low' {
-    return index < 4 ? 'high' : 'medium';
   }
 }

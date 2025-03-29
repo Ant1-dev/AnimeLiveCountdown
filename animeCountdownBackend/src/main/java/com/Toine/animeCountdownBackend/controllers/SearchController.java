@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/search")
 public class SearchController {
     private final SearchService service;
 
@@ -20,7 +20,7 @@ public class SearchController {
         this.service = service;
     }
 
-    @GetMapping("/search")
+    @GetMapping("")
     public ResponseEntity<List<MediaInfoEntity>> search(@RequestParam(required = false) String term) {
         List<MediaInfoEntity> results = service.searchEntities(term);
 

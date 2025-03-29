@@ -16,6 +16,7 @@ public class CorsConfig {
         // specific origins:
         config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedOrigin("https://animelivecountdown.com");
+        config.addAllowedOrigin("http://127.0.0.1:8081");
 
         // allow all HTTP methods
         config.addAllowedMethod("*");

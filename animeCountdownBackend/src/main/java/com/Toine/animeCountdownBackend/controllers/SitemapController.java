@@ -1,7 +1,7 @@
 package com.Toine.animeCountdownBackend.controllers;
 
-import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
-import com.Toine.animeCountdownBackend.repositories.MediaRepository;
+import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
+import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -21,17 +21,17 @@ import java.util.List;
 public class SitemapController {
 
     @Autowired
-    private MediaRepository mediaRepository;
+    private MediaInfoRepository mediaInfoRepository;
 
     @Cacheable(value = "sitemapCache", key = "'mediaSitemap'")
     @GetMapping(value = "/sitemap.xml", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> generateSitemap() {
         // get trending media (top 20 by popularity)
         Pageable pageable = PageRequest.of(0, 20);
-        List<MediaEntity> trendingMedia = mediaRepository.findAllByOrderByPopularityDesc(pageable).getContent();
+        List<MediaInfoEntity> trendingMedia = mediaInfoRepository.findAllByOrderByPopularityDesc(pageable).getContent();
 
         // get all media IDs for complete sitemap
-        List<Long> allMediaIds = mediaRepository.findAllIds();
+        List<Long> allMediaIds = mediaInfoRepository.findAllIds();
 
         String today = LocalDate.now().toString();
 
@@ -46,10 +46,10 @@ public class SitemapController {
                 .append("  </url>\n");
 
         // add trending media pages with higher priority
-        for (MediaEntity media : trendingMedia) {
+        for (MediaInfoEntity media : trendingMedia) {
             String lastMod = today;
-            if (media.getNext_Airing_At() != null) {
-                lastMod = LocalDate.ofInstant(media.getNext_Airing_At(), ZoneId.systemDefault())
+            if (media.getAiringat() != null) {
+                lastMod = LocalDate.ofInstant(media.getAiringat(), ZoneId.systemDefault())
                         .format(DateTimeFormatter.ISO_LOCAL_DATE);
             }
 

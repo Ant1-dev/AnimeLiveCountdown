@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.config;
 
+import com.Toine.animeCountdownBackend.components.OAuth2SuccessComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final OAuth2SuccessComponent oAuth2SuccessComponent;
+
+    public SecurityConfig(OAuth2SuccessComponent oAuth2SuccessComponent) {
+        this.oAuth2SuccessComponent = oAuth2SuccessComponent;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -19,17 +25,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/**").permitAll()
                         .requestMatchers("/api/auth/**").authenticated()
-                        .anyRequest().permitAll()  // allow Angular to serve its routes
+                        .anyRequest().permitAll()  // allow client to serve its routes
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler((request, response, authentication) -> {
-                            // redirect to Angular app after successful login
-                            response.sendRedirect("/");
-                        })
+                        .successHandler(oAuth2SuccessComponent)
                 )
                 .logout(logout -> logout
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            // redirect to Angular app after logout
+                            // redirect to client root after logout
                             response.sendRedirect("/");
                         })
                 );

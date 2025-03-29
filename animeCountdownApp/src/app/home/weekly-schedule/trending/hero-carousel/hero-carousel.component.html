@@ -1,0 +1,45 @@
+<div class="hero-carousel">
+    <!-- Main slide container -->
+    <div class="hero-slides-container">
+      @for (slide of mediaList(); track slide.id; let i = $index) {
+        <div
+          class="hero-slide"
+          [class.active]="currentSlide().id === slide.id">
+          
+          <!-- CRITICAL CHANGE: Use picture element with preload hint -->
+          <picture>
+            <!-- Preload the first image in head -->
+            @if (i === 0) {
+              <link rel="preload" [attr.href]="slide.banner" as="image" type="image/jpeg" importance="high">
+            }
+            
+            <img [src]="slide.banner" 
+                 [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+                 fetchpriority="high"
+                 width="1920" height="400"
+                 [alt]="slide.engtitle || slide.romtitle"
+                 style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0;"
+                 [attr.importance]="i === 0 ? 'high' : 'low'">
+          </picture>
+          
+          <div class="hero-slide-content">
+            <h1 [innerHTML]="slide.engtitle ? slide.engtitle : slide.romtitle"></h1>
+            <p [innerHTML]="slide.description ? slide.description.slice(0, 300) : ''"></p>
+          </div>
+        </div>
+      }
+    </div>
+    
+    <!-- Indicators/Dots -->
+    <div class="hero-indicators">
+      @for (slide of mediaList(); track slide.id; let i = $index) {
+        <button
+          class="hero-indicator"
+          [class.active]="currentIndex() === i"
+          (click)="goToSlide(i)"
+          [disabled]="isAnimating()">
+          <span class="sr-only">Slide {{ i + 1 }}</span>
+        </button>
+      }
+    </div>
+  </div>
