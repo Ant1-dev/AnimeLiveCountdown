@@ -31,7 +31,6 @@ export class TrendingComponent implements OnInit {
               // Preload just the first image with high priority
               const img = new Image();
               img.src = media[0].banner;
-              // not all browsers support this but worth trying
               img.fetchPriority = 'high';
             }
           }
