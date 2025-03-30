@@ -18,7 +18,8 @@ public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long
     @Query("SELECT DISTINCT m FROM MediaInfoEntity m JOIN FETCH m.genres WHERE m.id = :id")
     Optional<MediaInfoEntity> findByIdWithGenres(@Param("id") Long id);
 
-    Page<MediaInfoEntity> findAllByOrderByPopularityDesc(Pageable pageable);
+    @Query("SELECT m FROM MediaInfoEntity m WHERE m.airingat IS NOT NULL ORDER BY m.popularity DESC")
+    Page<MediaInfoEntity> findAllByPopularityWithAiringDate(Pageable pageable);
 
     @Query(value = "SELECT * FROM media_info WHERE " +
                    "rom_title ILIKE '%' || :searchTerm || '%' OR " +

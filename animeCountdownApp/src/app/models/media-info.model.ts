@@ -10,7 +10,7 @@ export interface MediaInfo {
   genres?: string[];
   avgscore?: number;
   description?: string;
-  coverimage?: string;
+  coverimage: string;
   banner?: string;
   airingat?: string;
   

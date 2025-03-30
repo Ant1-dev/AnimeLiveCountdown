@@ -5,11 +5,13 @@ import {
   effect,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MediaInfo } from '../../../../models/media-info.model';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-hero-carousel',
@@ -21,17 +23,25 @@ export class HeroCarouselComponent {
   mediaList = input<MediaInfo[]>();
   currentIndex = signal<number>(0);
   autoPlay = signal<boolean>(true);
-  autoPlayInterval = signal<number>(5000);
+  autoPlayInterval = signal<number>(7000);
   isAnimating = signal<boolean>(false);
   currentSlide = computed(() => this.mediaList()![this.currentIndex()]);
   private destroyRef = inject(DestroyRef);
+  index = output<number>();
+  sanitizer = inject(DomSanitizer);
 
   constructor() {
     effect(() => {
       if (this.autoPlay()) {
         this.startAutoPlay();
       }
+      this.index.emit(this.currentIndex());
     });
+  }
+
+  getSafeUrl(url: string | undefined): SafeUrl {
+    if (!url) return '';
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   startAutoPlay() {
@@ -63,5 +73,11 @@ export class HeroCarouselComponent {
       (this.currentIndex() - 1 + this.mediaList()!.length) %
       this.mediaList()!.length;
     this.goToSlide(newIndex);
+  }
+
+  truncateWithEllipsis(text: string | undefined, limit: number): string {
+    if (!text) return '';
+    if (text.length <= limit) return text;
+    return text.slice(0, limit) + '...';
   }
 }

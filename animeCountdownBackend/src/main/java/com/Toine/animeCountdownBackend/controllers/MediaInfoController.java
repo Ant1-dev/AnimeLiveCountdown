@@ -51,7 +51,7 @@ public class MediaInfoController {
     @Cacheable(value = "trendingCache", key = "'trending'")
     public ResponseEntity<Map<String, Object>> getTrending() {
         Pageable pageable = PageRequest.of(0, 7);
-        List<MediaInfoEntity> media = mediaInfoRepository.findAllByOrderByPopularityDesc(pageable).getContent();
+        List<MediaInfoEntity> media = mediaInfoRepository.findAllByPopularityWithAiringDate(pageable).getContent();
 
         // Create enhanced response with dimensions
         Map<String, Object> response = new HashMap<>();

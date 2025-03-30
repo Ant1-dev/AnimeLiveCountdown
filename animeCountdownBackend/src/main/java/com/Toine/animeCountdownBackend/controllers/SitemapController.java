@@ -28,7 +28,7 @@ public class SitemapController {
     public ResponseEntity<String> generateSitemap() {
         // get trending media (top 20 by popularity)
         Pageable pageable = PageRequest.of(0, 20);
-        List<MediaInfoEntity> trendingMedia = mediaInfoRepository.findAllByOrderByPopularityDesc(pageable).getContent();
+        List<MediaInfoEntity> trendingMedia = mediaInfoRepository.findAllByPopularityWithAiringDate(pageable).getContent();
 
         // get all media IDs for complete sitemap
         List<Long> allMediaIds = mediaInfoRepository.findAllIds();
