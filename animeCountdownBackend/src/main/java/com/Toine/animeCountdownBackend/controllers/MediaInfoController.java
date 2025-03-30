@@ -76,7 +76,7 @@ public class MediaInfoController {
         response.put("dimensions", dimensions);
 
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(15, TimeUnit.MINUTES))
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES))
                 .body(response);
     }
 
