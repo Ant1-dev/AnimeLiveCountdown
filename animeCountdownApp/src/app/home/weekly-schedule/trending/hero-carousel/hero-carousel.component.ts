@@ -7,14 +7,11 @@ import {
   input,
   output,
   signal,
-  OnInit,
-  AfterViewInit
 } from '@angular/core';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MediaInfo } from '../../../../models/media-info.model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MediaInfoService } from '../../../../services/media.info.service';
 
 @Component({
   selector: 'app-hero-carousel',
@@ -22,21 +19,17 @@ import { MediaInfoService } from '../../../../services/media.info.service';
   templateUrl: './hero-carousel.component.html',
   styleUrl: './hero-carousel.component.css',
 })
-export class HeroCarouselComponent implements OnInit, AfterViewInit {
+export class HeroCarouselComponent {
   mediaList = input<MediaInfo[]>();
   currentIndex = signal<number>(0);
   autoPlay = signal<boolean>(true);
   autoPlayInterval = signal<number>(7000);
   isAnimating = signal<boolean>(false);
-  imagesLoaded = signal<boolean>(false);
-  
   currentSlide = computed(() => this.mediaList()![this.currentIndex()]);
-  
   private destroyRef = inject(DestroyRef);
-  private mediaService = inject(MediaInfoService);
   index = output<number>();
   sanitizer = inject(DomSanitizer);
-  
+
   constructor() {
     effect(() => {
       if (this.autoPlay()) {
@@ -45,49 +38,30 @@ export class HeroCarouselComponent implements OnInit, AfterViewInit {
       this.index.emit(this.currentIndex());
     });
   }
-  
-  ngOnInit() {
-    // Preload first slide image
-    if (this.mediaList()!.length > 0) {
-      this.mediaService.preloadFirstBannerImage(this.mediaList());
-    }
+
+  // In your component
+ngAfterViewInit() {
+  if (this.mediaList()!.length > 0) {
+    const firstSlide = this.mediaList()![0];
+    const imgUrl = firstSlide.banner || firstSlide.coverimage;
+    
+    // Create preload link dynamically
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = imgUrl;
+    link.type = imgUrl.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
+    link.fetchPriority = 'high';
+    
+    document.head.appendChild(link);
   }
-  
-  ngAfterViewInit() {
-    // Track when the first image is loaded
-    const firstImage = document.querySelector('.hero-slide:first-child img');
-    if (firstImage) {
-      if ((firstImage as HTMLImageElement).complete) {
-        this.imagesLoaded.set(true);
-      } else {
-        firstImage.addEventListener('load', () => {
-          this.imagesLoaded.set(true);
-        });
-      }
-    }
-  }
-  
+}
+
   getSafeUrl(url: string | undefined): SafeUrl {
     if (!url) return '';
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
-  
-  getOptimizedImageUrl(url: string | undefined): SafeUrl {
-    if (!url) return '';
-    const optimizedUrl = this.mediaService.getOptimizedImageUrl(url);
-    return this.sanitizer.bypassSecurityTrustUrl(optimizedUrl);
-  }
-  
-  getSrcSet(slide: MediaInfo, isBanner: boolean = true): string {
-    return isBanner && slide.banner 
-      ? slide.banner 
-      : slide.coverimage || '';
-  }
-  
-  getSizes(): string {
-    return this.mediaService.getSizesAttribute();
-  }
-  
+
   startAutoPlay() {
     interval(this.autoPlayInterval())
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -95,31 +69,50 @@ export class HeroCarouselComponent implements OnInit, AfterViewInit {
         this.nextSlide();
       });
   }
-  
+
   goToSlide(index: number) {
     if (this.isAnimating()) return;
+
     this.isAnimating.set(true);
     this.currentIndex.set(index);
+
     setTimeout(() => {
       this.isAnimating.set(false);
     }, 600);
   }
-  
+
   nextSlide() {
     const newIndex = (this.currentIndex() + 1) % this.mediaList()!.length;
     this.goToSlide(newIndex);
   }
-  
+
   prevSlide() {
     const newIndex =
       (this.currentIndex() - 1 + this.mediaList()!.length) %
       this.mediaList()!.length;
     this.goToSlide(newIndex);
   }
-  
+
   truncateWithEllipsis(text: string | undefined, limit: number): string {
     if (!text) return '';
     if (text.length <= limit) return text;
     return text.slice(0, limit) + '...';
+  }
+
+  getOptimizedImageUrl(imageUrl: string): SafeUrl {
+    if (!imageUrl) return '';
+    
+    // Check if the URL already has a format specified
+    const hasFormat = /\.(jpe?g|png|gif|webp)$/i.test(imageUrl);
+    
+    // If it's an existing format, try to serve WebP version if available
+    if (hasFormat) {
+      // Replace extension with WebP
+      const webpUrl = imageUrl.replace(/\.(jpe?g|png|gif)$/i, '.webp');
+      return this.sanitizer.bypassSecurityTrustUrl(webpUrl);
+    }
+    
+    // If no format or already WebP, return as is
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
 }

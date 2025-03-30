@@ -144,3 +144,24 @@
     white-space: nowrap;
     border-width: 0;
   }
+
+  @media (max-width: 768px) {
+  
+  .hero-slide-content h1 {
+    font-size: 2rem; 
+  }
+  
+  .hero-slide-content p {
+    font-size: 0.9rem;
+    max-width: 300px;
+  }
+  
+  .hero-slide img {
+    image-rendering: optimizeSpeed;
+    width: 100%;
+  }
+  
+  .content-loaded .hero-indicators {
+    opacity: 1;
+  }
+}
