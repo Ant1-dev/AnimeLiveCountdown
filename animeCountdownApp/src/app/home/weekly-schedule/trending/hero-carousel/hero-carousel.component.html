@@ -5,24 +5,20 @@
       <picture>
         @if (slide.banner) {
         <img
-          [src]="getSafeUrl(slide.banner)"
-          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
-          fetchpriority="high"
+          [ngSrc]="slide.banner"
           width="1920"
           height="400"
           [alt]="slide.engtitle || slide.romtitle"
-          [attr.importance]="i === 0 ? 'high' : 'low'"
+          priority
         />
         } @else {
         <img
-          [src]="getSafeUrl(slide.coverimage)"
-          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
-          fetchpriority="high"
+          [ngSrc]="slide.coverimage"
           width="1920"
           height="400"
           [alt]="slide.engtitle || slide.romtitle"
           class="blurred"
-          [attr.importance]="i === 0 ? 'high' : 'low'"
+          priority
         />
         }
       </picture>
