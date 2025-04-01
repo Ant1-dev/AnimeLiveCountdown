@@ -2,7 +2,6 @@
   <div class="hero-slides-container">
     @for (slide of mediaList(); track slide.id; let i = $index) {
     <div class="hero-slide" [class.active]="currentSlide().id === slide.id">
-      <picture>
         @if (slide.banner) {
         <img
           [ngSrc]="slide.banner"
@@ -21,7 +20,6 @@
           priority
         />
         }
-      </picture>
       <div class="hero-slide-content">
         <h1>{{ slide.engtitle ? slide.engtitle : slide.romtitle }}</h1>
         <p [innerHTML]="truncateWithEllipsis(slide.description, 300)"></p>
