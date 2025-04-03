@@ -1,7 +1,5 @@
-.purpose {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 1.5rem;
+:root {
+  width: 100%;
 }
 
 .schedule-placeholder {

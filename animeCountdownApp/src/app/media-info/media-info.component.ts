@@ -5,11 +5,11 @@ import {
   inject,
   OnInit,
   signal,
-  computed
+  computed,
 } from '@angular/core';
 import { MediaInfoService } from '../services/media.info.service';
 import { MediaTimeService } from '../services/media-time.service';
-import { MediaInfo } from '../models/media-info.model';
+import { MediaInfo } from '../models/media.info.model';
 import { TimeRemaining } from '../models/time-remaining.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -29,13 +29,13 @@ export class MediaInfoComponent implements OnInit {
   public mediaDetails = signal<MediaInfo | undefined>(undefined);
   private error = signal<string>('');
   private route = inject(ActivatedRoute);
-  
+
   timeRemaining = computed<TimeRemaining | null>(() => {
     const media = this.mediaDetails();
     if (!media || !media.id) return null;
     return this.mediaTimeService.getTimeRemaining(media.id);
   });
-  
+
   ngOnInit(): void {
     this.route.paramMap
       .pipe(

@@ -23,6 +23,5 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideClientHydration(withEventReplay()),
-    provideImgixLoader('https://s4.anilist.co'),
   ],
 };

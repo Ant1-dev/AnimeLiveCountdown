@@ -16,7 +16,7 @@ import { SearchService } from '../../services/search.service';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ResultComponent } from './result/result.component';
-import { MediaInfo } from '../../models/media-info.model';
+import { MediaInfo } from '../../models/media.info.model';
 
 @Component({
   selector: 'app-searchbar',

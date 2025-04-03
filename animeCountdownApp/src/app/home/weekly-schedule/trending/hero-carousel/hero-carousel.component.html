@@ -1,43 +1,65 @@
-<div class="hero-carousel">
-  <div class="hero-slides-container">
-    @for (slide of mediaList(); track slide.id; let i = $index) {
-    <div class="hero-slide" [class.active]="currentSlide().id === slide.id">
-        @if (slide.banner) {
+<div class="carousel">
+  <div class="carousel-media">
+    @for (media of mediaList(); track media.id) {
+    <div class="carousel-media-image" [class.active]="currentMedia()!.id === media.id">
+      @if (media.banner) {
         <img
-          [ngSrc]="slide.banner"
-          width="1920"
-          height="400"
-          [alt]="slide.engtitle || slide.romtitle"
-          priority
-        />
-        } @else {
-        <img
-          [ngSrc]="slide.coverimage"
-          width="1920"
-          height="400"
-          [alt]="slide.engtitle || slide.romtitle"
-          class="blurred"
-          priority
-        />
-        }
-      <div class="hero-slide-content">
-        <h1>{{ slide.engtitle ? slide.engtitle : slide.romtitle }}</h1>
-        <p [innerHTML]="truncateWithEllipsis(slide.description, 300)"></p>
+        [ngSrc]="media.banner"
+        [alt]="media.engtitle || media.romtitle"
+        class="banner-image"
+        fill
+        priority="high"
+      />
+      
+      } @else {
+      <img
+        [ngSrc]="media.coverimage"
+        [alt]="media.engtitle || media.romtitle"
+        class="cover-image"
+        fill
+        priority
+      />
+      }
+      <div class="carousel-content">
+        <h1 class="show-title">{{ media.engtitle || media.romtitle }}</h1>
+        <p class="genres-episodes"> Next Episode: <span class="episodeA">{{media.nextepisode + " "}}</span> <br> Genres: {{ media.genres.join(", ") }}</p>
+        <p class="carousel-content-des" [innerHTML]="trimWithDots(media.description, 300)"></p>
+        <div class="airing-block">
+          <div class="countdown-timer">
+            <div class="countdown-item">
+              <div class="countdown-value">{{timeRemaining().days}}</div>
+              <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+              <div class="countdown-value">{{timeRemaining().hours | number:'2.0-0'}}</div>
+              <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+              <div class="countdown-value">{{timeRemaining().minutes | number:'2.0-0'}}</div>
+              <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+              <div class="countdown-value" style="color: #00a6fb">{{timeRemaining().seconds | number:'2.0-0'}}</div>
+              <div class="countdown-label">Seconds</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     }
-  </div>
-  <div class="hero-slide-content-details"></div>
-  <div class="hero-indicators">
-    @for (slide of mediaList(); track slide.id; let i = $index) {
-    <button
-      class="hero-indicator"
-      [class.active]="currentIndex() === i"
-      (click)="goToSlide(i)"
-      [disabled]="isAnimating()"
-    >
-      <span class="sr-only">Slide {{ i + 1 }}</span>
-    </button>
-    }
+    <!-- <div class="watch">
+      @if (mediaList()[currentIndex()].id) {
+        <a [href]="'/media/' + mediaList()[currentIndex()].id" class="watch-link">More Info</a>
+      }
+      <div class="add-notif"><img src="plusSymbol.svg" alt="Add Notification"></div>
+    </div>
+    <div class="directions">
+      <div class="left-arrow"></div>
+      <div class="carousel-index">
+        <span class="active-index">{{ currentIndex() + 1 }}</span> <span class="index-slash">/</span>
+        {{ mediaList().length }}
+      </div>
+      <div class="right-arrow"></div>
+    </div> -->
   </div>
 </div>

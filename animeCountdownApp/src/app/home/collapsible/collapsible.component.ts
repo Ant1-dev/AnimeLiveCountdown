@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-collapsible',

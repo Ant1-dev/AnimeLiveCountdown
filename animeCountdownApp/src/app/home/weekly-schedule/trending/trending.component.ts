@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
-import { HeroCarouselComponent } from "./hero-carousel/hero-carousel.component";
-import { MediaInfo } from '../../../models/media-info.model';
+import { HeroCarouselComponent } from './hero-carousel/hero-carousel.component';
+import { MediaInfo } from '../../../models/media.info.model';
 import { MediaInfoService } from '../../../services/media.info.service';
 
 @Component({
@@ -26,10 +26,8 @@ export class TrendingComponent implements OnInit {
         next: (media) => {
           if (media != undefined) {
             this.media.set(media);
-            
-            // Only preload the first banner image - rest will be lazy loaded
+
             if (media.length > 0 && media[0].banner) {
-              // Preload just the first image with high priority
               const img = new Image();
               img.src = media[0].banner;
               img.fetchPriority = 'high';
@@ -43,7 +41,7 @@ export class TrendingComponent implements OnInit {
           this.isLoading.set(false);
         },
       });
-    
+
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
     });

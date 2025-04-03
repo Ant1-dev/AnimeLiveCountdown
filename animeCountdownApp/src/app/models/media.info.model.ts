@@ -4,17 +4,16 @@ export interface MediaInfo {
   romtitle?: string;
   nextepisode?: number;
   totalepisodes?: number;
-  status?: string;
+  status: string;
   popularity?: number;
   duration?: number;
-  genres?: string[];
+  genres: string[];
   avgscore?: number;
-  description?: string;
+  description: string;
   coverimage: string;
   banner?: string;
-  airingat?: string;
+  airingat?: Date;
   
-  // additional properties for performance optimization
   bannerWidth?: number;
   bannerHeight?: number;
 }

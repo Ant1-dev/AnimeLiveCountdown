@@ -1,6 +1,6 @@
 /* Base container */
 .anime-container {
-  max-width: 1400px;
+  max-width: auto;
   margin: 1rem 0 0 0;
   background-color: var(--bg-card);
   border-radius: 12px;
@@ -264,7 +264,6 @@
   padding: 10px;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .content-body {
     grid-template-columns: 1fr;

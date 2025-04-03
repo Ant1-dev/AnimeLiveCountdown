@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { MediaInfo } from '../models/media-info.model';
+import { MediaInfo } from '../models/media.info.model';
 import { catchError, Observable, throwError, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -23,21 +23,21 @@ export class MediaInfoService {
 
   getTrendingMedia(error: string): Observable<MediaInfo[]> {
     return this.httpClient.get<any>(this.baseUrl + 'trending').pipe(
-      map(response => {
+      map((response) => {
         // Handle both formats - normal array or object with dimensions
         const mediaList = response.media || response;
         const dimensions = response.dimensions || {};
-        
+
         return mediaList.map((media: any) => {
           // Create enhanced media objects with dimension info
-          const enhancedMedia = {...media};
-          
+          const enhancedMedia = { ...media };
+
           // Add dimension properties if available in response
           if (dimensions[media.id]) {
             enhancedMedia.bannerWidth = dimensions[media.id].width;
             enhancedMedia.bannerHeight = dimensions[media.id].height;
           }
-          
+
           return enhancedMedia;
         });
       }),

@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { Media } from '../../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { MediaInfoService } from '../../../services/media.info.service';
-import { MediaInfo } from '../../../models/media-info.model';
+import { MediaInfo } from '../../../models/media.info.model';
 
 @Component({
   selector: 'app-result',

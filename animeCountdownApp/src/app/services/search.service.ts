@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
-import { MediaInfo } from '../models/media-info.model';
+import { MediaInfo } from '../models/media.info.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({

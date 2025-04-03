@@ -7,10 +7,10 @@
     --border: rgba(102, 252, 241, 0.1);
     
     /* Typography variables */
-    --font-main: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    --font-main: 'Poppins', 'Segoe UI', system-ui, sans-serif;
     
     /* Layout variables */
-    --container-width: 1400px;
+    --container-width: 1600px;
     --grid-gap: 30px;
     --spacing-md: 1rem;
     --spacing-lg: 2rem;
@@ -59,7 +59,6 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
   
-  /* Responsive Breakpoints */
   /* Tablet */
   @media screen and (max-width: 900px) {
     .cardContainer {
