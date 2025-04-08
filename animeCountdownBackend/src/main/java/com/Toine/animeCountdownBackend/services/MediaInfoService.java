@@ -27,7 +27,7 @@ public class MediaInfoService {
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    //@Scheduled(fixedRate = 43200000) //every 12hr
+    @Scheduled(fixedRate = 43200000) //every 3hr
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         logger.info("Starting scheduled media_info refresh at {}", Instant.now());

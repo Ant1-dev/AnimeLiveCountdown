@@ -128,9 +128,6 @@
   .banner-image{
     object-fit: cover;
   }
-  .carousel {
-    height: fit-content;
-  }
   
   .carousel-content {
     width: 70%;

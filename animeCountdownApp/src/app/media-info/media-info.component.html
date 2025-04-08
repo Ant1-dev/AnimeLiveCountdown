@@ -44,7 +44,7 @@
           @if (mediaDetails()?.status === 'RELEASING') {
           <div class="next-episode">
             <span class="ep-label"
-              >Next Airing Episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
+              >Next episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
             >
             <span class="airing-at">{{
               mediaDetails()?.airingat | date : "MMM d, h:mm a"
@@ -55,12 +55,11 @@
         }
   
         <div class="genres-container">
-          <div class="genre-title">Genres:</div>
-          @for (genre of mediaDetails()?.genres; track genre) {
-          <span class="genre-tag">{{ genre }},</span>
-          }
+          <h4>Genres: <span style="font-weight: normal;">{{ mediaDetails()!.genres.join(', ') }}</span>
+          </h4>
         </div>
-  
+        
+        <h4>Description:</h4>
         <div class="description" [innerHTML]="mediaDetails()?.description"></div>
   
         <div class="details-grid">
@@ -114,5 +113,6 @@
     }
   </div>
 } @placeholder {
-  <h1></h1>
+  <h1 style="text-align: center;">Seems this show is missing or does not exist</h1>
+  <h2 style="text-align: center;">Check out some other series <a href="/" style="text-decoration: none; color:#00a6fb">here</a></h2>
 }

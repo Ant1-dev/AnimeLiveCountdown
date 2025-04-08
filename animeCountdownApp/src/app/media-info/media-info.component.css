@@ -120,7 +120,6 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  margin: 5px 0 10px 0;
 }
 
 .next-episode {
@@ -149,39 +148,15 @@
   margin-left: 5px;
 }
 
-/* Genres */
-.genres-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 15px;
-}
-
-.genre-tag {
-  background-color: var(--bg-lighter);
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-}
-
-.genre-title {
-  font-weight: 600;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  margin-right: 5px;
-}
-
 /* Description */
 .description {
   color: #b4b7c5;
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 20px;
   max-width: 90%;
 }
 
-/* Details grid */
+/* Airing Date grid */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

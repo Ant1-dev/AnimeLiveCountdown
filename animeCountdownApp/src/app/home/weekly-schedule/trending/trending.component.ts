@@ -15,7 +15,6 @@ export class TrendingComponent implements OnInit {
   media = signal<MediaInfo[]>([]);
   error = signal<string>('');
   isLoading = signal(true);
-  currentIndex = signal<number>(0);
   private mediaInfoService = inject(MediaInfoService);
   private destroyRef = inject(DestroyRef);
 
@@ -45,9 +44,5 @@ export class TrendingComponent implements OnInit {
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
     });
-  }
-
-  getIndex(index: number) {
-    this.currentIndex.set(index);
   }
 }
