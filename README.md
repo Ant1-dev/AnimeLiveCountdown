@@ -31,3 +31,4 @@
     <li>Toggle to show airing media englished dubbed ☑️</li>
 </ol>
 <h1>Issues</h1>
+<p>The intial timer in hero-carousel is intially empty.</p>
