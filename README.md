@@ -16,6 +16,7 @@
     </li>
     <li><img alt="Static Badge" src="https://img.shields.io/badge/Vercel-000000?logo=vercel">
     </li>
+    <li>img alt="Static Badge" src="https://img.shields.io/badge/PostgreSQL-000000?logo=postgresql"</li>
 </ul>
 <h1 style="margin-top: 10px;">Roadmap</h1>
 <ol>
