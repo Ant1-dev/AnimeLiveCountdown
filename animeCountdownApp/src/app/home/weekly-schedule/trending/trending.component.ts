@@ -4,10 +4,11 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { HeroCarouselComponent } from './hero-carousel/hero-carousel.component';
 import { MediaInfo } from '../../../models/media.info.model';
 import { MediaInfoService } from '../../../services/media.info.service';
+import { SeasonPopComponent } from "./season-pop/season-pop.component";
 
 @Component({
   selector: 'app-trending',
-  imports: [CommonModule, SkeletonModule, HeroCarouselComponent],
+  imports: [CommonModule, SkeletonModule, HeroCarouselComponent, SeasonPopComponent],
   templateUrl: './trending.component.html',
   styleUrl: './trending.component.css',
 })

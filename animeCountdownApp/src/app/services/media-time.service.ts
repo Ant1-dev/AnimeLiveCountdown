@@ -56,10 +56,8 @@ export class MediaTimeService {
   // Add support for MediaInfo model
   initializeTimerFromMediaInfo(mediaInfo: MediaInfo | undefined): void {
     if (
-      typeof window === 'undefined' ||
       !mediaInfo ||
-      !mediaInfo.airingat ||
-      !mediaInfo.id
+      !mediaInfo.airingat
     ) {
       return;
     }

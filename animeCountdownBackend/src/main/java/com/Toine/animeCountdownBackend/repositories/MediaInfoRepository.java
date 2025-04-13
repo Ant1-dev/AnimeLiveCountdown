@@ -1,6 +1,5 @@
 package com.Toine.animeCountdownBackend.repositories;
 
-import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

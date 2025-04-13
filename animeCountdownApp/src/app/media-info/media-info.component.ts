@@ -15,10 +15,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Skeleton } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule],
+  imports: [CommonModule, Skeleton],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
 })

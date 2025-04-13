@@ -67,7 +67,7 @@
 
 .notification:hover, .profile:hover {
   cursor: pointer;
-  background-color: rgba(240, 240, 240, 0.8);
+  background-color: rgba(240, 240, 240, 0.1);
 }
 
 @media screen and (max-width: 768px) {

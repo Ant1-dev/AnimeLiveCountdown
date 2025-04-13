@@ -29,7 +29,7 @@ export class HeroCarouselComponent implements OnInit {
       const mediaItems = this.mediaList();
       if (mediaItems && mediaItems.length > 0) {
         const initialMedia = mediaItems[0];
-        if (initialMedia && initialMedia.id) {
+        if (initialMedia) {
           this.mediaTimeService.initializeTimerFromMediaInfo(initialMedia);
         }
       }
