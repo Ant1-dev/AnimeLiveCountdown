@@ -55,6 +55,8 @@ public class MediaInfoService {
         entity.setRomtitle(mediaInfo.getTitle().getRomaji());
         entity.setStatus(mediaInfo.getStatus());
         entity.setPopularity(mediaInfo.getPopularity());
+        entity.setSeason(mediaInfo.getSeason());
+        entity.setSeasonYear(mediaInfo.getSeasonYear());
 
         if (mediaInfo.getNextAiringEpisode() != null && mediaInfo.getNextAiringEpisode().getAiringAt() != null) {
             entity.setNextepisode(mediaInfo.getNextAiringEpisode().getEpisode());
@@ -104,6 +106,8 @@ public class MediaInfoService {
                         episode
                         airingAt
                       }
+                      seasonYear
+                      season
                       bannerImage
                       coverImage {
                         large

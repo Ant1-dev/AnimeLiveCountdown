@@ -1,5 +1,7 @@
 package com.Toine.animeCountdownBackend.models.graphQlMedia;
 
+import lombok.Getter;
+
 import java.util.List;
 
 public class MediaInfo {
@@ -13,6 +15,16 @@ public class MediaInfo {
     private Integer episodes;
     private Integer duration;
     private List<String> genres;
+    private Integer seasonYear;
+    private String season;
+
+    public Integer getSeasonYear() {
+        return seasonYear;
+    }
+
+    public String getSeason() {
+        return season;
+    }
 
     public Title getTitle() {
         return title;

@@ -28,10 +28,15 @@ public class ScheduleController {
 
     @GetMapping("/soon")
     public List<MediaEntity> getClosestAiring() {
-        Pageable pageable = PageRequest.of(0,6);
+        Pageable pageable = PageRequest.of(0,5);
         return mediaRepository.findAllByOrderByNext_Airing_AtAsc(pageable).getContent();
     }
 
+    @GetMapping("/trending")
+    public List<MediaEntity> getTrending() {
+        Pageable pageable = PageRequest.of(0, 10);
+        return mediaRepository.findAllByCurrentYear(pageable).getContent();
+    }
 
 
 }

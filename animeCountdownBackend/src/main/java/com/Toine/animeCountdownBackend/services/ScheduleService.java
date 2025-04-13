@@ -36,7 +36,7 @@ public class ScheduleService {
      * Scheduled task to update the anime database
      * Runs every 5 min (300000 ms)
      */
-    @Scheduled(fixedRate = 300000) // Every 5min
+    // @Scheduled(fixedRate = 300000) // Every 5min
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {
@@ -143,7 +143,8 @@ public class ScheduleService {
                !Objects.equals(existing.getTitle_Romaji(), newEntity.getTitle_Romaji()) ||
                !Objects.equals(existing.getCover_Image_Url(), newEntity.getCover_Image_Url()) ||
                !Objects.equals(existing.getPopularity(), newEntity.getPopularity()) ||
-               !Objects.equals(existing.getDay(), newEntity.getDay());
+               !Objects.equals(existing.getDay(), newEntity.getDay()) ||
+               !Objects.equals(existing.getSeasonYear(), newEntity.getSeasonYear());
     }
 
     /**
@@ -156,6 +157,7 @@ public class ScheduleService {
         existing.setStatus(newEntity.getStatus());
         existing.setPopularity(newEntity.getPopularity());
         existing.setCover_Image_Url(newEntity.getCover_Image_Url());
+        existing.setSeasonYear(newEntity.getSeasonYear());
 
         // Update airing info
         existing.setNext_Airing_At(newEntity.getNext_Airing_At());
@@ -181,6 +183,7 @@ public class ScheduleService {
         entity.setTitle_English(media.getTitle().getEnglish());
         entity.setStatus(media.getStatus());
         entity.setPopularity(media.getPopularity());
+        entity.setSeasonYear(media.getSeasonYear());
 
         if (media.getNextAiringEpisode() != null && media.getNextAiringEpisode().getAiringAt() != null) {
             Instant airingTime = Instant.ofEpochSecond(media.getNextAiringEpisode().getAiringAt());
@@ -214,6 +217,7 @@ public class ScheduleService {
                 romaji
               }
               status
+              seasonYear
               nextAiringEpisode {
                 airingAt
                 episode

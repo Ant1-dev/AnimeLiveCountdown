@@ -57,7 +57,6 @@ public class MediaInfoController {
         Map<String, Object> response = new HashMap<>();
         response.put("media", media);
 
-        // Add image dimensions map
         Map<String, Map<String, Object>> dimensions = new HashMap<>();
 
         for (MediaInfoEntity item : media) {

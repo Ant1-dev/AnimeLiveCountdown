@@ -1,5 +1,7 @@
 package com.Toine.animeCountdownBackend.models.graphQlMedia;
 
+import lombok.Getter;
+
 public class Media {
     private Long id;
     private Title title;
@@ -7,6 +9,11 @@ public class Media {
     private NextAiringEpisode nextAiringEpisode;
     private CoverImage coverImage;
     private Long popularity;
+    private Integer seasonYear;
+
+    public Integer getSeasonYear() {
+        return seasonYear;
+    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,8 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
@@ -55,6 +57,24 @@ public class MediaInfoEntity {
 
     @Column(name = "airing_at")
     private Instant airingat;
+    private Integer seasonYear;
+    private String season;
+
+    public Integer getSeasonYear() {
+        return seasonYear;
+    }
+
+    public void setSeasonYear(Integer seasonYear) {
+        this.seasonYear = seasonYear;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
+    }
 
     public Long getId() {
         return id;
