@@ -47,19 +47,13 @@
       </div>
     </div>
     }
-    <!-- <div class="watch">
-      @if (mediaList()[currentIndex()].id) {
-        <a [href]="'/media/' + mediaList()[currentIndex()].id" class="watch-link">More Info</a>
-      }
-      <div class="add-notif"><img src="plusSymbol.svg" alt="Add Notification"></div>
-    </div>
     <div class="directions">
-      <div class="left-arrow"></div>
+      <div class="left-arrow" (click)="previousSlide()"><mat-icon fontIcon="arrow_back_ios"></mat-icon></div>
       <div class="carousel-index">
-        <span class="active-index">{{ currentIndex() + 1 }}</span> <span class="index-slash">/</span>
-        {{ mediaList().length }}
+        <span class="active-index" style="color: #00a6fb;">{{ currentIndex() + 1 }}</span> <span class="index-slash">/</span>
+        <span class="total-index">{{ mediaList().length }}</span>
       </div>
-      <div class="right-arrow"></div>
-    </div> -->
+      <div class="right-arrow" (click)="nextSlide()"><mat-icon fontIcon="arrow_forward_ios"></mat-icon></div>
+    </div>
   </div>
 </div>

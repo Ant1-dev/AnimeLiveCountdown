@@ -123,6 +123,35 @@
   margin-top: 5px;
 }
 
+/* Directions Arrows */
+.directions {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  font-size: .9rem;
+  gap: 1.2rem;
+  z-index: 3;
+  right: 3rem;
+  bottom: 2rem;
+  color: white;
+}
+
+.carousel-index {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.active-index {
+  font-weight: 600;
+  font-size: 1.8em;
+}
+
+.right-arrow:hover, .left-arrow:hover {
+  cursor: pointer;
+  color: #00a6fb;
+}
+
 @media (max-width: 992px) {
 
   .banner-image{
@@ -136,7 +165,7 @@
   
   .show-title {
     height: fit-content;
-    font-size: 40px;
+    font-size: 2.5rem;
   }
   
   .countdown-value {
@@ -180,6 +209,12 @@
 }
 
 @media (max-width: 576px) {
+
+  .show-title {
+    height: fit-content;
+    font-size: 1.5rem;
+  }
+
   .carousel {
     height: 400px;
     margin-top: -40px;
@@ -218,6 +253,12 @@
 }
 
 @media (max-width: 375px) {
+
+  .show-title {
+    height: fit-content;
+    font-size: 1.2rem;
+  }
+
   .carousel {
     height: 350px;
   }
@@ -232,10 +273,6 @@
   }
   .banner-image {
     object-fit: cover;
-  }
-  
-  .show-title {
-    font-size: 24px;
   }
   
   .countdown-timer {

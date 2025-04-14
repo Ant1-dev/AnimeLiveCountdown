@@ -27,22 +27,26 @@ public class MediaInfoService {
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    @Scheduled(fixedRate = 43200000) //every 3hr
+    // @Scheduled(fixedRate = 43200000) //every 3hr
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
-        logger.info("Starting scheduled media_info refresh at {}", Instant.now());
+        try {
+            logger.info("Starting scheduled media_info refresh at {}", Instant.now());
 
-        // First fetch the data outside the transaction
-        List<MediaInfoEntity> newEntities = fetchAllCurrentlyAiringAnimeInfo().block();
+            // First fetch the data outside the transaction
+            List<MediaInfoEntity> newEntities = fetchAllCurrentlyAiringAnimeInfo().block();
 
-        logger.info("Clearing Database");
-        mediaInfoRepository.deleteAll();
-        if (newEntities != null) {
-            logger.info("Successfully fetched {} anime info entries", newEntities.size());
-            mediaInfoRepository.saveAll(newEntities);
-            logger.info("Saved {} anime info entries", newEntities.size());
-        } else {
-            logger.info("Nothing to save");
+            logger.info("Clearing Database");
+            mediaInfoRepository.deleteAll();
+            if (newEntities != null) {
+                logger.info("Successfully fetched {} anime info entries", newEntities.size());
+                mediaInfoRepository.saveAll(newEntities);
+                logger.info("Saved {} anime info entries", newEntities.size());
+            } else {
+                logger.info("Nothing to save");
+            }
+        } catch (Exception e) {
+            logger.error("There was an error trying to fresh data from graphql api!", e);
         }
     }
 

@@ -5,9 +5,10 @@ import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TimeRemaining } from '../../../../models/time-remaining.model';
 import { MediaTimeService } from '../../../../services/media-time.service';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-hero-carousel',
-  imports: [NgOptimizedImage, CommonModule],
+  imports: [NgOptimizedImage, CommonModule, MatIcon],
   templateUrl: './hero-carousel.component.html',
   styleUrl: './hero-carousel.component.css',
 })
@@ -57,6 +58,14 @@ export class HeroCarouselComponent implements OnInit {
   
   nextSlide() {
     const newIndex = (this.currentIndex() + 1) % this.mediaList().length;
+    this.goToSlide(newIndex);
+  }
+
+  previousSlide() {
+    let newIndex = (this.currentIndex() - 1) % this.mediaList().length;
+    if (newIndex < 0){
+      newIndex = this.mediaList().length - 1;
+    }
     this.goToSlide(newIndex);
   }
   
