@@ -29,10 +29,8 @@ export class MediaInfoService {
         const dimensions = response.dimensions || {};
 
         return mediaList.map((media: any) => {
-          // Create enhanced media objects with dimension info
           const enhancedMedia = { ...media };
 
-          // Add dimension properties if available in response
           if (dimensions[media.id]) {
             enhancedMedia.bannerWidth = dimensions[media.id].width;
             enhancedMedia.bannerHeight = dimensions[media.id].height;

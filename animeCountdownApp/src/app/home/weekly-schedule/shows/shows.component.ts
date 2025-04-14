@@ -63,7 +63,6 @@ export class ShowsComponent implements OnInit {
     });
   }
 
-  // Determine show priority based on component priority and position
   getShowPriority(index: number): RenderPriority {
     if (this.renderPriority() === 'high') {
       return index < 8 ? 'high' : 'medium';
