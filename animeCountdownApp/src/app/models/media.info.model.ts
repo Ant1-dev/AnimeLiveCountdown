@@ -13,7 +13,4 @@ export interface MediaInfo {
   coverimage: string;
   banner: string;
   airingat?: Date;
-  
-  bannerWidth?: number;
-  bannerHeight?: number;
 }
