@@ -4,17 +4,7 @@
 </div>
 <div class="cardContainer">
   @if (isLoading()) {
-    @for (i of [1, 2, 3, 4, 5]; track i) {
-      <div class="show-skeleton">
-        <div class="airing-date-skeleton"></div>
-        <p-skeleton
-          width="100%"
-          height="252px"
-          styleClass="poster-skeleton"
-        ></p-skeleton>
-        <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
-      </div>
-      }
+    <app-media-skeleton/>
   } @else {
   @for (show of media(); track show.id; let i = $index) {
   <app-show [media]="show" />

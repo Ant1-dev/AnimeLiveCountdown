@@ -11,12 +11,13 @@ import { CommonModule } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
+import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
 @Component({
   selector: 'app-shows',
-  imports: [ShowComponent, CommonModule, SkeletonModule],
+  imports: [ShowComponent, CommonModule, SkeletonModule, MediaSkeletonComponent],
   templateUrl: './shows.component.html',
   styleUrl: './shows.component.css',
 })

@@ -2,8 +2,13 @@
     <h1 class="section-title">Popular this season</h1>
     <div class="gradient-bar"></div>
 </div>
-<div class="cardContainer">
-    @for (show of media(); track show.id) {
-        <app-show [media]="show" />
-    }
-</div>
+
+@defer (when media()) {
+    <div class="cardContainer">
+        @for (show of media(); track show.id) {
+            <app-show [media]="show" />
+        }
+    </div>
+} @placeholder {
+    <app-media-skeleton />
+}

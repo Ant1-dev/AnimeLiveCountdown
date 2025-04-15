@@ -243,8 +243,8 @@
   margin: 1rem 0 0 0;
   border-radius: 10px;
   background-color: #1f2833;
-  width: 1200px;
-  height: 800px;
+  width: auto;
+  height: 700px;
 }
 
 @media (max-width: 768px) {

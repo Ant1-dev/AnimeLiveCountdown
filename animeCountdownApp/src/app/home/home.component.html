@@ -1,9 +1,7 @@
 <app-trending/>
-<app-airing-soon/>
 @defer (on viewport) {
+    <app-airing-soon/>
     <app-weekly-schedule/>
   } @placeholder {
-    <div class="schedule-placeholder" aria-label="Loading weekly schedule">
-      <div class="loading-text">Loading weekly schedule...</div>
-    </div>
+    <app-media-skeleton />
   }

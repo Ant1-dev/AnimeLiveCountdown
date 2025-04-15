@@ -2,11 +2,11 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
 import { ShowComponent } from '../shows/show/show.component';
-import { Skeleton } from 'primeng/skeleton';
+import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
 
 @Component({
   selector: 'app-airing-soon',
-  imports: [ShowComponent, Skeleton],
+  imports: [ShowComponent, MediaSkeletonComponent],
   templateUrl: './airing-soon.component.html',
   styleUrl: './airing-soon.component.css',
 })
