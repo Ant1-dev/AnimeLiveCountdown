@@ -48,45 +48,12 @@ public class MediaInfoController {
     }
 
     @GetMapping("/trending")
-    @Cacheable(value = "trendingCache", key = "'trending'")
-    public ResponseEntity<Map<String, Object>> getTrending() {
+    public ResponseEntity<List<MediaInfoEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 7);
         List<MediaInfoEntity> media = mediaInfoRepository.findAllByPopularityWithAiringDate(pageable).getContent();
 
-        // Create enhanced response with dimensions
-        Map<String, Object> response = new HashMap<>();
-        response.put("media", media);
-
-        Map<String, Map<String, Object>> dimensions = new HashMap<>();
-
-        for (MediaInfoEntity item : media) {
-            if (item.getBanner() != null) {
-                String bannerId = extractImageId(item.getBanner());
-                int[] dims = IMAGE_DIMENSIONS.getOrDefault(bannerId, new int[]{1920, 400});
-
-                Map<String, Object> itemDims = new HashMap<>();
-                itemDims.put("width", dims[0]);
-                itemDims.put("height", dims[1]);
-
-                dimensions.put(String.valueOf(item.getId()), itemDims);
-            }
-        }
-
-        response.put("dimensions", dimensions);
-
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES))
-                .body(response);
+                .body(media);
     }
-
-    private String extractImageId(String imageUrl) {
-        if (imageUrl == null) return "";
-
-        Matcher matcher = BANNER_PATTERN.matcher(imageUrl);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return "";
-    }
-
 }
