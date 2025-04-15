@@ -10,6 +10,10 @@
     line-height: normal;
     z-index: 3;
   }
+
+.search-input::placeholder {
+  color: #dedede;
+}
   
   .search-wrapper {
     height: 100%;

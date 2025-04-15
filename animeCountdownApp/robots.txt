@@ -1,4 +1,4 @@
-User-agent: *
-Allow: /
+user-agent: *
+allow: /
 
-Sitemap: https://animelivecountdown.com/sitemap.xml
+sitemap: https://animelivecountdown.com/sitemap.xml

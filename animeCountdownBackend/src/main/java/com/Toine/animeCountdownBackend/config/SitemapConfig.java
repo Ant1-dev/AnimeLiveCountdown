@@ -1,13 +1,11 @@
 package com.Toine.animeCountdownBackend.config;
 
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Configuration
-@EnableCaching
 @EnableScheduling
 public class SitemapConfig {
 

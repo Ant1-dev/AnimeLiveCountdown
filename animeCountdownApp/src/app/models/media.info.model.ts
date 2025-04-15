@@ -5,13 +5,13 @@ export interface MediaInfo {
   nextepisode?: number;
   totalepisodes?: number;
   status: string;
-  popularity?: number;
+  popularity: number;
   duration?: number;
   genres: string[];
   avgscore?: number;
   description: string;
   coverimage: string;
-  banner?: string;
+  banner: string;
   airingat?: Date;
   
   bannerWidth?: number;

@@ -1,8 +1,8 @@
 @defer (when mediaDetails()) {
   <div class="anime-container">
-    @if (mediaDetails()?.banner) {
+    @if (mediaDetails().banner) {
     <div class="banner-container">
-      <img [src]="mediaDetails()?.banner" alt="Anime Banner" class="img-banner" />
+      <img [ngSrc]="mediaDetails()!.banner" alt="Anime Banner" class="img-banner" fill priority/>
       <div class="banner-gradient"></div>
     </div>
     } @else {
@@ -15,39 +15,40 @@
     <div class="content-body">
       <div class="poster">
         <img
-          [src]="mediaDetails()?.coverimage"
+          [ngSrc]="mediaDetails().coverimage"
           alt="Anime Cover Image"
           class="cover-art"
+          priority
         />
         <div class="score-container">
           <div class="progress-bar-container">
             <div
               class="progress-bar"
-              [style.width]="mediaDetails()?.avgscore + '%'"
+              [style.width]="mediaDetails().avgscore + '%'"
             ></div>
           </div>
           <div class="score-badge">
-            <span>{{ mediaDetails()?.avgscore  }}%</span>
+            <span>{{ mediaDetails().avgscore  }}%</span>
           </div>
         </div>
       </div>
   
       <div class="media-info">
         <div class="title">
-          <h1 class="english-title">{{ mediaDetails()?.engtitle }}</h1>
-          <h3 class="romaji-title">{{ mediaDetails()?.romtitle }}</h3>
+          <h1 class="english-title">{{ mediaDetails().engtitle }}</h1>
+          <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
         </div>
   
-        @if (mediaDetails()?.airingat) {
+        @if (mediaDetails().airingat) {
         <div class="airing-info">
   
-          @if (mediaDetails()?.status === 'RELEASING') {
+          @if (mediaDetails().status === 'RELEASING') {
           <div class="next-episode">
             <span class="ep-label"
-              >Next episode: <div class="ep-number">{{ mediaDetails()?.nextepisode }}</div></span
+              >Next episode: <div class="ep-number">{{ mediaDetails().nextepisode }}</div></span
             >
             <span class="airing-at">{{
-              mediaDetails()?.airingat | date : "MMM d, h:mm a"
+              mediaDetails().airingat | date : "MMM d, h:mm a"
             }}</span>
           </div>
           }
@@ -60,28 +61,28 @@
         </div>
         
         <h4>Description:</h4>
-        <div class="description" [innerHTML]="mediaDetails()?.description"></div>
+        <div class="description" [innerHTML]="mediaDetails().description"></div>
   
         <div class="details-grid">
           <div class="detail-item">
             <div class="detail-label">Expected: Episodes</div>
-            @if (mediaDetails()?.totalepisodes) {
-            <div class="detail-value">{{ mediaDetails()?.totalepisodes }}</div>
+            @if (mediaDetails().totalepisodes) {
+            <div class="detail-value">{{ mediaDetails().totalepisodes }}</div>
             } @else {
             <div class="detail-value">Not Known</div>
             }
           </div>
           <div class="detail-item">
             <div class="detail-label">Duration</div>
-            @if (mediaDetails()?.duration) {
-              <div class="detail-value">{{ mediaDetails()?.duration }} min</div>
+            @if (mediaDetails().duration) {
+              <div class="detail-value">{{ mediaDetails().duration }} min</div>
             } @else {
               <div class="detail-value">Not Known</div>
             }
           </div>
           <div class="detail-item">
             <div class="detail-label">Followers</div>
-            <div class="detail-value">{{ mediaDetails()?.popularity }} 🧑‍💻 </div>
+            <div class="detail-value">{{ mediaDetails().popularity }} 🧑‍💻 </div>
           </div>
         </div>
       </div>
@@ -108,7 +109,7 @@
           <div class="countdown-label">Seconds</div>
         </div>
       </div>
-    } @else if (mediaDetails()?.status != 'RELEASING') {
+    } @else if (mediaDetails().status != 'RELEASING') {
       <div class="countdown-message">Countdown data not available</div>
     }
   </div>

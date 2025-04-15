@@ -71,6 +71,7 @@
   @media screen and (max-width: 600px) {
     :root {
       padding: 0 var(--spacing-sm);
+      max-width: 100%;
     }
     
     .weekSection {

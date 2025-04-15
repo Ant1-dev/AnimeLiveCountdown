@@ -12,7 +12,7 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        // Simple in-memory cache for trending results
-        return new ConcurrentMapCacheManager("trendingCache");
+        // Simple in-memory cache for trending results and sitemap
+        return new ConcurrentMapCacheManager("trendingCache", "sitemapCache");
     }
 }

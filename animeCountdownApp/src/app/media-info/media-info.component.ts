@@ -14,12 +14,12 @@ import { TimeRemaining } from '../models/time-remaining.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Skeleton } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton],
+  imports: [CommonModule, Skeleton, NgOptimizedImage],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
 })
@@ -27,7 +27,7 @@ export class MediaInfoComponent implements OnInit {
   private mediaInfoService = inject(MediaInfoService);
   private mediaTimeService = inject(MediaTimeService);
   private destroyRef = inject(DestroyRef);
-  public mediaDetails = signal<MediaInfo | undefined>(undefined);
+  public mediaDetails = signal<MediaInfo>({} as MediaInfo);
   private error = signal<string>('');
   private route = inject(ActivatedRoute);
 
