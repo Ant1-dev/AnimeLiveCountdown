@@ -12,38 +12,6 @@ import { SeasonPopComponent } from "./season-pop/season-pop.component";
   templateUrl: './trending.component.html',
   styleUrl: './trending.component.css',
 })
-export class TrendingComponent implements OnInit {
-  media = signal<MediaInfo[]>([]);
-  error = signal<string>('');
-  isLoading = signal(true);
-  private mediaInfoService = inject(MediaInfoService);
-  private destroyRef = inject(DestroyRef);
+export class TrendingComponent {
 
-  ngOnInit(): void {
-    const subscription = this.mediaInfoService
-      .getTrendingMedia(this.error())
-      .subscribe({
-        next: (media) => {
-          if (media != undefined) {
-            this.media.set(media);
-
-            if (media.length > 0 && media[0].banner) {
-              const img = new Image();
-              img.src = media[0].banner;
-              img.fetchPriority = 'high';
-            }
-          }
-          this.isLoading.set(false);
-        },
-        error: (error) => {
-          this.error.set(error);
-          console.log(error);
-          this.isLoading.set(false);
-        },
-      });
-
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
-  }
 }

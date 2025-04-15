@@ -12,6 +12,7 @@
 .navbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.75rem 1rem;
@@ -31,12 +32,11 @@
 }
 
 .searchBar {
-  flex: 1;
+  flex: 0.5;
   height: 2.3rem;
   border-radius: 100px;
   outline: #a9a9a9 solid 1px;
   margin: 0 0.5rem;
-  min-width: 120px;
 }
 
 .navbar-actions {
@@ -83,6 +83,7 @@
   }
   
   .searchBar {
+    flex: 1;
     order: 3;
     width: 100%;
     margin: 0 0 0 0;
