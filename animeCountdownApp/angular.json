@@ -28,7 +28,7 @@
             "assets": [{ "glob": "**/*", "input": "public" }],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -77,7 +77,7 @@
             "assets": [{ "glob": "**/*", "input": "public" }],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }

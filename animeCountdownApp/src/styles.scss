@@ -1,0 +1,138 @@
+@use '@angular/material' as mat;
+
+:root {
+    /* Color variables */
+    --bg-dark: #101116;
+    --bg-card: #1F2833;
+    --text-primary: #C5C6C7;
+    --accent: #00a6fb;
+    --border: rgba(102, 252, 241, 0.1);
+  
+    /* Typography variables */
+    --font-main: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  
+    /* Layout variables */
+    --container-width: 1600px;
+    --grid-gap: 30px;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+  
+    /* System settings */
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+  @include mat.dialog-overrides((
+    container-color: #1f2833,
+  ));
+}
+
+
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  margin: 0 auto;
+  overflow-x: hidden;
+  max-width: var(--container-width);
+  padding: 0 var(--spacing-md);
+}
+
+
+/* Container for week sections */
+.weekSection {
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+  font-size: 2.125rem;
+  font-weight: 700;
+  padding-bottom: var(--spacing-md);
+}
+
+/* Cards layout */
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--grid-gap);
+  margin: var(--spacing-lg) 0;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Card hover animations */
+.cardContainer > * {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardContainer > *:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Tablet */
+@media screen and (max-width: 900px) {
+  .cardContainer {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 0 var(--spacing-md);
+    max-width: 100%;
+  }
+
+  .weekSection {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 1.75rem;
+    padding: var(--spacing-md);
+  }
+
+  .cardContainer {
+    grid-template-columns: repeat(2, 45vw);
+    grid-auto-rows: auto;
+    gap: 15px;
+    justify-content: center;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,54 @@
+
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    margin: 0 30px 0 30px;
+}
+
+button {
+    background: none;
+    border: #0078b4 solid 0.1px;
+    border-radius: 10px;
+    width: calc(100%);
+    display: grid;
+    grid-template-columns: 1fr auto .8fr;
+    align-items: center;
+    padding: 10px;
+    font-size: 1em;
+}
+
+.provider {
+    grid-column: 2;
+}
+
+button:hover {
+    cursor: pointer;
+    border: #00aaff solid 0.1px;
+}
+
+img {
+    grid-column: 1;
+    width: 50px;
+    height: auto;
+}
+
+.logo {
+    border-radius: 100px;
+    margin-bottom: -20px;
+}
+
+@media screen and (max-width: 600px) {
+    .button-container {
+        font-size: .7rem;
+    }
+
+    img {
+        width: 40px;
+    }
+}
+

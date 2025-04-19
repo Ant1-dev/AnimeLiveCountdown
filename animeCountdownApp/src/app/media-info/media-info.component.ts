@@ -30,6 +30,7 @@ export class MediaInfoComponent implements OnInit {
   public mediaDetails = signal<MediaInfo>({} as MediaInfo);
   private error = signal<string>('');
   private route = inject(ActivatedRoute);
+  protected isLoading = signal<boolean>(false);
 
   timeRemaining = computed<TimeRemaining | null>(() => {
     const media = this.mediaDetails();
@@ -45,14 +46,15 @@ export class MediaInfoComponent implements OnInit {
         switchMap((params: ParamMap) => {
           const id = Number(params.get('id'));
           this.mediaInfoService.getMediaId(id);
+          this.isLoading.set(true);
           return this.mediaInfoService.getMedia();
         })
       )
       .subscribe({
         next: (data) => {
           this.mediaDetails.set(data);
+          this.isLoading.set(false);
           this.mediaTimeService.initializeTimerFromMediaInfo(data);
-          console.log(data);
         },
         error: (err) =>
           this.error.set(err.message || 'An error occured info component'),

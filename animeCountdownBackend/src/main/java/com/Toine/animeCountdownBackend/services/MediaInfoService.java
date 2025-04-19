@@ -73,7 +73,7 @@ public class MediaInfoService {
         entity.setAvgscore(mediaInfo.getAverageScore());
         entity.setDescription(mediaInfo.getDescription());
 
-        entity.setCoverimage(mediaInfo.getCoverImage().getLarge());
+        entity.setCoverimage(mediaInfo.getCoverImage().getExtraLarge());
         entity.setBanner(mediaInfo.getBannerImage());
 
         return entity;
@@ -113,7 +113,7 @@ public class MediaInfoService {
                       season
                       bannerImage
                       coverImage {
-                        large
+                        extraLarge
                       }
                       status
                       popularity
