@@ -2,28 +2,39 @@ package com.Toine.animeCountdownBackend.components;
 
 import com.Toine.animeCountdownBackend.models.postgreEntities.UserEntity;
 import com.Toine.animeCountdownBackend.repositories.UserRepository;
+import com.Toine.animeCountdownBackend.services.JwtService;
+import io.jsonwebtoken.Jwt;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
+    private final OAuth2AuthorizedClientService authorizedClientService;
+    private final FetchGithubEmail githubEmailFetcher;
+    private final JwtService jwtService;
 
     @Value("${app.frontend.url}")
     String frontendUrl;
 
-    public OAuth2SuccessComponent(UserRepository userRepository) {
+    public OAuth2SuccessComponent(UserRepository userRepository, OAuth2AuthorizedClientService authorizedClientService, FetchGithubEmail githubEmailFetcher, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.authorizedClientService = authorizedClientService;
+        this.githubEmailFetcher = githubEmailFetcher;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -53,10 +64,18 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
                           attributes.get("avatar").toString() + ".png";
                 break;
             case "github":
-                email = attributes.get("email") != null ? attributes.get("email").toString() : "";
+                OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                        oauthToken.getAuthorizedClientRegistrationId(),
+                        oauthToken.getName()
+                );
+                String accessToken = client.getAccessToken().getTokenValue();
+
+                // Fetch private email
+                email = githubEmailFetcher.getPrimaryEmail(accessToken);
                 name = attributes.get("login") != null ? attributes.get("login").toString() : "Unknown";
                 picture = attributes.get("avatar_url") != null ? attributes.get("avatar_url").toString() : "";
                 break;
+
 
             default:
                 email = attributes.get("email") != null ? attributes.get("email").toString() : "";
@@ -71,7 +90,11 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
         user.setPicture(picture);
 
         user = userRepository.save(user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("name", user.getName());
+        claims.put("picture", user.getPicture());
+        String token = jwtService.generateToken(claims, user);
 
-        response.sendRedirect(frontendUrl);
+        response.sendRedirect(frontendUrl + "?token=" + token);
     }
 }
