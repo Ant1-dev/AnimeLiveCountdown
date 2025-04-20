@@ -2,7 +2,6 @@ package com.Toine.animeCountdownBackend.controllers;
 
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
-import com.Toine.animeCountdownBackend.services.ScheduleService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;

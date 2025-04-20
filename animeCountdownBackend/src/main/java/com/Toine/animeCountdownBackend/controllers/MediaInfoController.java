@@ -1,9 +1,7 @@
 package com.Toine.animeCountdownBackend.controllers;
 
-import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
@@ -17,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController

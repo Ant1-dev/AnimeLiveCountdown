@@ -10,7 +10,7 @@
     margin: 0 30px 0 30px;
 }
 
-button {
+ button {
     background: none;
     border: #0078b4 solid 0.1px;
     border-radius: 10px;
@@ -18,9 +18,9 @@ button {
     display: grid;
     grid-template-columns: 1fr auto .8fr;
     align-items: center;
-    padding: 10px;
-    font-size: 1em;
+    font-size: .8em;
 }
+
 
 .provider {
     grid-column: 2;
@@ -33,7 +33,7 @@ button:hover {
 
 img {
     grid-column: 1;
-    width: 50px;
+    width: 40px;
     height: auto;
 }
 

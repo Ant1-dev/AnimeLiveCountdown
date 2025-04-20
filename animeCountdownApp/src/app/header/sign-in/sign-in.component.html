@@ -1,16 +1,16 @@
 <div class="button-container">
-  <img src="favicon.png" alt="logo" class="logo" />
-  <h1>Sign into your account</h1>
-  <button>
-    <img src="svgs/google.svg" alt="google" />
-    <h2>Google</h2>
-  </button>
-  <button>
-    <img src="svgs/discord.svg" alt="discord" />
-    <h2>Discord</h2>
-  </button>
-  <button>
-    <img src="svgs/apple.svg" alt="apple" />
-    <h2>Apple</h2>
-  </button>
-</div>
+    <img src="favicon.png" alt="logo" class="logo" />
+    <h1>Sign into your account</h1>
+    <button (click)="googleSignIn()">
+      <img src="svgs/google.svg" alt="google" />
+      <h2>Google</h2>
+    </button>
+    <button (click)="discordSignIn()">
+      <img src="svgs/discord.svg" alt="discord" />
+      <h2>Discord</h2>
+    </button>
+    <button (click)="appleSignIn()">
+      <img src="svgs/github.svg" alt="github" />
+      <h2>Github</h2>
+    </button>
+  </div>
