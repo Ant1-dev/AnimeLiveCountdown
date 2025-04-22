@@ -30,6 +30,7 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
     @Value("${app.frontend.url}")
     String frontendUrl;
 
+
     public OAuth2SuccessComponent(UserRepository userRepository, OAuth2AuthorizedClientService authorizedClientService, FetchGithubEmail githubEmailFetcher, JwtService jwtService) {
         this.userRepository = userRepository;
         this.authorizedClientService = authorizedClientService;
@@ -40,6 +41,10 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+
+        System.out.println("=== OAuth2 SUCCESS HANDLER CALLED ===");
+        System.out.println("Request URI: " + request.getRequestURI());
+        System.out.println("Authentication: " + authentication);
 
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         String registrationId = oauthToken.getAuthorizedClientRegistrationId();
