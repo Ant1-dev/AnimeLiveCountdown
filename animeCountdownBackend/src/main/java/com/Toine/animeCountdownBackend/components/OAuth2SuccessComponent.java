@@ -96,6 +96,7 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
 
         user = userRepository.save(user);
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
         claims.put("name", user.getName());
         claims.put("picture", user.getPicture());
         String token = jwtService.generateToken(claims, user);

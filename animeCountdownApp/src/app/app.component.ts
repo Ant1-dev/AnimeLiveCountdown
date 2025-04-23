@@ -1,32 +1,27 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./header/header.component";
-import { FooterComponent } from "./footer/footer.component";
-import { Router } from '@angular/router'
-
+import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { Router } from '@angular/router';
+import { TokenStorageService } from './services/token-storage.service';
 
 @Component({
-    selector: 'app-root',
-    imports: [HeaderComponent, FooterComponent, RouterOutlet],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.css'
+  selector: 'app-root',
+  imports: [HeaderComponent, FooterComponent, RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-    private route = inject(ActivatedRoute);
-    private router = inject(Router)
+  private router = inject(Router);
+  private tokenStorage = inject(TokenStorageService);
 
-    ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
-            const token = params['token'];
+  ngOnInit(): void {
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('token');
 
-            if (token) {
-                localStorage.setItem('token', token);
-                this.router.navigate([], {
-                    queryParams: {},
-                    replaceUrl: true,
-                });
-            }
-        });
+    if (token) {
+      this.tokenStorage.saveToken(token);
+      this.router.navigate([], { replaceUrl: true });
     }
-    
+  }
 }
