@@ -1,11 +1,13 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
-import { TokenStorageService } from "./token-storage.service";
+import { TokenStorageService } from "../services/token-storage.service";
 import { User } from "../models/user.model";
+import { Router } from "@angular/router";
 
 // This service is meant to handle decifering token in storage if it changes or existant
 @Injectable({providedIn: 'root'})
 export class AuthService {
     private tokenStorage = inject(TokenStorageService);
+    private router = inject(Router)
 
     private storedToken = signal<string | null>(this.tokenStorage.getToken());
     readonly token = this.storedToken.asReadonly();
@@ -17,11 +19,19 @@ export class AuthService {
 
     // Handles changes in storage
     constructor() {
-        window.addEventListener('storage', () => {
-            const newToken = this.tokenStorage.getToken();
-            this.storedToken.set(newToken)
-            this.storedUser.set(this.decodeUserFromToken(newToken));
-        });
+        const token = sessionStorage.getItem('token');
+        if (token) {
+          this.storedToken.set(token);
+          try {
+            const decoded = this.decodeUserFromToken(token);
+            this.storedUser.set(decoded); 
+          } catch {
+            // Invalid token - clear it
+            sessionStorage.removeItem('token');
+            this.storedToken.set(null);
+            this.storedUser.set(null);
+          }
+        }
     }
 
 
@@ -31,6 +41,7 @@ export class AuthService {
         try {
             const payload = token.split('.')[1];
             const json = atob(payload);
+            console.log(payload);
             const data = JSON.parse(json);
 
             return {
@@ -49,5 +60,6 @@ export class AuthService {
         this.tokenStorage.clearToken();
         this.storedToken.set(null);
         this.storedUser.set(null);
+        this.router.navigate([], {replaceUrl: true});
     }
 }
