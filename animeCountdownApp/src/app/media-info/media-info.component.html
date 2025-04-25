@@ -40,6 +40,7 @@
           <span>{{ mediaDetails().avgscore }}%</span>
         </div>
       </div>
+      <span>Score</span>
     </div>
     }
 
@@ -133,7 +134,9 @@
     </div>
   </div>
   } @else if (mediaDetails().status != 'RELEASING') {
-  <div class="countdown-message">Countdown data not available</div>
+  <h1 class="countdown-message">Countdown data not available</h1>
+  } @else if (mediaDetails().status == 'RELEASING' && timeRemaining() == null) {
+    <h1 class="countdown-message">This anime is out now</h1>
   }
 </div>
 } @else {

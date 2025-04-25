@@ -42,10 +42,6 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        System.out.println("=== OAuth2 SUCCESS HANDLER CALLED ===");
-        System.out.println("Request URI: " + request.getRequestURI());
-        System.out.println("Authentication: " + authentication);
-
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         String registrationId = oauthToken.getAuthorizedClientRegistrationId();
         OAuth2User oAuth2User = oauthToken.getPrincipal();
