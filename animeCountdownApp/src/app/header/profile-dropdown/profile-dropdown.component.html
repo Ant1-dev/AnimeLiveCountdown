@@ -1,0 +1,10 @@
+@if (isVisible()) {
+<div class="dropdown-container">
+  <div class="user-desc" style="font-weight: bold;">{{ user()?.name }}</div>
+  <div class="dropdown-functions">
+    <div>Saved shows</div>
+    <div>Notifications</div>
+    <a routerLink="/" (click)="logout()">Sign out</a>
+  </div>
+</div>
+}

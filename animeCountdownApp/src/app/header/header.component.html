@@ -11,9 +11,16 @@
         <div class="notification">
           <mat-icon fontIcon="notifications"></mat-icon>
         </div>
-        <div class="profile">
-          <button (click)="openSignIn()" style="border: none; background: none; cursor: pointer;"><mat-icon fontIcon="account_circle"></mat-icon></button>
-        </div>
+        @if (user()) {
+          <div class="profile">
+            <button (click)="setVisible()" style="border: none; background: none; cursor: pointer;"><img [src]="user()?.picture" alt=""></button>
+          </div>
+          <app-profile-dropdown class="profile-dropdown" [isVisible]="dropdownVisible()"/>
+        } @else {
+          <div class="profile">
+            <button (click)="openSignIn()" style="border: none; background: none; cursor: pointer;"><mat-icon fontIcon="account_circle"></mat-icon></button>
+          </div>
+        }
       </div>
     </div>
   </div>
