@@ -25,7 +25,7 @@
         <li>Search bar to filter data from the database ✅</li>
         <li>Search bar takes you to a page showing media's detailed description ✅</li>
     </ul>
-    <li>Add user sign-in and authentication ☑️</li>
+    <li>Add user sign-in and authentication ✅</li>
     <li>Add notifications set up ☑️</li>
     <li>Give larges screens more data to fill space ☑️</li>
     <li>Nav bar removes itself on scroll down and reinserts on scroll up for mobile ☑️</li>
