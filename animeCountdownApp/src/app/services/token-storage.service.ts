@@ -6,14 +6,14 @@ export class TokenStorageService {
     private readonly KEY = 'auth_token';
 
     saveToken(token: string) {
-        sessionStorage.setItem(this.KEY, token);
+        localStorage.setItem(this.KEY, token);
     }
 
     getToken(): string | null {
-        return sessionStorage.getItem(this.KEY);
+        return localStorage.getItem(this.KEY);
     }
 
     clearToken() {
-        sessionStorage.removeItem(this.KEY);
+        localStorage.removeItem(this.KEY);
     }
 }

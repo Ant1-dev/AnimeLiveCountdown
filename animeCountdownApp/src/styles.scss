@@ -125,10 +125,6 @@ body {
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {
