@@ -31,5 +31,4 @@
     <li>Nav bar removes itself on scroll down and reinserts on scroll up for mobile ☑️</li>
     <li>Toggle to show airing media englished dubbed ☑️</li>
 </ol>
-<h1>Issues</h1>
-<p>The intial timer in hero-carousel is intially empty.</p>
+
