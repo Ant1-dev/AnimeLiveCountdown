@@ -87,11 +87,12 @@
   }
 
   .profile {
-    position: relative;
     border-radius: 100px;
     overflow: hidden;
-    margin: 0;
-    padding: 0;
+  }
+
+  .notification {
+    margin-top: -10px;
   }
 
   .profile img {
