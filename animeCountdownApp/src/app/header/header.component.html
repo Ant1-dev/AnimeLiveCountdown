@@ -9,7 +9,7 @@
     <div class="navbar-actions">
       <div class="navbar-icons">
         <div class="notification">
-          <mat-icon fontIcon="notifications"></mat-icon>
+          <mat-icon style="color: white;" fontIcon="notifications"></mat-icon>
         </div>
         @if (user()) {
           <div class="profile">
@@ -18,7 +18,7 @@
           <app-profile-dropdown class="profile-dropdown" [isVisible]="dropdownVisible()"/>
         } @else {
           <div class="profile">
-            <button (click)="openSignIn()" style="border: none; background: none; cursor: pointer;"><mat-icon fontIcon="account_circle"></mat-icon></button>
+            <button aria-label="profile" (click)="openSignIn()" style="border: none; background: none; cursor: pointer;"><mat-icon fontIcon="account_circle" style="color: white;"></mat-icon></button>
           </div>
         }
       </div>

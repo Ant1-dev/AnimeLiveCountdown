@@ -166,6 +166,10 @@
   .show-title {
     height: fit-content;
     font-size: 2.5rem;
+    background-color: rgba(16, 17, 22, 0.7);
+    width: fit-content;
+    border-radius: 10px;
+    padding: 5px 5px 5px 0;
   }
   
   .countdown-value {
@@ -208,50 +212,6 @@
   }
 }
 
-@media (max-width: 576px) {
-
-  .show-title {
-    height: fit-content;
-    font-size: 1.5rem;
-  }
-
-  .carousel {
-    height: 400px;
-    margin-top: -40px;
-  }
-  
-  .carousel-content {
-    width: 85%;
-    top: 20%;
-  }
-  
-  .genres-episodes {
-    font-size: 14px;
-    line-height: 1.3rem;
-  }
-  
-  .countdown-timer {
-    gap: 8px;
-    padding: 6px;
-  }
-  
-  .countdown-value {
-    font-size: 1.2rem;
-    min-width: 35px;
-    padding: 5px 7px;
-  }
-  
-  .countdown-label {
-    font-size: 0.8rem;
-  }
-  
-  .carousel-content-des {
-    height: 50px;
-  }
-  
-
-}
-
 @media (max-width: 600px) {
 
   .show-title {
@@ -291,7 +251,7 @@
   
   .carousel-content-des {
     height: 45px;
-    font-size: 12px;
+    font-size: .9em;
   }
 
   .carousel-index {

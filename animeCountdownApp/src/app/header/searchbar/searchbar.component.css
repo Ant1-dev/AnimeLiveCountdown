@@ -9,13 +9,13 @@
     font-size: 16px;
     line-height: normal;
     z-index: 3;
+    color: #f0f0f0;
   }
 
 .search-input::placeholder {
-  color: #dedede;
+  color: #f0f0f0;
 }
 
-  
   .search-wrapper {
     height: 100%;
     width: 100%;
@@ -34,11 +34,6 @@
     width: 100%;
     z-index: 9999;
   }
-  
-  .pi-search {
-    margin-right: 8px;
-    color: #666;
-  }
 
   mat-icon {
     margin-right: 8px;
@@ -47,7 +42,7 @@
   
   .search-results {
     margin-top: 0.5rem;
-    width: inherit;
+    width: 100%;
     z-index: 5;
     background-color: #141414;
     border-radius: 10px;
