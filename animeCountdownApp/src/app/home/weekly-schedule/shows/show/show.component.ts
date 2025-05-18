@@ -6,18 +6,19 @@ import {
   inject,
   input,
   OnInit,
-  signal,
-  computed
+   computed
 } from '@angular/core';
 import { Media } from '../../../../models/schedule.model';
 import { MediaInfoService } from '../../../../services/media.info.service';
 import { MediaTimeService } from '../../../../services/media-time.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TimeRemaining } from '../../../../models/time-remaining.model';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipModule, Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-show',
-  imports: [CommonModule, SkeletonModule],
+  imports: [CommonModule, SkeletonModule, MatIcon, TooltipModule, Tooltip],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,4 +54,10 @@ export class ShowComponent implements OnInit {
   ngOnInit(): void {
     this.mediaTimeService.initializeTimer(this.media());
   }
+
+  tooltipOptions = {
+    showDelay: 150,
+    autoHide: false,
+  };
+
 }

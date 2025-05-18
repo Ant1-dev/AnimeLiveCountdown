@@ -99,6 +99,20 @@
     margin-bottom: 0;
     overflow: hidden;
   }
+
+  .poster-container {
+    position: relative;
+  }
+
+  .info-icon {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+  }
+
+  .info-icon:hover {
+    color: #00a6fb;
+  }
   
   @media screen and (max-width: 600px) {
     .airingDate {

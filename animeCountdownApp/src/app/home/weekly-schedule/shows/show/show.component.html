@@ -1,45 +1,54 @@
 @if (timeRemaining(); as remaining) {
-  <a class="link" [href]="'/media/' + media()!.id" (click)="retrieveId()">
-    <div class="card">
-      <div class="airingDate">
-        <div class="dateItem">{{remaining.days}}</div>
-        <div class="dateItem">{{remaining.hours | number:'2.0-0'}}</div>
-        <div class="dateItem">{{remaining.minutes | number:'2.0-0'}}</div>
-        <div class="dateItemS">{{remaining.seconds | number:'2.0-0'}}</div>
-        <div class="dateItem">Days</div>
-        <div class="dateItem">Hours</div>
-        <div class="dateItem">Minutes</div>
-        <div class="dateItem">Sec</div>
-      </div>
-      <picture>
-        <img
-          [src]="media()?.cover_Image_Url"
-          [alt]="getDisplayTitle()"
-          class="poster"
-          width="168"
-          height="252"
-          [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
-          [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
-          [style.aspect-ratio]="'2/3'"
-        />
-      </picture>
-      <div class="cardFooter">
-        {{getDisplayTitle()}}
-      </div>
-    </div>
-  </a>
-} @else {
+<a class="link" [href]="'/media/' + media()!.id" (click)="retrieveId()">
   <div class="card">
-    <div class="skeleton-container">
-      <div class="airingDate-skeleton">
-        <p-skeleton width="100%" height="60px"></p-skeleton>
-      </div>
-      <p-skeleton
-        width="100%"
-        height="252px"
-        styleClass="poster-skeleton"
-      ></p-skeleton>
-      <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+    <div class="airingDate">
+      <div class="dateItem">{{ remaining.days }}</div>
+      <div class="dateItem">{{ remaining.hours | number : "2.0-0" }}</div>
+      <div class="dateItem">{{ remaining.minutes | number : "2.0-0" }}</div>
+      <div class="dateItemS">{{ remaining.seconds | number : "2.0-0" }}</div>
+      <div class="dateItem">Days</div>
+      <div class="dateItem">Hours</div>
+      <div class="dateItem">Minutes</div>
+      <div class="dateItem">Sec</div>
+    </div>
+    <div class="poster-container">
+      <img
+        [src]="media()?.cover_Image_Url"
+        [alt]="getDisplayTitle()"
+        class="poster"
+        width="168"
+        height="252"
+        [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
+        [style.aspect-ratio]="'2/3'"
+      />
+      <mat-icon
+        [tooltipOptions]="tooltipOptions"
+        [pTooltip]="showInfo"
+        class="info-icon"
+        >info_i</mat-icon
+      >
+      <<ng-template #showInfo>
+        <div class="show-info-container">Show Info in progress</div>
+      </ng-template>
+    </div>
+    <div class="cardFooter">
+      {{ getDisplayTitle() }}
     </div>
   </div>
+</a>
+} @else {
+<div class="card">
+  <div class="skeleton-container">
+    <div class="airingDate-skeleton">
+      <p-skeleton width="100%" height="60px"></p-skeleton>
+    </div>
+    <p-skeleton
+      width="100%"
+      height="252px"
+      styleClass="poster-skeleton"
+    ></p-skeleton>
+    <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+  </div>
+</div>
 }
