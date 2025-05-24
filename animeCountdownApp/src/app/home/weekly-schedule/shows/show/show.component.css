@@ -113,6 +113,24 @@
   .info-icon:hover {
     color: #00a6fb;
   }
+
+  .show-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .show-info-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .add-icon:hover {
+    cursor: pointer;
+    color: #00a6fb;
+  }
   
   @media screen and (max-width: 600px) {
     .airingDate {
