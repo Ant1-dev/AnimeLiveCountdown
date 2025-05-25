@@ -14,39 +14,162 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.List;
-
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class MediaInfoService {
     private static final Logger logger = LoggerFactory.getLogger(MediaInfoService.class);
     private final HttpGraphQlClient graphQlClient;
     private final MediaInfoRepository mediaInfoRepository;
+    private final AtomicBoolean isUpdating = new AtomicBoolean(false);
 
     public MediaInfoService(HttpGraphQlClient graphQlClient, MediaInfoRepository mediaInfoRepository) {
         this.graphQlClient = graphQlClient;
         this.mediaInfoRepository = mediaInfoRepository;
     }
-    @Scheduled(fixedRate = 43200000) //every 3hr
+
+    //@Scheduled(fixedRate = 43200000) //every 3hr
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
-        try {
-            logger.info("Starting scheduled media_info refresh at {}", Instant.now());
+        if (isUpdating.compareAndSet(false, true)) {
+            try {
+                logger.info("Starting scheduled media_info refresh at {}", Instant.now());
 
-            // First fetch the data outside the transaction
-            List<MediaInfoEntity> newEntities = fetchAllCurrentlyAiringAnimeInfo().block();
+                // First fetch the data outside the transaction
+                List<MediaInfoEntity> newEntities = fetchAllCurrentlyAiringAnimeInfo().block();
 
-            logger.info("Clearing Database");
-            mediaInfoRepository.deleteAll();
-            if (newEntities != null) {
+                if (newEntities == null || newEntities.isEmpty()) {
+                    logger.warn("No data retrieved from API, skipping database refresh");
+                    return;
+                }
+
                 logger.info("Successfully fetched {} anime info entries", newEntities.size());
-                mediaInfoRepository.saveAll(newEntities);
-                logger.info("Saved {} anime info entries", newEntities.size());
-            } else {
-                logger.info("Nothing to save");
+
+                // Then update the database in a transaction
+                updateDatabase(newEntities);
+
+                logger.info("Media info database refresh completed successfully");
+            } catch (Exception e) {
+                logger.error("There was an error trying to refresh data from graphql api!", e);
+            } finally {
+                isUpdating.set(false);
             }
-        } catch (Exception e) {
-            logger.error("There was an error trying to fresh data from graphql api!", e);
+        } else {
+            logger.info("Previous media info update still in progress, skipping this cycle");
         }
+    }
+
+    /**
+     * Updates the database with new entities in a transaction
+     * Uses an incremental approach that only updates changed records
+     */
+    @Transactional
+    public void updateDatabase(List<MediaInfoEntity> newEntities) {
+        try {
+            logger.info("Starting incremental media info database update...");
+
+            // Get all existing IDs for efficient lookups and to track deletions
+            List<Long> existingIds = mediaInfoRepository.findAllIds();
+            List<Long> newIds = newEntities.stream().map(MediaInfoEntity::getId).toList();
+
+            int updates = 0;
+            int insertions = 0;
+            int deletions = 0;
+
+            // Process each new entity
+            for (MediaInfoEntity newEntity : newEntities) {
+                // Check if this entity already exists
+                boolean exists = existingIds.contains(newEntity.getId());
+
+                if (exists) {
+                    // Get the existing entity
+                    MediaInfoEntity existingEntity = mediaInfoRepository.findById(newEntity.getId()).orElse(null);
+
+                    // Check if any important fields have changed
+                    if (existingEntity != null && hasSignificantChanges(existingEntity, newEntity)) {
+                        // Update the entity with new values
+                        updateEntityFields(existingEntity, newEntity);
+                        mediaInfoRepository.save(existingEntity);
+                        updates++;
+                    }
+                } else {
+                    // This is a new entity, so insert it
+                    mediaInfoRepository.save(newEntity);
+                    insertions++;
+                }
+            }
+
+            // Handle deletions (anime that are no longer airing)
+            // Only if there is a complete dataset (not empty)
+            if (!newIds.isEmpty()) {
+                List<Long> idsToDelete = existingIds.stream()
+                        .filter(id -> !newIds.contains(id))
+                        .toList();
+
+                if (!idsToDelete.isEmpty()) {
+                    mediaInfoRepository.deleteAllById(idsToDelete);
+                    deletions = idsToDelete.size();
+                }
+            }
+
+            logger.info("Media info database update completed: {} updates, {} insertions, {} deletions",
+                    updates, insertions, deletions);
+        } catch (Exception e) {
+            logger.error("Error during incremental media info database update: {}", e.getMessage(), e);
+            throw e; // Rethrow to trigger transaction rollback
+        }
+    }
+
+    /**
+     * Check if a media info entity has significant changes that require an update
+     */
+    private boolean hasSignificantChanges(MediaInfoEntity existing, MediaInfoEntity newEntity) {
+        if (existing == null || newEntity == null) {
+            return true; // Null check to prevent NullPointerException
+        }
+
+        return !Objects.equals(existing.getEngtitle(), newEntity.getEngtitle()) ||
+               !Objects.equals(existing.getRomtitle(), newEntity.getRomtitle()) ||
+               !Objects.equals(existing.getStatus(), newEntity.getStatus()) ||
+               !Objects.equals(existing.getPopularity(), newEntity.getPopularity()) ||
+               !Objects.equals(existing.getSeason(), newEntity.getSeason()) ||
+               !Objects.equals(existing.getSeasonYear(), newEntity.getSeasonYear()) ||
+               !Objects.equals(existing.getNextepisode(), newEntity.getNextepisode()) ||
+               !Objects.equals(existing.getAiringat(), newEntity.getAiringat()) ||
+               !Objects.equals(existing.getTotalepisodes(), newEntity.getTotalepisodes()) ||
+               !Objects.equals(existing.getDuration(), newEntity.getDuration()) ||
+               !Objects.equals(existing.getGenres(), newEntity.getGenres()) ||
+               !Objects.equals(existing.getAvgscore(), newEntity.getAvgscore()) ||
+               !Objects.equals(existing.getDescription(), newEntity.getDescription()) ||
+               !Objects.equals(existing.getCoverimage(), newEntity.getCoverimage()) ||
+               !Objects.equals(existing.getBanner(), newEntity.getBanner());
+    }
+
+    /**
+     * Update the fields of an existing entity with values from a new entity
+     */
+    private void updateEntityFields(MediaInfoEntity existing, MediaInfoEntity newEntity) {
+        // Update basic info
+        existing.setEngtitle(newEntity.getEngtitle());
+        existing.setRomtitle(newEntity.getRomtitle());
+        existing.setStatus(newEntity.getStatus());
+        existing.setPopularity(newEntity.getPopularity());
+        existing.setSeason(newEntity.getSeason());
+        existing.setSeasonYear(newEntity.getSeasonYear());
+
+        // Update episode info
+        existing.setNextepisode(newEntity.getNextepisode());
+        existing.setAiringat(newEntity.getAiringat());
+        existing.setTotalepisodes(newEntity.getTotalepisodes());
+        existing.setDuration(newEntity.getDuration());
+
+        // Update media details
+        existing.setGenres(newEntity.getGenres());
+        existing.setAvgscore(newEntity.getAvgscore());
+        existing.setDescription(newEntity.getDescription());
+        existing.setCoverimage(newEntity.getCoverimage());
+        existing.setBanner(newEntity.getBanner());
     }
 
     public MediaInfoEntity convertToEntity(MediaInfo mediaInfo) {
@@ -85,7 +208,6 @@ public class MediaInfoService {
         return fetchReleasingAnimeInfoPage(1)
                 .map(this::convertToEntity)
                 .collectList();
-
     }
 
     // graphql call gets all the pages for media info
@@ -138,5 +260,4 @@ public class MediaInfoService {
                             .concatWith(fetchReleasingAnimeInfoPage(page + 1));
                 });
     }
-
 }

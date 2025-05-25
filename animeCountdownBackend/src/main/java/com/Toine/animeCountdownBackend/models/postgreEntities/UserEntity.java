@@ -30,9 +30,10 @@ public class UserEntity implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<FavoriteMediaEntity> favMedia;
 
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<NotificationEntity> notifs;
 
     public Long getId() {
@@ -73,6 +74,30 @@ public class UserEntity implements UserDetails {
 
     public void setNotifs(List<NotificationEntity> notifs) {
         this.notifs = notifs;
+    }
+
+    public List<FavoriteMediaEntity> getFavMedia() {
+        return favMedia;
+    }
+
+    public void setFavMedia(List<FavoriteMediaEntity> favMedia) {
+        this.favMedia = favMedia;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

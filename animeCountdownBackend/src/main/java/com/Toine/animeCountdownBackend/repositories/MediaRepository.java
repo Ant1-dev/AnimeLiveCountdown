@@ -25,4 +25,5 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
 
     @Query("SELECT m.id FROM MediaEntity m")
     List<Long> findAllIds();
+
 }
