@@ -17,7 +17,7 @@ import java.util.Optional;
 public class FavoriteMediaController {
     private final MediaRepository mediaRepository;
     private final UserRepository userRepository;
-    private FavoriteMediaRepository favRepository;
+    private final FavoriteMediaRepository favRepository;
 
     public FavoriteMediaController(FavoriteMediaRepository favRepository, MediaRepository mediaRepository, UserRepository userRepository) {
         this.favRepository = favRepository;
