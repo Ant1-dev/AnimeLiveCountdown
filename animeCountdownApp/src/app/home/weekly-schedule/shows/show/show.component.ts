@@ -6,7 +6,7 @@ import {
   inject,
   input,
   OnInit,
-   computed
+  computed,
 } from '@angular/core';
 import { Media } from '../../../../models/schedule.model';
 import { MediaInfoService } from '../../../../services/media.info.service';
@@ -15,6 +15,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TimeRemaining } from '../../../../models/time-remaining.model';
 import { MatIcon } from '@angular/material/icon';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
+import { FavoriteMediaService } from '../../../../services/favorite.media.service';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-show',
@@ -26,31 +28,41 @@ import { TooltipModule, Tooltip } from 'primeng/tooltip';
 export class ShowComponent implements OnInit {
   media = input<Media>();
   renderPriority = input<'high' | 'medium' | 'low'>('low');
-  
+
   private mediaInfoService = inject(MediaInfoService);
-  mediaTimeService = inject(MediaTimeService);
-  
+  private mediaTimeService = inject(MediaTimeService);
+  private favMediaService = inject(FavoriteMediaService);
+  private authService = inject(AuthService);
+
+  protected user = this.authService.user;
+
   timeRemaining = computed<TimeRemaining | null>(() => {
     const mediaData = this.media();
     if (!mediaData || !mediaData.id) return null;
     return this.mediaTimeService.getTimeRemaining(mediaData.id);
   });
-  
+
   getDisplayTitle(): string {
     return this.mediaTimeService.getDisplayTitle(this.media());
   }
-  
-  getWebpUrl(url: string | undefined): string {
-    return this.mediaTimeService.getWebpUrl(url);
-  }
-  
+
   retrieveId(): void {
     const mediaData = this.media();
     if (mediaData) {
       this.mediaInfoService.getMediaId(mediaData.id);
     }
   }
-  
+
+  saveMedia(): void {
+    if (this.user()) {
+      this.favMediaService.addFavoriteMedia(this.user()!.id, this.media()!.id).subscribe({
+        next: (res) => console.log(res),
+        error: (error) => console.log(error)
+      });
+      console.log("Media was added");
+    }
+  }
+
   ngOnInit(): void {
     this.mediaTimeService.initializeTimer(this.media());
   }
@@ -59,5 +71,4 @@ export class ShowComponent implements OnInit {
     showDelay: 150,
     autoHide: false,
   };
-
 }

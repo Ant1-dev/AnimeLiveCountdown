@@ -17,16 +17,14 @@ import java.util.Optional;
 @Repository
 public interface FavoriteMediaRepository extends JpaRepository<FavoriteMediaEntity, Long> {
 
-    @Query("SELECT fm.media FROM FavoriteMediaEntity fm WHERE fm.id = :userId")
+    @Query("SELECT fm.media FROM FavoriteMediaEntity fm WHERE fm.user.id = :userId")
     List<MediaEntity> findAllFavMedia(@Param("userId") Long userId);
 
     @Modifying
     @Transactional
-    @Query("INSERT INTO FavoriteMediaEntity (user, media, addedDate) VALUES(:user, :media, :addedDate)")
-    boolean addFavoriteMedia(@Param("user")Optional<UserEntity> user, @Param("media") Optional<MediaEntity> media, @Param("addedDate")Instant addedDate);
+    @Query("DELETE FROM FavoriteMediaEntity fm WHERE fm.media.id = :favoriteMediaId")
+    int removeFavoriteMedia(@Param("mediaId") Long favoriteMediaId);
 
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM FavoriteMediaEntity fm WHERE fm.id = :favoriteMediaId")
-    boolean removeFavoriteMedia(@Param("mediaId") Long favoriteMediaId);
+    @Query("SELECT COUNT(f) > 0 FROM FavoriteMediaEntity f WHERE f.user.id = :userId AND f.media.id = :mediaId")
+    boolean existsByUserIdAndMediaId(@Param("userId") Long userId, @Param("mediaId") Long mediaId);
 }
