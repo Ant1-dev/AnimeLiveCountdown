@@ -137,7 +137,7 @@
 
 /* Bottom Bar */
 .footer-bottom {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: inherit;
   padding: 15px;
   display: flex;
   justify-content: space-between;

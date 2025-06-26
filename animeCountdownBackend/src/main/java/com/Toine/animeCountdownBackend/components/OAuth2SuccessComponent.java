@@ -98,6 +98,6 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
         String accessToken = jwtService.generateToken(claims, user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        response.sendRedirect(frontendUrl + "?token=" + accessToken + "&refreshToken=" + refreshToken);
+        response.sendRedirect(frontendUrl + "?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
     }
 }
