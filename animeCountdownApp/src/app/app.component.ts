@@ -19,14 +19,18 @@ export class AppComponent implements OnInit {
   
   ngOnInit(): void {
     const url = new URL(window.location.href);
-    const token = url.searchParams.get('token');
-    if (token) {
-      this.tokenStorage.saveToken(token);
+    const accessToken = url.searchParams.get('accessToken');
+    const refreshToken = url.searchParams.get('refreshToken');
+    if (accessToken) {
+      this.tokenStorage.setToken(accessToken);
       
-      const user = this.authService['decodeUserFromToken'](token);
+      const user = this.authService['decodeUserFromToken'](accessToken);
       this.authService['storedUser'].set(user);
       
-      this.router.navigate([], { replaceUrl: true });
     }
+    if (refreshToken) {
+      this.tokenStorage.setRefreshToken(refreshToken)
+    }
+    this.router.navigate([], { replaceUrl: true });
   }
 }

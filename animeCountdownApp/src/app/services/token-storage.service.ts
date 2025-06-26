@@ -4,16 +4,26 @@ import { Injectable } from "@angular/core";
 @Injectable({providedIn: 'root'})
 export class TokenStorageService {
     private readonly KEY = 'auth_token';
+    private readonly RKEY = 'refreshToken';
 
-    saveToken(token: string) {
+    setToken(token: string) {
         localStorage.setItem(this.KEY, token);
+    }
+
+    setRefreshToken(token: string) {
+        localStorage.setItem(this.RKEY, token);
+    }
+
+    getRefreshToken(): string | null {
+        return localStorage.getItem(this.RKEY);
     }
 
     getToken(): string | null {
         return localStorage.getItem(this.KEY);
     }
 
-    clearToken() {
+    clearTokens() {
         localStorage.removeItem(this.KEY);
+        localStorage.removeItem(this.RKEY);
     }
 }

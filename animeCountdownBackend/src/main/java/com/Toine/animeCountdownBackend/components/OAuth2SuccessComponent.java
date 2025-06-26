@@ -96,7 +96,8 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
         claims.put("name", user.getName());
         claims.put("picture", user.getPicture());
         String accessToken = jwtService.generateToken(claims, user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        response.sendRedirect(frontendUrl + "?token=" + accessToken);
+        response.sendRedirect(frontendUrl + "?token=" + accessToken + "&refreshToken=" + refreshToken);
     }
 }
