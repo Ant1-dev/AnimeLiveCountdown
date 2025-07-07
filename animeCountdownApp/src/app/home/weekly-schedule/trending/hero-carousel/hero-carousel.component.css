@@ -1,7 +1,7 @@
 .carousel {
   margin-top: -73px;
   width: 100%;
-  height: 600px;
+  height: 500px;
   position: relative;
 }
 .carousel-media-image {
@@ -19,6 +19,7 @@
 .cover-image {
   filter: blur(8px);
 }
+
 .carousel-media-image.active {
   opacity: 1;
   z-index: 1;
@@ -207,20 +208,17 @@
     padding: 6px 8px;
   }
   
-  .carousel-content-des {
-    height: 55px;
-  }
 }
 
 @media (max-width: 600px) {
 
   .show-title {
     height: fit-content;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
   }
 
   .carousel {
-    height: 350px;
+    height: 300px;
   }
   
   .carousel-content {

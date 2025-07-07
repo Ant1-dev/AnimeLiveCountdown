@@ -33,7 +33,6 @@ public class FavoriteMediaController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<MediaEntity>> getAllFavoriteMedia(@PathVariable Long userId) {
-        // Add authentication check
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             return ResponseEntity.status(401).build();
@@ -82,7 +81,6 @@ public class FavoriteMediaController {
 
     @DeleteMapping("/{mediaId}")
     public ResponseEntity<String> deleteFavoriteMedia(@PathVariable Long mediaId) {
-        // Add authentication check
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             return ResponseEntity.status(401).body("Authentication required");

@@ -23,7 +23,6 @@
       <div class="carousel-content">
         <h1 class="show-title">{{ media.engtitle || media.romtitle }}</h1>
         <p class="genres-episodes"> Next Episode: <span class="episodeA">{{media.nextepisode + " "}}</span> <br> Genres: {{ media.genres.join(", ") }}</p>
-        <p class="carousel-content-des" [innerHTML]="trimWithDots(media.description, 300)"></p>
         <div class="airing-block">
           <div class="countdown-timer">
             <div class="countdown-item">

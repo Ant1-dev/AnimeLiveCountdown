@@ -75,7 +75,6 @@
   
   .notification:hover, .profile:hover {
     cursor: pointer;
-    background-color: rgba(240, 240, 240, 0.1);
   }
 
   .logo-container span {
@@ -86,10 +85,6 @@
     text-decoration: none;
   }
 
-  .profile {
-    border-radius: 100px;
-    overflow: hidden;
-  }
 
   .notification {
     margin-top: -10px;
