@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://realthinkers.co/api/',
+    apiUrl: 'https://www.alcountdown.us/api/',
 };

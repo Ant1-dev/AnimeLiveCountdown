@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "https://anime-countdown-latest.onrender.com/sitemap.xml" },
+    { "source": "/sitemap.xml", "destination": "https://www.alcountdown.us/sitemap.xml" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "builds": [
