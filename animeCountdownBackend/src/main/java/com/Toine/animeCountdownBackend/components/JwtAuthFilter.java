@@ -32,10 +32,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("JwtAuthFilter called for: " + request.getRequestURI());
 
         final String authHeader = request.getHeader("Authorization");
-        System.out.println("Auth header: " + authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             System.out.println("No valid auth header found" );

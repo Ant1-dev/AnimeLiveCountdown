@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "media")
@@ -25,6 +26,8 @@ public class MediaEntity {
     private String day;
     private Long popularity;
     private Integer seasonYear;
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteMediaEntity> favorites;
 
     public Integer getSeasonYear() {
         return seasonYear;
@@ -105,5 +108,13 @@ public class MediaEntity {
 
     public void setPopularity(Long popularity) {
         this.popularity = popularity;
+    }
+
+    public List<FavoriteMediaEntity> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoriteMediaEntity> favorites) {
+        this.favorites = favorites;
     }
 }

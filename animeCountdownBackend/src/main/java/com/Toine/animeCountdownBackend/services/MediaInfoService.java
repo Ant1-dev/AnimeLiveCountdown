@@ -29,7 +29,7 @@ public class MediaInfoService {
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    //@Scheduled(fixedRate = 43200000) //every 3hr
+    @Scheduled(fixedRate = 43200000) //every 3hr
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {
