@@ -38,9 +38,15 @@ export class HeroCarouselComponent implements OnInit {
   timeRemaining = computed(() => {
     const media = this.currentMedia();
     return media
-      ? this.mediaTimeService.getTimeRemaining(media.id) ||
-          ({} as TimeRemaining)
-      : ({} as TimeRemaining);
+      ? this.mediaTimeService.getTimeRemaining(media.id)
+      : null;
+  });
+
+  isAiringNow = computed(() => {
+    const media = this.currentMedia();
+    if (!media) return false;
+    const timeLeft = this.mediaTimeService.getTimeRemaining(media.id);
+    return timeLeft === null;
   });
 
   // Services

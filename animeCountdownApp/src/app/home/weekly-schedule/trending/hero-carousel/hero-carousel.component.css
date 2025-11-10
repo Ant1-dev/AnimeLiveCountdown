@@ -124,6 +124,19 @@
   margin-top: 5px;
 }
 
+.airing-now-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00a6fb;
+  background-color: black;
+  border-radius: 10px;
+  padding: 15px 30px;
+  width: fit-content;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
 /* Directions Arrows */
 .directions {
   position: absolute;

@@ -28,6 +28,8 @@ import { AuthService } from '../../../../auth/auth.service';
 export class ShowComponent implements OnInit {
   media = input<Media>();
   renderPriority = input<'high' | 'medium' | 'low'>('low');
+  // If true, show "Airing Now" when countdown finishes. If false, hide card completely.
+  showAiringNow = input<boolean>(false);
 
   private mediaInfoService = inject(MediaInfoService);
   private mediaTimeService = inject(MediaTimeService);
@@ -40,6 +42,10 @@ export class ShowComponent implements OnInit {
     const mediaData = this.media();
     if (!mediaData || !mediaData.id) return null;
     return this.mediaTimeService.getTimeRemaining(mediaData.id);
+  });
+
+  isAiringNow = computed(() => {
+    return this.timeRemaining() === null && this.showAiringNow();
   });
 
   getDisplayTitle(): string {

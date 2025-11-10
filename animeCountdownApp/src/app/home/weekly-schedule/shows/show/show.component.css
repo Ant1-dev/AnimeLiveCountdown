@@ -131,7 +131,22 @@
     cursor: pointer;
     color: #00a6fb;
   }
-  
+
+  .airing-now-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+  }
+
+  .airing-now-text-card {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #00a6fb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
   @media screen and (max-width: 600px) {
     .airingDate {
       font-size: 12px;

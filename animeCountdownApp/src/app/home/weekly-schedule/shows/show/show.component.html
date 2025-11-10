@@ -41,18 +41,40 @@
     </div>
   </div>
 </a>
-} @else {
-<div class="card">
-  <div class="skeleton-container">
-    <div class="airingDate-skeleton">
-      <p-skeleton width="100%" height="60px"></p-skeleton>
+} @else if (isAiringNow()) {
+<a class="link" [href]="'/media/' + media()!.id" (click)="retrieveId()">
+  <div class="card">
+    <div class="airingDate airing-now-card">
+      <span class="airing-now-text-card">Airing Now</span>
     </div>
-    <p-skeleton
-      width="100%"
-      height="252px"
-      styleClass="poster-skeleton"
-    ></p-skeleton>
-    <p-skeleton height="40px" width="80%" styleClass="mt-2"></p-skeleton>
+    <div class="poster-container">
+      <img
+        [src]="media()?.cover_Image_Url"
+        [alt]="getDisplayTitle()"
+        class="poster"
+        width="168"
+        height="252"
+        [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
+        [style.aspect-ratio]="'2/3'"
+      />
+      <mat-icon
+        [tooltipOptions]="tooltipOptions"
+        [pTooltip]="showInfo"
+        class="info-icon"
+        >info_i</mat-icon
+      >
+      <ng-template #showInfo>
+        <div class="show-info-container">
+          <div class="show-info-item">Episode {{ media()?.next_Airing_Episode}} is airing now!</div>
+          <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
+          <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="cardFooter">
+      {{ getDisplayTitle() }}
+    </div>
   </div>
-</div>
+</a>
 }

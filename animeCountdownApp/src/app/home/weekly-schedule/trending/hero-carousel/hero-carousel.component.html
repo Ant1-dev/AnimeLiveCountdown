@@ -24,24 +24,30 @@
         <h1 class="show-title">{{ media.engtitle || media.romtitle }}</h1>
         <p class="genres-episodes"> Next Episode: <span class="episodeA">{{media.nextepisode + " "}}</span> <br> Genres: {{ media.genres.join(", ") }}</p>
         <div class="airing-block">
-          <div class="countdown-timer">
-            <div class="countdown-item">
-              <div class="countdown-value">{{timeRemaining().days}}</div>
-              <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-item">
-              <div class="countdown-value">{{timeRemaining().hours | number:'2.0-0'}}</div>
-              <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-item">
-              <div class="countdown-value">{{timeRemaining().minutes | number:'2.0-0'}}</div>
-              <div class="countdown-label">Minutes</div>
-            </div>
-            <div class="countdown-item">
-              <div class="countdown-value" style="color: #00a6fb">{{timeRemaining().seconds | number:'2.0-0'}}</div>
-              <div class="countdown-label">Seconds</div>
-            </div>
-          </div>
+          @if (isAiringNow()) {
+            <div class="airing-now-text">Airing Now</div>
+          } @else {
+            @if (timeRemaining(); as remaining) {
+              <div class="countdown-timer">
+                <div class="countdown-item">
+                  <div class="countdown-value">{{remaining.days}}</div>
+                  <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                  <div class="countdown-value">{{remaining.hours | number:'2.0-0'}}</div>
+                  <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                  <div class="countdown-value">{{remaining.minutes | number:'2.0-0'}}</div>
+                  <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                  <div class="countdown-value" style="color: #00a6fb">{{remaining.seconds | number:'2.0-0'}}</div>
+                  <div class="countdown-label">Seconds</div>
+                </div>
+              </div>
+            }
+          }
         </div>
       </div>
     </div>
