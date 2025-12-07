@@ -20,7 +20,14 @@ import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-show',
-  imports: [CommonModule, SkeletonModule, MatIcon, TooltipModule, Tooltip, NgOptimizedImage],
+  imports: [
+    CommonModule,
+    SkeletonModule,
+    MatIcon,
+    TooltipModule,
+    Tooltip,
+    NgOptimizedImage,
+  ],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,11 +68,13 @@ export class ShowComponent implements OnInit {
 
   saveMedia(): void {
     if (this.user()) {
-      this.favMediaService.addFavoriteMedia(this.user()!.id, this.media()!.id).subscribe({
-        next: (res) => console.log(res),
-        error: (error) => console.log(error)
-      });
-      console.log("Media was added");
+      this.favMediaService
+        .addFavoriteMedia(this.user()!.id, this.media()!.id)
+        .subscribe({
+          next: (res) => console.log(res),
+          error: (error) => console.log(error),
+        });
+      console.log('Media was added');
     }
   }
 
