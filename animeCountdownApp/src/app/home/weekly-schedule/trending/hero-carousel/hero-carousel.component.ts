@@ -6,6 +6,7 @@ import {
   signal,
   computed,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MediaInfo } from '../../../../models/media.info.model';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -22,6 +23,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   imports: [NgOptimizedImage, CommonModule, MatIcon, SkeletonModule],
   templateUrl: './hero-carousel.component.html',
   styleUrl: './hero-carousel.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroCarouselComponent implements OnInit {
   // Internal state
@@ -65,11 +67,6 @@ export class HeroCarouselComponent implements OnInit {
         next: (media) => {
           if (media != undefined) {
             this.mediaList.set(media);
-            if (media.length > 0 && media[0].banner) {
-              const img = new Image();
-              img.src = media[0].banner;
-              img.fetchPriority = 'high';
-            }
             this.initializeCarousel();
           }
           this.isLoading.set(false);

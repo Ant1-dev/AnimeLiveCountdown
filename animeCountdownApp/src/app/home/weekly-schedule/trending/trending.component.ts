@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { HeroCarouselComponent } from './hero-carousel/hero-carousel.component';
@@ -11,6 +11,7 @@ import { SeasonPopComponent } from "./season-pop/season-pop.component";
   imports: [CommonModule, SkeletonModule, HeroCarouselComponent, SeasonPopComponent],
   templateUrl: './trending.component.html',
   styleUrl: './trending.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrendingComponent {
 

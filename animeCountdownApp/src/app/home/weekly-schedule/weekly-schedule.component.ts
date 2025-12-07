@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShowsComponent } from "./shows/shows.component";
 import { CollapsibleComponent } from '../shared-home/collapsible/collapsible.component';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -6,7 +6,6 @@ import { MediaSkeletonComponent } from "../shared-home/media-skeleton/media-skel
 
 @Component({
   selector: 'app-weekly-schedule',
-  standalone: true,
   imports: [
     ShowsComponent,
     CollapsibleComponent,
@@ -14,7 +13,8 @@ import { MediaSkeletonComponent } from "../shared-home/media-skeleton/media-skel
     MediaSkeletonComponent
 ],
   templateUrl: './weekly-schedule.component.html',
-  styleUrl: './weekly-schedule.component.css'
+  styleUrl: './weekly-schedule.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeeklyScheduleComponent {
   weekDays: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

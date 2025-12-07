@@ -13,14 +13,12 @@
     </div>
     <div class="poster-container">
       <img
-        [src]="media()?.cover_Image_Url"
+        [ngSrc]="media()?.cover_Image_Url || ''"
         [alt]="getDisplayTitle()"
         class="poster"
         width="168"
         height="252"
-        [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
-        [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
-        [style.aspect-ratio]="'2/3'"
+        [priority]="renderPriority() === 'high'"
       />
       <mat-icon
         [tooltipOptions]="tooltipOptions"
@@ -49,14 +47,12 @@
     </div>
     <div class="poster-container">
       <img
-        [src]="media()?.cover_Image_Url"
+        [ngSrc]="media()?.cover_Image_Url || ''"
         [alt]="getDisplayTitle()"
         class="poster"
         width="168"
         height="252"
-        [attr.loading]="renderPriority() === 'high' ? 'eager' : 'lazy'"
-        [attr.fetchpriority]="renderPriority() === 'high' ? 'high' : 'low'"
-        [style.aspect-ratio]="'2/3'"
+        [priority]="renderPriority() === 'high'"
       />
       <mat-icon
         [tooltipOptions]="tooltipOptions"

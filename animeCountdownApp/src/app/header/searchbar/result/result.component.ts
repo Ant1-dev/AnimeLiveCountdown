@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { Media } from '../../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { MediaInfoService } from '../../../services/media.info.service';
@@ -9,6 +9,7 @@ import { MediaInfo } from '../../../models/media.info.model';
   imports: [CommonModule],
   templateUrl: './result.component.html',
   styleUrl: './result.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultComponent {
   result = input<MediaInfo>();

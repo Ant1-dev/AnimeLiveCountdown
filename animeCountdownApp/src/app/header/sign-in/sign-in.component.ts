@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
   imports: [],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
   googleSignIn() {

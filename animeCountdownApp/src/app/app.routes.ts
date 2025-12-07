@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { MediaInfoComponent } from './media-info/media-info.component';
 
 export const routes: Routes = [
     {
@@ -9,6 +8,6 @@ export const routes: Routes = [
     },
     {
         path: 'media/:id',
-        component: MediaInfoComponent
+        loadComponent: () => import('./media-info/media-info.component').then(m => m.MediaInfoComponent)
     },
 ];

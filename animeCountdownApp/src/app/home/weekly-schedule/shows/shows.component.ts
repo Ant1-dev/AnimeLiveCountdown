@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
   computed,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ShowComponent } from './show/show.component';
 import { CommonModule } from '@angular/common';
@@ -24,6 +25,7 @@ type RenderPriority = 'high' | 'medium' | 'low';
   imports: [ShowComponent, CommonModule, SkeletonModule, MediaSkeletonComponent],
   templateUrl: './shows.component.html',
   styleUrl: './shows.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowsComponent implements OnInit {
   weekDay = input<string>('');
@@ -79,14 +81,6 @@ export class ShowsComponent implements OnInit {
           if (media != undefined) {
             // Add media to the store (will maintain priority queue)
             this.mediaStoreService.addMediaToStore(this.weekDay(), media);
-
-            // Preload high priority images from display media
-            const displayMedia = this.mediaStoreService.getDisplayMedia(this.weekDay());
-            if (this.renderPriority() === 'high') {
-              this.preloadImages(displayMedia.slice(0, 6));
-            } else if (this.renderPriority() === 'medium') {
-              this.preloadImages(displayMedia.slice(0, 3));
-            }
           }
         },
         error: (error) => {
@@ -113,13 +107,6 @@ export class ShowsComponent implements OnInit {
         next: (media) => {
           if (media != undefined) {
             this.media.set(media);
-
-            // Preload high priority images
-            if (this.renderPriority() === 'high') {
-              this.preloadImages(media.slice(0, 6));
-            } else if (this.renderPriority() === 'medium') {
-              this.preloadImages(media.slice(0, 3));
-            }
           }
         },
         error: (error) => {
@@ -143,16 +130,6 @@ export class ShowsComponent implements OnInit {
       return index < 4 ? 'medium' : 'low';
     } else {
       return 'low';
-    }
-  }
-
-  // Preload important images
-  private preloadImages(media: Media[]): void {
-    for (const show of media) {
-      if (show.cover_Image_Url) {
-        const img = new Image();
-        img.src = show.cover_Image_Url;
-      }
     }
   }
 }

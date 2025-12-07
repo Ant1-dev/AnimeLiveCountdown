@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { RouterLink } from '@angular/router';
 
@@ -6,7 +6,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-profile-dropdown',
   imports: [RouterLink],
   templateUrl: './profile-dropdown.component.html',
-  styleUrl: './profile-dropdown.component.css'
+  styleUrl: './profile-dropdown.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileDropdownComponent {
   isVisible = input<boolean>(false);

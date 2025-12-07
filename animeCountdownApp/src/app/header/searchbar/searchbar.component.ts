@@ -7,7 +7,7 @@ import {
   signal,
   Injector,
   ElementRef,
-  HostListener,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +23,10 @@ import { MediaInfo } from '../../models/media.info.model';
   imports: [ReactiveFormsModule, CommonModule, ResultComponent, MatIconModule],
   templateUrl: './searchbar.component.html',
   styleUrl: './searchbar.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:click)': 'clickOutside($event)'
+  }
 })
 export class SearchbarComponent implements OnInit {
   searchResults = signal<MediaInfo[]>([]);
@@ -63,7 +67,6 @@ export class SearchbarComponent implements OnInit {
     });
   }
 
-  @HostListener('document:click', ['$event'])
   clickOutside(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showResults.set(false);

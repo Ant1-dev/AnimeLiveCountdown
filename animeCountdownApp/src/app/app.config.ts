@@ -14,6 +14,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { cacheInterceptor } from './interceptors/cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withFetch(),
-      withInterceptors([AuthInterceptor]) 
+      withInterceptors([cacheInterceptor, AuthInterceptor])
     ),
     provideAnimationsAsync(),
     providePrimeNG({

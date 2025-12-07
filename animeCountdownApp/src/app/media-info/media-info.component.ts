@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
   computed,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MediaInfoService } from '../services/media.info.service';
 import { MediaTimeService } from '../services/media-time.service';
@@ -22,6 +23,7 @@ import { Skeleton } from 'primeng/skeleton';
   imports: [CommonModule, Skeleton, NgOptimizedImage],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaInfoComponent implements OnInit {
   private mediaInfoService = inject(MediaInfoService);

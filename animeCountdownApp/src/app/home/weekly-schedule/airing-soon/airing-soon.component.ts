@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
 import { ShowComponent } from '../shows/show/show.component';
@@ -9,6 +9,7 @@ import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-s
   imports: [ShowComponent, MediaSkeletonComponent],
   templateUrl: './airing-soon.component.html',
   styleUrl: './airing-soon.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiringSoonComponent implements OnInit {
   media = signal<Media[]>([]);

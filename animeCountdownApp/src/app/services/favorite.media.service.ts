@@ -12,7 +12,7 @@ export class FavoriteMediaService {
   private httpClient = inject(HttpClient);
 
   getFavoriteMedia(userId: number) {
-    this.httpClient.get<FavoriteMedia>(this.url + `/${userId}`);
+    return this.httpClient.get<FavoriteMedia>(this.url + `/${userId}`);
   }
 
   addFavoriteMedia(userId: number, mediaId: number) {

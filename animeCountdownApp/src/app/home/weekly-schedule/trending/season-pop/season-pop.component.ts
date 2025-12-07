@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ScheduleService } from '../../../../services/schedule.service';
 import { Media } from '../../../../models/schedule.model';
 import { ShowComponent } from '../../shows/show/show.component';
@@ -9,6 +9,7 @@ import { MediaSkeletonComponent } from "../../../shared-home/media-skeleton/medi
   imports: [ShowComponent, MediaSkeletonComponent],
   templateUrl: './season-pop.component.html',
   styleUrl: './season-pop.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeasonPopComponent implements OnInit {
   private scheduleService = inject(ScheduleService);

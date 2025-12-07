@@ -1,5 +1,5 @@
 // show.component.ts
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +20,7 @@ import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-show',
-  imports: [CommonModule, SkeletonModule, MatIcon, TooltipModule, Tooltip],
+  imports: [CommonModule, SkeletonModule, MatIcon, TooltipModule, Tooltip, NgOptimizedImage],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

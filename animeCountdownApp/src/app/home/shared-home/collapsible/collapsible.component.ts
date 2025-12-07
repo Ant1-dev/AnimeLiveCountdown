@@ -1,17 +1,18 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-collapsible',
   imports: [CommonModule],
   templateUrl: './collapsible.component.html',
-  styleUrl: './collapsible.component.css'
+  styleUrl: './collapsible.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollapsibleComponent {
   title = input<string>('Collapse Section');
-  isCollapsed: boolean = false;
+  isCollapsed = signal(false);
 
   toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
+    this.isCollapsed.update(val => !val);
   }
 }

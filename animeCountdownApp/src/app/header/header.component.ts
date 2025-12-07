@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { RouterLink } from '@angular/router';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -21,6 +21,10 @@ import { ProfileDropdownComponent } from "./profile-dropdown/profile-dropdown.co
 ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:click)': 'closeDropdownOnOutsideClick($event)'
+  }
 })
 export class HeaderComponent {
   dropdownVisible = signal<boolean>(false);
@@ -38,15 +42,14 @@ export class HeaderComponent {
     });
   }
 
-  @HostListener('document:click', ['$event'])
   closeDropdownOnOutsideClick(event: MouseEvent): void {
     if (!this.dropdownVisible()) return;
-    
+
     const dropdown = document.querySelector('.profile-dropdown');
     const profileButton = document.querySelector('.profile button');
-    
-    if (dropdown && profileButton && 
-        !dropdown.contains(event.target as Node) && 
+
+    if (dropdown && profileButton &&
+        !dropdown.contains(event.target as Node) &&
         !profileButton.contains(event.target as Node)) {
       this.dropdownVisible.set(false);
     }
