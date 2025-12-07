@@ -14,6 +14,7 @@ import { MediaTimeService } from '../../../../services/media-time.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TimeRemaining } from '../../../../models/time-remaining.model';
 import { MatIcon } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
@@ -42,6 +43,7 @@ export class ShowComponent implements OnInit {
   private mediaTimeService = inject(MediaTimeService);
   private favMediaService = inject(FavoriteMediaService);
   private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
   protected user = this.authService.user;
 
@@ -71,10 +73,24 @@ export class ShowComponent implements OnInit {
       this.favMediaService
         .addFavoriteMedia(this.user()!.id, this.media()!.id)
         .subscribe({
-          next: (res) => console.log(res),
-          error: (error) => console.log(error),
+          next: () => {
+            this.snackBar.open('Added to favorites!', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+          },
+          error: (error) => {
+            const errorMessage = error.error?.error === 'Media is already in favorites'
+              ? 'Already in favorites'
+              : 'Failed to add to favorites';
+            this.snackBar.open(errorMessage, 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+          },
         });
-      console.log('Media was added');
     }
   }
 

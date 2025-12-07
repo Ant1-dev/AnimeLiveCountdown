@@ -1,6 +1,6 @@
-import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -11,8 +11,16 @@ import { RouterLink } from '@angular/router';
 })
 export class ProfileDropdownComponent {
   isVisible = input<boolean>(false);
+  close = output<void>();
+
   private authService = inject(AuthService);
+  private router = inject(Router);
   protected user = this.authService.user;
+
+  navigateToFavorites(): void {
+    this.router.navigate(['/favorites']);
+    this.close.emit();
+  }
 
   logout(): void {
     this.authService.logout();

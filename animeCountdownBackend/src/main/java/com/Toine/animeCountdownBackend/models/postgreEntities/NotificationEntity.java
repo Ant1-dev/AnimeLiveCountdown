@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -15,6 +16,7 @@ public class NotificationEntity {
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn( name = "user_id")
+    @JsonIgnore
     private UserEntity user;
 
     public Long getId() {
@@ -41,10 +43,12 @@ public class NotificationEntity {
         this.message = message;
     }
 
+    @JsonIgnore
     public UserEntity getUser() {
         return user;
     }
 
+    @JsonIgnore
     public void setUser(UserEntity user) {
         this.user = user;
     }

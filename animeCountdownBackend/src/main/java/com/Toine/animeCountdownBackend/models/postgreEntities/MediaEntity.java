@@ -1,6 +1,7 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,7 @@ public class MediaEntity {
     private Long popularity;
     private Integer seasonYear;
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<FavoriteMediaEntity> favorites;
 
     public Integer getSeasonYear() {
@@ -120,10 +122,12 @@ public class MediaEntity {
         this.popularity = popularity;
     }
 
+    @JsonIgnore
     public List<FavoriteMediaEntity> getFavorites() {
         return favorites;
     }
 
+    @JsonIgnore
     public void setFavorites(List<FavoriteMediaEntity> favorites) {
         this.favorites = favorites;
     }

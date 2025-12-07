@@ -1,0 +1,43 @@
+.section-header {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+}
+
+.gradient-bar {
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), transparent);
+  margin-top: 0.5rem;
+}
+
+.error-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.empty-state h2 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  opacity: 0.8;
+}

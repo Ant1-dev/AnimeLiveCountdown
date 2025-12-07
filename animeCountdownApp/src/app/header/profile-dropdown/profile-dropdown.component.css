@@ -17,6 +17,33 @@
     gap: 8px;
 }
 
+.dropdown-functions > div {
+    cursor: pointer;
+    position: relative;
+    padding: 4px 0;
+    transition: opacity 0.2s ease;
+}
+
+.dropdown-functions > div:hover {
+    opacity: 0.8;
+}
+
+.dropdown-functions > div::after {
+    content: "";
+    position: absolute;
+    background-color: #C5C6C7;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.dropdown-functions > div:hover::after {
+    opacity: 1;
+}
+
 a {
     position: relative;
     text-decoration: none;

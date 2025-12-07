@@ -36,6 +36,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
                 "https://animelivecountdown.com",
+                "https://www.alcountdown.us",
+                "http://alcountdown.us",
                 "http://127.0.0.1:8081",
                 "https://anime-live-countdown-6y6pbb7ma-ant1-devs-projects.vercel.app",
                 "https://anime-live-countdown-git-main-ant1-devs-projects.vercel.app"

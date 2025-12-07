@@ -58,4 +58,8 @@ export class HeaderComponent {
   setVisible(): void {
     this.dropdownVisible.set(!this.dropdownVisible());
   }
+
+  closeDropdown(): void {
+    this.dropdownVisible.set(false);
+  }
 }

@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,9 +32,11 @@ public class UserEntity implements UserDetails {
     private Date updatedAt;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<FavoriteMediaEntity> favMedia;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<NotificationEntity> notifs;
 
     public Long getId() {
@@ -68,18 +71,22 @@ public class UserEntity implements UserDetails {
         this.name = name;
     }
 
+    @JsonIgnore
     public List<NotificationEntity> getNotifs() {
         return notifs;
     }
 
+    @JsonIgnore
     public void setNotifs(List<NotificationEntity> notifs) {
         this.notifs = notifs;
     }
 
+    @JsonIgnore
     public List<FavoriteMediaEntity> getFavMedia() {
         return favMedia;
     }
 
+    @JsonIgnore
     public void setFavMedia(List<FavoriteMediaEntity> favMedia) {
         this.favMedia = favMedia;
     }

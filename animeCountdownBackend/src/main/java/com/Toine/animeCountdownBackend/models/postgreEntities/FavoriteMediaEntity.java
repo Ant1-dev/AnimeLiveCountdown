@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -19,10 +20,12 @@ public class FavoriteMediaEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "media_id")
+    @JsonIgnore
     private MediaEntity media;
 
     @Column(name = "added_date")
@@ -36,18 +39,22 @@ public class FavoriteMediaEntity {
         this.id = id;
     }
 
+    @JsonIgnore
     public UserEntity getUser() {
         return user;
     }
 
+    @JsonIgnore
     public void setUser(UserEntity user) {
         this.user = user;
     }
 
+    @JsonIgnore
     public MediaEntity getMedia() {
         return media;
     }
 
+    @JsonIgnore
     public void setMedia(MediaEntity media) {
         this.media = media;
     }

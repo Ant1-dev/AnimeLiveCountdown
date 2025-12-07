@@ -1,0 +1,26 @@
+<div class="section-header">
+  <h1 class="section-title">My Favorites</h1>
+  <div class="gradient-bar"></div>
+</div>
+
+@if (isLoading()) {
+  <app-media-skeleton/>
+} @else if (error() !== '') {
+  <div class="error-container">
+    <div class="error-message">{{error()}}</div>
+  </div>
+} @else if (media().length <= 0) {
+  <div class="empty-state">
+    <h2>No favorite shows yet</h2>
+    <p>Start adding shows to your favorites to see them here!</p>
+  </div>
+} @else {
+  <div class="cardContainer">
+    @for (show of media(); track show.id; let i = $index) {
+      <app-show
+        [media]="show"
+        [renderPriority]="getShowPriority(i)"
+        [showAiringNow]="true" />
+    }
+  </div>
+}
