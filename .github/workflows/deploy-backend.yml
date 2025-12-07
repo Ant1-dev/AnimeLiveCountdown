@@ -76,11 +76,10 @@ jobs:
           # Run new container
           docker run -d \
             --name anime-countdown \
-            --network ipv6net \
-            -p 8080:8080 \
-            --env-file /home/ec2-user/AnimeLiveCountdown/.env \
+            --network host \  
+            --env-file .env \
             --restart unless-stopped \
-            $DOCKER_USERNAME/$IMAGE_NAME:latest
+            ant1dev/anime-countdown:latest
 
           # Show logs
           docker logs anime-countdown --tail 50
