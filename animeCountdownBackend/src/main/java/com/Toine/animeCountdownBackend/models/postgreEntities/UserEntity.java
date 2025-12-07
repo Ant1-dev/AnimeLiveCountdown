@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
+// test
 @Entity
 @Table(name = "app_user")
 public class UserEntity implements UserDetails {
