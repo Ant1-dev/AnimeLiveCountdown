@@ -1,0 +1,86 @@
+name: Deploy Backend to AWS EC2
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'animeCountdownBackend/**'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 23
+      uses: actions/setup-java@v4
+      with:
+        java-version: '23'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      working-directory: ./animeCountdownBackend
+      run: mvn clean package -DskipTests
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract version from pom.xml
+      id: version
+      working-directory: ./animeCountdownBackend
+      run: |
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Building version: $VERSION"
+
+    - name: Build and push Docker image
+      working-directory: ./animeCountdownBackend
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+        VERSION: ${{ steps.version.outputs.VERSION }}
+      run: |
+        docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$VERSION .
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:latest
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+    - name: Deploy to AWS EC2
+      uses: appleboy/ssh-action@v1.0.3
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        envs: DOCKER_USERNAME,IMAGE_NAME
+        script: |
+          # Stop and remove existing container
+          docker stop anime-countdown || true
+          docker rm anime-countdown || true
+
+          # Remove old images to save space
+          docker image prune -af
+
+          # Pull latest image
+          docker pull $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+          # Run new container
+          docker run -d \
+            --name anime-countdown \
+            --network ipv6net \
+            -p 8080:8080 \
+            --env-file /home/ec2-user/AnimeLiveCountdown/.env \
+            --restart unless-stopped \
+            $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+          # Show logs
+          docker logs anime-countdown --tail 50
