@@ -23,7 +23,7 @@ public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long
     @Query(value = "SELECT * FROM media_info WHERE " +
                    "rom_title ILIKE '%' || :searchTerm || '%' OR " +
                    "eng_title ILIKE '%' || :searchTerm || '%' " +
-                   "ORDER BY media_popularity DESC LIMIT 20",
+                   "ORDER BY media_popularity DESC LIMIT 5",
             nativeQuery = true)
     List<MediaInfoEntity> searchByFields(@Param("searchTerm") String searchTerm);
 

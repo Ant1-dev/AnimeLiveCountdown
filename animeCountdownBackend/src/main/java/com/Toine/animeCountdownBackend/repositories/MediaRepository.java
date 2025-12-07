@@ -14,13 +14,13 @@ import java.util.List;
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
 
-    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND LOWER(m.day) = LOWER(:day) ORDER BY m.popularity DESC")
-    List<MediaEntity> findAiringMediaByDayOrderedByPopularity(@Param("day") String day);
+    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND LOWER(m.day) = LOWER(:day) AND m.status = 'RELEASING' ORDER BY m.popularity DESC")
+    Page<MediaEntity> findAiringMediaByDayOrderedByPopularity(@Param("day") String day, Pageable pageable);
 
     @Query("SELECT m FROM MediaEntity m WHERE m.seasonYear = EXTRACT(YEAR FROM CURRENT_DATE) AND m.status = 'RELEASING' AND m.next_Airing_At IS NOT NULL ORDER BY m.popularity DESC")
     Page<MediaEntity> findAllByCurrentYear(Pageable pageable);
 
-    @Query("SELECT m FROM MediaEntity m ORDER BY m.next_Airing_At ASC")
+    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND m.status IN ('RELEASING', 'NOT_YET_RELEASED') ORDER BY m.next_Airing_At ASC")
     Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);
 
     @Query("SELECT m.id FROM MediaEntity m")

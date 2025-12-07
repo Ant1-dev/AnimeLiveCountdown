@@ -12,7 +12,13 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        // Simple in-memory cache for trending results and sitemap
-        return new ConcurrentMapCacheManager("trendingCache", "sitemapCache");
+        // Simple in-memory cache for frequently accessed endpoints
+        return new ConcurrentMapCacheManager(
+                "trendingCache",
+                "sitemapCache",
+                "upcomingAnime",
+                "trendingAnime",
+                "weekdayAnime"
+        );
     }
 }

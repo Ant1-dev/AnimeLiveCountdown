@@ -8,7 +8,11 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name = "media_info")
+@Table(name = "media_info", indexes = {
+    @Index(name = "idx_media_info_eng_title", columnList = "eng_title"),
+    @Index(name = "idx_media_info_rom_title", columnList = "rom_title"),
+    @Index(name = "idx_media_info_popularity", columnList = "media_popularity")
+})
 public class MediaInfoEntity {
     @Id
     private Long id;

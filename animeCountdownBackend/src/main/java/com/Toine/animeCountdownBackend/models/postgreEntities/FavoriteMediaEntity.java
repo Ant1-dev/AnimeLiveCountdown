@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "favmedia", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "media_id"}))
+@Table(name = "favmedia",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "media_id"}),
+       indexes = {
+           @Index(name = "idx_favmedia_user_id", columnList = "user_id"),
+           @Index(name = "idx_favmedia_media_id", columnList = "media_id")
+       })
 public class FavoriteMediaEntity {
 
     @Id

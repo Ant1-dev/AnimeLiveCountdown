@@ -6,10 +6,12 @@ import com.Toine.animeCountdownBackend.models.postgreEntities.UserEntity;
 import com.Toine.animeCountdownBackend.repositories.FavoriteMediaRepository;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
 import com.Toine.animeCountdownBackend.repositories.UserRepository;
+import jakarta.validation.constraints.Positive;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth/favorite")
+@Validated
 public class FavoriteMediaController {
     private final MediaRepository mediaRepository;
     private final UserRepository userRepository;
@@ -32,7 +35,8 @@ public class FavoriteMediaController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<MediaEntity>> getAllFavoriteMedia(@PathVariable Long userId) {
+    public ResponseEntity<List<MediaEntity>> getAllFavoriteMedia(
+            @PathVariable @Positive(message = "User ID must be positive") Long userId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             return ResponseEntity.status(401).build();
@@ -43,7 +47,9 @@ public class FavoriteMediaController {
     }
 
     @PostMapping("/{userId}/{mediaId}")
-    public ResponseEntity<Map<String, String>> addFavoriteMedia(@PathVariable Long userId, @PathVariable Long mediaId) {
+    public ResponseEntity<Map<String, String>> addFavoriteMedia(
+            @PathVariable @Positive(message = "User ID must be positive") Long userId,
+            @PathVariable @Positive(message = "Media ID must be positive") Long mediaId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -80,7 +86,8 @@ public class FavoriteMediaController {
     }
 
     @DeleteMapping("/{mediaId}")
-    public ResponseEntity<String> deleteFavoriteMedia(@PathVariable Long mediaId) {
+    public ResponseEntity<String> deleteFavoriteMedia(
+            @PathVariable @Positive(message = "Media ID must be positive") Long mediaId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             return ResponseEntity.status(401).body("Authentication required");

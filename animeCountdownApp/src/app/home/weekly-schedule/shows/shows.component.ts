@@ -108,7 +108,7 @@ export class ShowsComponent implements OnInit {
     this.isLoading.set(true);
 
     const subscription = this.scheduleService
-      .renderMedia(this.weekDay(), this.error())
+      .renderMedia(this.weekDay().toUpperCase(), this.error())
       .subscribe({
         next: (media) => {
           if (media != undefined) {

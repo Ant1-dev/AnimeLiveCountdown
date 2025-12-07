@@ -53,16 +53,18 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
 
         switch (registrationId) {
             case "google":
-                email = attributes.get("email").toString();
-                name = attributes.get("name").toString();
-                picture = attributes.get("picture").toString();
+                email = attributes.get("email") != null ? attributes.get("email").toString() : "";
+                name = attributes.get("name") != null ? attributes.get("name").toString() : "Google User";
+                picture = attributes.get("picture") != null ? attributes.get("picture").toString() : "";
                 break;
             case "discord":
                 email = attributes.get("email") != null ? attributes.get("email").toString() : "";
-                name = attributes.get("username").toString();
-                picture = "https://cdn.discordapp.com/avatars/" +
-                          attributes.get("id").toString() + "/" +
-                          attributes.get("avatar").toString() + ".png";
+                name = attributes.get("username") != null ? attributes.get("username").toString() : "Discord User";
+                Object discordId = attributes.get("id");
+                Object discordAvatar = attributes.get("avatar");
+                picture = (discordId != null && discordAvatar != null)
+                    ? "https://cdn.discordapp.com/avatars/" + discordId.toString() + "/" + discordAvatar.toString() + ".png"
+                    : "";
                 break;
             case "github":
                 OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(

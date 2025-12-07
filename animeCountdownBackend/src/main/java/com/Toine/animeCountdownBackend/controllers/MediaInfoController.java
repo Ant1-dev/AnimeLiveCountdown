@@ -2,6 +2,7 @@ package com.Toine.animeCountdownBackend.controllers;
 
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
@@ -44,6 +45,7 @@ public class MediaInfoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Cacheable(value = "trendingCache", key = "'mediaInfo'")
     @GetMapping("/trending")
     public ResponseEntity<List<MediaInfoEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 7);

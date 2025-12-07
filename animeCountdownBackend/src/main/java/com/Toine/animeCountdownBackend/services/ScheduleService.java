@@ -14,9 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -70,15 +70,27 @@ public class ScheduleService {
     /**
      * Updates the database with new entities in a transaction
      * Uses an incremental approach that only updates changed records
+     * Optimized with batch operations and HashSet lookups
      */
     @Transactional
     public void updateDatabase(List<MediaEntity> newEntities) {
         try {
             logger.info("Starting incremental database update...");
 
-            // Get all existing IDs for efficient lookups and to track deletions
-            List<Long> existingIds = mediaRepository.findAllIds();
-            List<Long> newIds = newEntities.stream().map(MediaEntity::getId).toList();
+            // Get all existing IDs - use HashSet for O(1) lookup
+            Set<Long> existingIds = new HashSet<>(mediaRepository.findAllIds());
+            Set<Long> newIds = newEntities.stream()
+                    .map(MediaEntity::getId)
+                    .collect(Collectors.toSet());
+
+            // Fetch all existing entities at once to avoid N+1 queries
+            Map<Long, MediaEntity> existingEntitiesMap = mediaRepository
+                    .findAllById(existingIds)
+                    .stream()
+                    .collect(Collectors.toMap(MediaEntity::getId, entity -> entity));
+
+            List<MediaEntity> entitiesToUpdate = new ArrayList<>();
+            List<MediaEntity> entitiesToInsert = new ArrayList<>();
 
             int updates = 0;
             int insertions = 0;
@@ -86,33 +98,37 @@ public class ScheduleService {
 
             // Process each new entity
             for (MediaEntity newEntity : newEntities) {
-                // Check if this entity already exists
-                boolean exists = existingIds.contains(newEntity.getId());
+                MediaEntity existingEntity = existingEntitiesMap.get(newEntity.getId());
 
-                if (exists) {
-                    // Get the existing entity
-                    MediaEntity existingEntity = mediaRepository.findById(newEntity.getId()).orElse(null);
-
+                if (existingEntity != null) {
                     // Check if any important fields have changed
-                    if (existingEntity != null && hasSignificantChanges(existingEntity, newEntity)) {
+                    if (hasSignificantChanges(existingEntity, newEntity)) {
                         // Update the entity with new values
                         updateEntityFields(existingEntity, newEntity);
-                        mediaRepository.save(existingEntity);
+                        entitiesToUpdate.add(existingEntity);
                         updates++;
                     }
                 } else {
                     // This is a new entity, so insert it
-                    mediaRepository.save(newEntity);
+                    entitiesToInsert.add(newEntity);
                     insertions++;
                 }
+            }
+
+            // Batch save all updates and insertions
+            if (!entitiesToUpdate.isEmpty()) {
+                mediaRepository.saveAll(entitiesToUpdate);
+            }
+            if (!entitiesToInsert.isEmpty()) {
+                mediaRepository.saveAll(entitiesToInsert);
             }
 
             // Handle deletions (anime that are no longer airing)
             // Only if there is a complete dataset (not empty)
             if (!newIds.isEmpty()) {
-                List<Long> idsToDelete = existingIds.stream()
+                Set<Long> idsToDelete = existingIds.stream()
                         .filter(id -> !newIds.contains(id))
-                        .toList();
+                        .collect(Collectors.toSet());
 
                 if (!idsToDelete.isEmpty()) {
                     mediaRepository.deleteAllById(idsToDelete);
@@ -200,6 +216,7 @@ public class ScheduleService {
         return entity;
     }
 
+    // Uses iterative approach with expand for better performance than recursive concatWith
     public Flux<Media> fetchAllCurrentlyAiringAnimePage(int page) {
         String query = """
         query ($page: Int) {
@@ -230,16 +247,14 @@ public class ScheduleService {
         }
     """;
 
-        return graphQlClient.document(query)
-                .variable("page", page)
-                .retrieve("Page")
-                .toEntity(Page.class)
-                .flatMapMany(p -> {
-                    if (p.getMedia().isEmpty()) {
-                        return Flux.empty(); // Stop when no more data
-                    }
-                    return Flux.fromIterable(p.getMedia())
-                            .concatWith(fetchAllCurrentlyAiringAnimePage(page + 1)); // Recursively fetch next page
-                });
+        return Flux.range(page, Integer.MAX_VALUE - page)
+                .concatMap(currentPage ->
+                    graphQlClient.document(query)
+                        .variable("page", currentPage)
+                        .retrieve("Page")
+                        .toEntity(Page.class)
+                )
+                .takeWhile(p -> p.getMedia() != null && !p.getMedia().isEmpty())
+                .flatMapIterable(Page::getMedia);
     }
 }

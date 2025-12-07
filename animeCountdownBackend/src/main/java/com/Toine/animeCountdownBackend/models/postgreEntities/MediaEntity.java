@@ -9,7 +9,17 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name = "media")
+@Table(name = "media", indexes = {
+    @Index(name = "idx_media_day", columnList = "day"),
+    @Index(name = "idx_media_next_airing_at", columnList = "next_airing_at"),
+    @Index(name = "idx_media_status", columnList = "status"),
+    @Index(name = "idx_media_popularity", columnList = "popularity"),
+    @Index(name = "idx_media_season_year", columnList = "season_year"),
+    // Composite indexes for common query patterns
+    @Index(name = "idx_media_status_day", columnList = "status, day"),
+    @Index(name = "idx_media_status_next_airing", columnList = "status, next_airing_at"),
+    @Index(name = "idx_media_day_popularity", columnList = "day, popularity")
+})
 public class MediaEntity {
     @Id
     private Long id;

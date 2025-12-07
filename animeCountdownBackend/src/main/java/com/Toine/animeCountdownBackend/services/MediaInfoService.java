@@ -13,9 +13,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 public class MediaInfoService {
@@ -63,15 +63,27 @@ public class MediaInfoService {
     /**
      * Updates the database with new entities in a transaction
      * Uses an incremental approach that only updates changed records
+     * Optimized with batch operations and HashSet lookups
      */
     @Transactional
     public void updateDatabase(List<MediaInfoEntity> newEntities) {
         try {
             logger.info("Starting incremental media info database update...");
 
-            // Get all existing IDs for efficient lookups and to track deletions
-            List<Long> existingIds = mediaInfoRepository.findAllIds();
-            List<Long> newIds = newEntities.stream().map(MediaInfoEntity::getId).toList();
+            // Get all existing IDs - use HashSet for O(1) lookup
+            Set<Long> existingIds = new HashSet<>(mediaInfoRepository.findAllIds());
+            Set<Long> newIds = newEntities.stream()
+                    .map(MediaInfoEntity::getId)
+                    .collect(Collectors.toSet());
+
+            // Fetch all existing entities at once to avoid N+1 queries
+            Map<Long, MediaInfoEntity> existingEntitiesMap = mediaInfoRepository
+                    .findAllById(existingIds)
+                    .stream()
+                    .collect(Collectors.toMap(MediaInfoEntity::getId, entity -> entity));
+
+            List<MediaInfoEntity> entitiesToUpdate = new ArrayList<>();
+            List<MediaInfoEntity> entitiesToInsert = new ArrayList<>();
 
             int updates = 0;
             int insertions = 0;
@@ -79,33 +91,37 @@ public class MediaInfoService {
 
             // Process each new entity
             for (MediaInfoEntity newEntity : newEntities) {
-                // Check if this entity already exists
-                boolean exists = existingIds.contains(newEntity.getId());
+                MediaInfoEntity existingEntity = existingEntitiesMap.get(newEntity.getId());
 
-                if (exists) {
-                    // Get the existing entity
-                    MediaInfoEntity existingEntity = mediaInfoRepository.findById(newEntity.getId()).orElse(null);
-
+                if (existingEntity != null) {
                     // Check if any important fields have changed
-                    if (existingEntity != null && hasSignificantChanges(existingEntity, newEntity)) {
+                    if (hasSignificantChanges(existingEntity, newEntity)) {
                         // Update the entity with new values
                         updateEntityFields(existingEntity, newEntity);
-                        mediaInfoRepository.save(existingEntity);
+                        entitiesToUpdate.add(existingEntity);
                         updates++;
                     }
                 } else {
                     // This is a new entity, so insert it
-                    mediaInfoRepository.save(newEntity);
+                    entitiesToInsert.add(newEntity);
                     insertions++;
                 }
+            }
+
+            // Batch save all updates and insertions
+            if (!entitiesToUpdate.isEmpty()) {
+                mediaInfoRepository.saveAll(entitiesToUpdate);
+            }
+            if (!entitiesToInsert.isEmpty()) {
+                mediaInfoRepository.saveAll(entitiesToInsert);
             }
 
             // Handle deletions (anime that are no longer airing)
             // Only if there is a complete dataset (not empty)
             if (!newIds.isEmpty()) {
-                List<Long> idsToDelete = existingIds.stream()
+                Set<Long> idsToDelete = existingIds.stream()
                         .filter(id -> !newIds.contains(id))
-                        .toList();
+                        .collect(Collectors.toSet());
 
                 if (!idsToDelete.isEmpty()) {
                     mediaInfoRepository.deleteAllById(idsToDelete);
@@ -211,6 +227,7 @@ public class MediaInfoService {
     }
 
     // graphql call gets all the pages for media info
+    // Uses iterative approach with expand for better performance than recursive concatWith
     public Flux<MediaInfo> fetchReleasingAnimeInfoPage(int page) {
         String query =
                 """
@@ -248,16 +265,15 @@ public class MediaInfoService {
                   }
                 }
                 """;
-        return graphQlClient.document(query)
-                .variable("page", page)
-                .retrieve("Page.media")
-                .toEntityList(MediaInfo.class)
-                .flatMapMany(mediaList -> {
-                    if (mediaList.isEmpty()) {
-                        return Flux.empty();
-                    }
-                    return Flux.fromIterable(mediaList)
-                            .concatWith(fetchReleasingAnimeInfoPage(page + 1));
-                });
+
+        return Flux.range(page, Integer.MAX_VALUE - page)
+                .concatMap(currentPage ->
+                    graphQlClient.document(query)
+                        .variable("page", currentPage)
+                        .retrieve("Page.media")
+                        .toEntityList(MediaInfo.class)
+                )
+                .takeWhile(mediaList -> !mediaList.isEmpty())
+                .flatMapIterable(mediaList -> mediaList);
     }
 }

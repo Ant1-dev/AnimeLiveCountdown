@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 public class SitemapController {
@@ -61,10 +64,14 @@ public class SitemapController {
         }
 
         // add remaining media with lower priority
-        // add IDs that weren't already added from trending
+        // Convert trending media IDs to HashSet for O(1) lookup instead of O(n) stream
+        Set<Long> trendingIds = trendingMedia.stream()
+                .map(MediaInfoEntity::getId)
+                .collect(Collectors.toSet());
+
         for (Long id : allMediaIds) {
-            // Skip if already in trending
-            if (trendingMedia.stream().anyMatch(m -> m.getId().equals(id))) {
+            // Skip if already in trending - O(1) lookup with HashSet
+            if (trendingIds.contains(id)) {
                 continue;
             }
 
