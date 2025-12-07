@@ -71,6 +71,7 @@
     height: 2.3rem;
     border-radius: 50%;
     transition: flex 0.6s ease;
+    overflow: hidden;
   }
   
   .notification:hover, .profile:hover {
