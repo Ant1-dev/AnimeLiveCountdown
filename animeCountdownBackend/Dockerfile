@@ -1,5 +1,5 @@
 # First stage: Build the application
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:23-jdk-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -21,7 +21,7 @@ COPY src ./src
 RUN ./mvnw package -DskipTests
 
 # Second stage: Run the application
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:23-jre-alpine
 
 WORKDIR /app
 
