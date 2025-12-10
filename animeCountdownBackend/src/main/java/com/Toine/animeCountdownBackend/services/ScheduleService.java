@@ -41,7 +41,7 @@ public class ScheduleService {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {
             try {
-                logger.info("Starting scheduled database refresh at {}", Instant.now());
+                logger.info("Starting scheduled database refresh at: {}", Instant.now());
 
                 // First fetch the data outside the transaction
                 List<MediaEntity> newEntities = fetchAllCurrentlyAiringAnime().block();
