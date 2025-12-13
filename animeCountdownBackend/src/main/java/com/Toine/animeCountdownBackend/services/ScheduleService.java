@@ -103,6 +103,12 @@ public class ScheduleService {
                 if (existingEntity != null) {
                     // Check if any important fields have changed
                     if (hasSignificantChanges(existingEntity, newEntity)) {
+                        // Debug logging for first few updates (BEFORE updating)
+                        if (updates < 3) {
+                            logger.info("Detected change in anime ID {}: Old airing={}, New airing={}",
+                                newEntity.getId(), existingEntity.getNext_Airing_At(), newEntity.getNext_Airing_At());
+                        }
+
                         // Update the entity with new values
                         updateEntityFields(existingEntity, newEntity);
                         entitiesToUpdate.add(existingEntity);
@@ -112,8 +118,16 @@ public class ScheduleService {
                     // This is a new entity, so insert it
                     entitiesToInsert.add(newEntity);
                     insertions++;
+
+                    // Debug logging for first few insertions
+                    if (insertions <= 3) {
+                        logger.info("New anime to insert: ID={}, Title={}", newEntity.getId(), newEntity.getTitle_English());
+                    }
                 }
             }
+
+            logger.info("Comparison complete: Checked {} new entities against {} existing entities",
+                newEntities.size(), existingEntitiesMap.size());
 
             // Batch save all updates and insertions
             if (!entitiesToUpdate.isEmpty()) {
