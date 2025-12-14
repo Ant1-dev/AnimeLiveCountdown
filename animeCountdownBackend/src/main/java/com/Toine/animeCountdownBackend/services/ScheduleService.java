@@ -7,6 +7,7 @@ import com.Toine.animeCountdownBackend.repositories.MediaRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.graphql.client.HttpGraphQlClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,7 @@ public class ScheduleService {
      * Optimized with batch operations and HashSet lookups
      */
     @Transactional
+    @CacheEvict(value = {"weekdayAnime", "upcomingAnime", "trendingAnime"}, allEntries = true)
     public void updateDatabase(List<MediaEntity> newEntities) {
         try {
             logger.info("Starting incremental database update...");
@@ -152,6 +154,7 @@ public class ScheduleService {
 
             logger.info("Database update completed: {} updates, {} insertions, {} deletions",
                     updates, insertions, deletions);
+            logger.info("Cache cleared: weekdayAnime, upcomingAnime, trendingAnime");
         } catch (Exception e) {
             logger.error("Error during incremental database update: {}", e.getMessage(), e);
             throw e; // Rethrow to trigger transaction rollback

@@ -6,6 +6,7 @@ import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.graphql.client.HttpGraphQlClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,7 @@ public class MediaInfoService {
      * Optimized with batch operations and HashSet lookups
      */
     @Transactional
+    @CacheEvict(value = {"trendingCache"}, allEntries = true)
     public void updateDatabase(List<MediaInfoEntity> newEntities) {
         try {
             logger.info("Starting incremental media info database update...");
@@ -131,6 +133,7 @@ public class MediaInfoService {
 
             logger.info("Media info database update completed: {} updates, {} insertions, {} deletions",
                     updates, insertions, deletions);
+            logger.info("Cache cleared: trendingCache");
         } catch (Exception e) {
             logger.error("Error during incremental media info database update: {}", e.getMessage(), e);
             throw e; // Rethrow to trigger transaction rollback
