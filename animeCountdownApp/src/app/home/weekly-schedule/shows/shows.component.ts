@@ -15,8 +15,9 @@ import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
 import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
 import { MediaStoreService } from '../../../services/media-store.service';
-import { interval } from 'rxjs';
+import { timer, interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs/operators';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
@@ -97,23 +98,25 @@ export class ShowsComponent implements OnInit {
     });
   }
 
-  // Used by weekday tabs - simple direct load
+  // Used by weekday tabs - poll every 60 seconds for fresh data
   private loadMedia(): void {
     this.isLoading.set(true);
 
-    const subscription = this.scheduleService
-      .renderMedia(this.weekDay().toUpperCase(), this.error())
+    // Start immediately (0ms), then poll every 60 seconds (60000ms)
+    const subscription = timer(0, 60000)
+      .pipe(
+        switchMap(() => this.scheduleService.renderMedia(this.weekDay().toUpperCase(), this.error()))
+      )
       .subscribe({
         next: (media) => {
           if (media != undefined) {
             this.media.set(media);
           }
+          this.isLoading.set(false);
         },
         error: (error) => {
           console.log(error);
           this.error.set(error.message);
-        },
-        complete: () => {
           this.isLoading.set(false);
         },
       });

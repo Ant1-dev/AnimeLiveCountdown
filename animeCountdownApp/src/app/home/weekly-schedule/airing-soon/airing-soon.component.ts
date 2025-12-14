@@ -3,6 +3,7 @@ import { Media } from '../../../models/schedule.model';
 import { ScheduleService } from '../../../services/schedule.service';
 import { ShowComponent } from '../shows/show/show.component';
 import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
+import { timer, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-airing-soon',
@@ -21,19 +22,21 @@ export class AiringSoonComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading.set(true);
 
-    const subscription = this.scheduleService
-      .renderMedia('soon', this.error())
+    // Start immediately (0ms), then poll every 60 seconds (60000ms)
+    const subscription = timer(0, 60000)
+      .pipe(
+        switchMap(() => this.scheduleService.renderMedia('soon', this.error()))
+      )
       .subscribe({
         next: (media) => {
           if (media != undefined) {
             this.media.set(media);
           }
+          this.isLoading.set(false);
         },
         error: (error) => {
           this.error.set(error);
           console.log(error);
-        },
-        complete: () => {
           this.isLoading.set(false);
         },
       });
