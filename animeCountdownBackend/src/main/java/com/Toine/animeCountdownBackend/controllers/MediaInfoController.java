@@ -45,7 +45,6 @@ public class MediaInfoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Cacheable(value = "trendingCache", key = "'mediaInfo'")
     @GetMapping("/trending")
     public ResponseEntity<List<MediaInfoEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 7);

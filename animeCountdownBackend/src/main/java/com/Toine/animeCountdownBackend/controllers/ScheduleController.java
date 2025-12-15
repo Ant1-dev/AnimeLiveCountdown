@@ -27,7 +27,6 @@ public class ScheduleController {
         this.mediaRepository = mediaRepository;
     }
 
-    @Cacheable(value = "weekdayAnime", key = "#weekDay")
     @GetMapping("/{weekDay}")
     public ResponseEntity<List<MediaEntity>> getAnimeOnDay(
             @PathVariable
@@ -41,7 +40,6 @@ public class ScheduleController {
                 .body(results);
     }
 
-    @Cacheable(value = "upcomingAnime", key = "'soon'")
     @GetMapping("/soon")
     public ResponseEntity<List<MediaEntity>> getClosestAiring() {
         Pageable pageable = PageRequest.of(0,15);
@@ -51,7 +49,6 @@ public class ScheduleController {
                 .body(results);
     }
 
-    @Cacheable(value = "trendingAnime", key = "'currentYear'")
     @GetMapping("/trending")
     public ResponseEntity<List<MediaEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 10);
