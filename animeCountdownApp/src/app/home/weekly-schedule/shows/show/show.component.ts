@@ -7,6 +7,7 @@ import {
   input,
   OnInit,
   computed,
+  effect,
 } from '@angular/core';
 import { Media } from '../../../../models/schedule.model';
 import { MediaInfoService } from '../../../../services/media.info.service';
@@ -46,6 +47,16 @@ export class ShowComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   protected user = this.authService.user;
+
+  // Watch for media changes and reinitialize timer when data updates
+  constructor() {
+    effect(() => {
+      const mediaData = this.media();
+      if (mediaData) {
+        this.mediaTimeService.initializeTimer(mediaData);
+      }
+    });
+  }
 
   timeRemaining = computed<TimeRemaining | null>(() => {
     const mediaData = this.media();
@@ -95,7 +106,7 @@ export class ShowComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mediaTimeService.initializeTimer(this.media());
+    // Timer initialization now handled by constructor effect
   }
 
   tooltipOptions = {
