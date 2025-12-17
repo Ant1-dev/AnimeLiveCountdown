@@ -7,7 +7,9 @@
     <app-media-skeleton/>
   } @else {
   @for (show of media(); track show.id; let i = $index) {
-  <app-show [media]="show" />
+    @if (i < 5) {
+        <app-show [media]="show" />
+    }
   }
 }
 </div>
