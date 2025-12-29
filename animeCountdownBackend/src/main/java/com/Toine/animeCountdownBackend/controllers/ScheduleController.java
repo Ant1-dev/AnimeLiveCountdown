@@ -3,6 +3,7 @@ package com.Toine.animeCountdownBackend.controllers;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleController {
     private final MediaRepository mediaRepository;
 
+    @Value("${app.media.buffer-days:14}")
+    private int bufferDays;
+
     public ScheduleController(MediaRepository mediaRepository) {
         this.mediaRepository = mediaRepository;
     }
@@ -36,8 +40,8 @@ public class ScheduleController {
                      message = "Invalid day of week. Must be MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, or SUNDAY")
             String weekDay) {
         Pageable pageable = PageRequest.of(0, 50);
-        Instant twoWeeksFromNow = Instant.now().plus(14, ChronoUnit.DAYS);
-        List<MediaEntity> results = mediaRepository.findAiringMediaByDayOrderedByPopularity(weekDay, twoWeeksFromNow, pageable).getContent();
+        Instant bufferEndDate = Instant.now().plus(bufferDays, ChronoUnit.DAYS);
+        List<MediaEntity> results = mediaRepository.findAiringMediaByDayOrderedByPopularity(weekDay, bufferEndDate, pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);
@@ -55,8 +59,8 @@ public class ScheduleController {
     @GetMapping("/trending")
     public ResponseEntity<List<MediaEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 10);
-        Instant twoWeeksFromNow = Instant.now().plus(14, ChronoUnit.DAYS);
-        List<MediaEntity> results = mediaRepository.findAllByCurrentYear(twoWeeksFromNow, pageable).getContent();
+        Instant bufferEndDate = Instant.now().plus(bufferDays, ChronoUnit.DAYS);
+        List<MediaEntity> results = mediaRepository.findAllByCurrentYear(bufferEndDate, pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);
