@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +36,8 @@ public class ScheduleController {
                      message = "Invalid day of week. Must be MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, or SUNDAY")
             String weekDay) {
         Pageable pageable = PageRequest.of(0, 50);
-        List<MediaEntity> results = mediaRepository.findAiringMediaByDayOrderedByPopularity(weekDay, pageable).getContent();
+        Instant twoWeeksFromNow = Instant.now().plus(14, ChronoUnit.DAYS);
+        List<MediaEntity> results = mediaRepository.findAiringMediaByDayOrderedByPopularity(weekDay, twoWeeksFromNow, pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);
@@ -52,7 +55,8 @@ public class ScheduleController {
     @GetMapping("/trending")
     public ResponseEntity<List<MediaEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 10);
-        List<MediaEntity> results = mediaRepository.findAllByCurrentYear(pageable).getContent();
+        Instant twoWeeksFromNow = Instant.now().plus(14, ChronoUnit.DAYS);
+        List<MediaEntity> results = mediaRepository.findAllByCurrentYear(twoWeeksFromNow, pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);

@@ -8,17 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
 
-    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND m.next_Airing_At <= CURRENT_DATE + 14 AND LOWER(m.day) = LOWER(:day) AND m.status = 'RELEASING' ORDER BY m.popularity DESC")
-    Page<MediaEntity> findAiringMediaByDayOrderedByPopularity(@Param("day") String day, Pageable pageable);
+    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND m.next_Airing_At <= :twoWeeksFromNow AND LOWER(m.day) = LOWER(:day) AND m.status = 'RELEASING' ORDER BY m.popularity DESC")
+    Page<MediaEntity> findAiringMediaByDayOrderedByPopularity(@Param("day") String day, @Param("twoWeeksFromNow") Instant twoWeeksFromNow, Pageable pageable);
 
-    @Query("SELECT m FROM MediaEntity m WHERE m.seasonYear = EXTRACT(YEAR FROM CURRENT_DATE) AND m.status = 'RELEASING' AND m.next_Airing_At IS NOT NULL AND m.next_Airing_At <= CURRENT_DATE + 14 ORDER BY m.popularity DESC")
-    Page<MediaEntity> findAllByCurrentYear(Pageable pageable);
+    @Query("SELECT m FROM MediaEntity m WHERE m.seasonYear = EXTRACT(YEAR FROM CURRENT_DATE) AND m.status = 'RELEASING' AND m.next_Airing_At IS NOT NULL AND m.next_Airing_At <= :twoWeeksFromNow ORDER BY m.popularity DESC")
+    Page<MediaEntity> findAllByCurrentYear(@Param("twoWeeksFromNow") Instant twoWeeksFromNow, Pageable pageable);
 
     @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND m.status IN ('RELEASING', 'NOT_YET_RELEASED') ORDER BY m.next_Airing_At ASC")
     Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);
