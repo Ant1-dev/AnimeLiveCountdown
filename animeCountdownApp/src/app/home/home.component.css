@@ -1,3 +1,12 @@
+.main-content {
+  display: grid;
+  grid-template-columns: 5fr 1.1fr;
+  grid-template-rows: auto 1fr;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 .schedule-placeholder {
   min-height: 200px;
   display: flex;
@@ -11,4 +20,26 @@
 .loading-text {
   font-size: 1.2rem;
   color: #666;
+}
+
+.carousel {
+  grid-column: 1 / -1;
+}
+
+/* Tablet/smaller desktop - adjust grid ratio */
+@media (min-width: 1001px) and (max-width: 1600px) {
+  .main-content {
+    grid-template-columns: 70% 30%;
+  }
+}
+
+/* Mobile - hide sidebar */
+@media (max-width: 1000px) {
+  .main-content {
+    display: inline;
+  }
+
+  app-sidebar {
+    display: none;
+  }
 }

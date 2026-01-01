@@ -10,7 +10,7 @@ import { MediaSkeletonComponent } from "../shared-home/media-skeleton/media-skel
     ShowsComponent,
     CollapsibleComponent,
     SkeletonModule,
-    MediaSkeletonComponent
+    MediaSkeletonComponent,
 ],
   templateUrl: './weekly-schedule.component.html',
   styleUrl: './weekly-schedule.component.css',

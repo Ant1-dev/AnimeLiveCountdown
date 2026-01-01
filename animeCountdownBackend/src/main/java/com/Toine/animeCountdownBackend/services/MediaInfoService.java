@@ -51,8 +51,12 @@ public class MediaInfoService {
                 updateDatabase(newEntities);
 
                 logger.info("Media info database refresh completed successfully");
-            } catch (Exception e) {
-                logger.error("There was an error trying to refresh data from graphql api!", e);
+            } catch (org.springframework.graphql.client.GraphQlTransportException e) {
+                if (e.getMessage().contains("429")) {
+                    logger.warn("AniList API rate limit exceeded (429 Too Many Requests). Will retry on next scheduled cycle.");
+                } else {
+                    logger.error("GraphQL API request failed: {}", e.getMessage());
+                }
             } finally {
                 isUpdating.set(false);
             }

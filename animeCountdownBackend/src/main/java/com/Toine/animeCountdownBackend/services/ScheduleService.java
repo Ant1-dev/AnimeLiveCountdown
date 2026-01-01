@@ -58,8 +58,12 @@ public class ScheduleService {
                 updateDatabase(newEntities);
 
                 logger.info("Database refresh completed successfully");
-            } catch (Exception e) {
-                logger.error("Error during scheduled refresh: {}", e.getMessage(), e);
+            } catch (org.springframework.graphql.client.GraphQlTransportException e) {
+                if (e.getMessage().contains("429")) {
+                    logger.warn("AniList API rate limit exceeded (429 Too Many Requests). Will retry on next scheduled cycle.");
+                } else {
+                    logger.error("GraphQL API request failed: {}", e.getMessage());
+                }
             } finally {
                 isUpdating.set(false);
             }
@@ -177,7 +181,9 @@ public class ScheduleService {
                !Objects.equals(existing.getCover_Image_Url(), newEntity.getCover_Image_Url()) ||
                !Objects.equals(existing.getPopularity(), newEntity.getPopularity()) ||
                !Objects.equals(existing.getDay(), newEntity.getDay()) ||
-               !Objects.equals(existing.getSeasonYear(), newEntity.getSeasonYear());
+               !Objects.equals(existing.getSeasonYear(), newEntity.getSeasonYear()) ||
+               !Objects.equals(existing.getSeason(), newEntity.getSeason()) ||
+               !Objects.equals(existing.getBanner_Image_Url(), newEntity.getBanner_Image_Url());
     }
 
     /**
@@ -191,6 +197,8 @@ public class ScheduleService {
         existing.setPopularity(newEntity.getPopularity());
         existing.setCover_Image_Url(newEntity.getCover_Image_Url());
         existing.setSeasonYear(newEntity.getSeasonYear());
+        existing.setSeason(newEntity.getSeason());
+        existing.setBanner_Image_Url(newEntity.getBanner_Image_Url());
 
         // Update airing info
         existing.setNext_Airing_At(newEntity.getNext_Airing_At());
@@ -217,6 +225,8 @@ public class ScheduleService {
         entity.setStatus(media.getStatus());
         entity.setPopularity(media.getPopularity());
         entity.setSeasonYear(media.getSeasonYear());
+        entity.setSeason(media.getSeason());
+        entity.setBanner_Image_Url(media.getBannerImage());
 
         if (media.getNextAiringEpisode() != null && media.getNextAiringEpisode().getAiringAt() != null) {
             Instant airingTime = Instant.ofEpochSecond(media.getNextAiringEpisode().getAiringAt());
@@ -229,7 +239,10 @@ public class ScheduleService {
             entity.setDay(null);
         }
 
-        entity.setCover_Image_Url(media.getCoverImage().getLarge());
+        if (media.getCoverImage() != null) {
+            entity.setCover_Image_Url(media.getCoverImage().getLarge());
+        }
+
         return entity;
     }
 
@@ -252,6 +265,8 @@ public class ScheduleService {
               }
               status
               seasonYear
+              season
+              bannerImage
               nextAiringEpisode {
                 airingAt
                 episode

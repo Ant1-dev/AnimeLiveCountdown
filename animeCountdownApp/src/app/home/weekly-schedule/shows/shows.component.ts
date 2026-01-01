@@ -43,7 +43,7 @@ export class ShowsComponent implements OnInit {
   // Check if this is the "Airing Soon" tab
   isAiringSoon = computed(() => this.weekDay() === 'soon');
 
-  // Get active media - use store for "Airing Soon", direct filtering for weekdays
+  // Get active media use store for "Airing Soon", direct filtering for weekdays
   activeMedia = computed(() => {
     if (this.isAiringSoon()) {
       // Use store for "Airing Soon" - automatically pulls from queue

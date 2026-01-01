@@ -2,13 +2,13 @@
     width: 100%;
     padding: 10px 0;
   }
-  
+
   .skeleton-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 16px;
   }
-  
+
   .show-skeleton {
     min-height: 350px;
     display: flex;
@@ -18,7 +18,7 @@
     padding: 0;
     overflow: hidden;
   }
-  
+
   .airing-date-skeleton {
     width: 100%;
     background-color: rgba(128, 128, 128, 0.05);

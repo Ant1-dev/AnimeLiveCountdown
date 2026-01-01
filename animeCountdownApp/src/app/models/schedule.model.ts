@@ -7,4 +7,6 @@ export interface Media {
     next_Airing_Episode: number;
     cover_Image_Url: string;
     day: string;
+    banner_Image_Url?: string;
+    season: string;
 }

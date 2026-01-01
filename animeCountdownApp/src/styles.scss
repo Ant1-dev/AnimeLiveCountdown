@@ -12,7 +12,6 @@
     --font-main: 'Poppins', 'Segoe UI', system-ui, sans-serif;
   
     /* Layout variables */
-    --container-width: 1600px;
     --grid-gap: 30px;
     --spacing-md: 1rem;
     --spacing-lg: 2rem;
@@ -32,9 +31,8 @@ body {
   color: var(--text-primary);
   font-family: var(--font-main);
   overflow-x: hidden;
-  margin: 0 auto;
-  max-width: var(--container-width);
-  padding: 0 var(--spacing-md);
+  max-width: 100%;
+  padding: 0 1rem;
 }
 
 
@@ -51,10 +49,11 @@ body {
 /* Cards layout */
 .cardContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--grid-gap);
   margin: var(--spacing-lg) 0;
   animation: fadeIn 0.5s ease-in-out;
+  width: 100%;
 }
 
 /* Card hover animations */
@@ -67,15 +66,7 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Tablet */
-@media screen and (max-width: 900px) {
-  .cardContainer {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-  }
-}
 
-/* Mobile */
 @media screen and (max-width: 600px) {
   body {
     padding: 0;
@@ -91,7 +82,6 @@ body {
 
   .cardContainer {
     grid-template-columns: repeat(2, 45vw);
-    grid-auto-rows: auto;
     gap: 15px;
     justify-content: center;
   }

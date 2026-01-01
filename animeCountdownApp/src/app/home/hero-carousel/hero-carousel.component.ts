@@ -8,13 +8,12 @@ import {
   input,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { MediaInfo } from '../../../../models/media.info.model';
+import { MediaInfo } from '../../models/media.info.model';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TimeRemaining } from '../../../../models/time-remaining.model';
-import { MediaTimeService } from '../../../../services/media-time.service';
-import { MediaInfoService } from '../../../../services/media.info.service';
+import { MediaTimeService } from '../../services/media-time.service';
+import { MediaInfoService } from '../../services/media.info.service';
 import { MatIcon } from '@angular/material/icon';
 import { SkeletonModule } from 'primeng/skeleton';
 

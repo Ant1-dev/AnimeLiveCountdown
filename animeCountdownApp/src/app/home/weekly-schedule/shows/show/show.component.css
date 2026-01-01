@@ -1,161 +1,161 @@
 .card {
-    position: relative;
-    width: 100%;
-    min-height: 350px; 
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in;
-    will-change: transform;
-    display: flex;
-    flex-direction: column;
-    overflow: visible; 
-  }
-  
-  .card:hover {
-    transform: scale(1.01);
-  }
-  
-  .cardFooter {
-    display: flex;
-    justify-content: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 17px;
-    min-height: 40px;
-    max-height: fit-content;
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    white-space: normal; 
-    z-index: 1;
-    position: relative; 
-  }
-  
-  .poster {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 2/3;
-    border-radius: 0 0 5px 5px;
-    object-fit: cover;
-  }
-  
-  .airingDate {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, auto);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding: 5px;
-    gap: 7px;
-    font-size: 14px;
-    background-color: rgba(128, 128, 128, 0.2);
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
-  .dateItem, .dateItemS {
-    display: flex;
-    justify-content: center;
-    min-width: 30px;
-    text-align: center;
-  }
-  
-  .dateItemS {
-    color: #00a6fb;
-  }
-  
-  .link {
-    color: inherit;
-    text-decoration: inherit;
-    display: block;
-    height: 100%;
-  }
-  
-  .card-container-skeleton {
-    width: 100%;
-    padding: 10px 0;
-  }
-  
-  .skeleton-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 16px;
-  }
-  
-  .show-skeleton {
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    background-color: rgba(251, 251, 251, 0.02);
-    padding: 0;
-    overflow: hidden;
-  }
-  
-  .airing-date-skeleton {
-    width: 100%;
-    background-color: rgb(255, 255, 255);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    margin-bottom: 0;
-    overflow: hidden;
-  }
+  position: relative;
+  width: 100%;
+  min-height: 350px; 
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  overflow: visible; 
+}
 
-  .poster-container {
-    position: relative;
-  }
+.card:hover {
+  transform: scale(1.01);
+}
 
-  .info-icon {
-    position: absolute;
-    right: 2px;
-    top: 2px;
-  }
+.cardFooter {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 17px;
+  min-height: 40px;
+  max-height: fit-content;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: normal; 
+  z-index: 1;
+  position: relative; 
+}
 
-  .info-icon:hover {
-    color: #00a6fb;
-  }
+.poster {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2/3;
+  border-radius: 0 0 5px 5px;
+  object-fit: cover;
+}
 
-  .show-info-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
+.airingDate {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 5px;
+  gap: 7px;
+  font-size: 14px;
+  background-color: rgba(128, 128, 128, 0.2);
+  box-sizing: border-box;
+  overflow: hidden;
+}
 
-  .show-info-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5px;
-  }
+.dateItem, .dateItemS {
+  display: flex;
+  justify-content: center;
+  min-width: 30px;
+  text-align: center;
+}
 
-  .add-icon:hover {
-    cursor: pointer;
-    color: #00a6fb;
-  }
+.dateItemS {
+  color: #00a6fb;
+}
 
-  .airing-now-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60px;
-  }
+.link {
+  color: inherit;
+  text-decoration: inherit;
+  display: block;
+  height: 100%;
+}
 
-  .airing-now-text-card {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #00a6fb;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+.card-container-skeleton {
+  width: 100%;
+  padding: 10px 0;
+}
 
-  @media screen and (max-width: 600px) {
-    .airingDate {
-      font-size: 12px;
-    }
-    
-    .cardFooter {
-      justify-content: start;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.show-skeleton {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background-color: rgba(251, 251, 251, 0.02);
+  padding: 0;
+  overflow: hidden;
+}
+
+.airing-date-skeleton {
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.poster-container {
+  position: relative;
+}
+
+.info-icon {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}
+
+.info-icon:hover {
+  color: #00a6fb;
+}
+
+.show-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.show-info-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.add-icon:hover {
+  cursor: pointer;
+  color: #00a6fb;
+}
+
+.airing-now-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.airing-now-text-card {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #00a6fb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media screen and (max-width: 600px) {
+.airingDate {
+  font-size: 12px;
+}
+
+.cardFooter {
+  justify-content: start;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+}

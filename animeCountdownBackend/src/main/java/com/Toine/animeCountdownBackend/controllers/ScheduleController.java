@@ -60,7 +60,7 @@ public class ScheduleController {
     public ResponseEntity<List<MediaEntity>> getTrending() {
         Pageable pageable = PageRequest.of(0, 10);
         Instant bufferEndDate = Instant.now().plus(bufferDays, ChronoUnit.DAYS);
-        List<MediaEntity> results = mediaRepository.findAllByCurrentYear(bufferEndDate, pageable).getContent();
+        List<MediaEntity> results = mediaRepository.findTrendingByPopularity(bufferEndDate, pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);

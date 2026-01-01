@@ -1,7 +1,14 @@
-<app-trending/>
-@defer (on viewport) {
-    <app-airing-soon/>
-    <app-weekly-schedule/>
-  } @placeholder {
+<div class="main-content">
+  <app-hero-carousel class="carousel"/>
+  <div class="main">
+    @defer (on viewport) {
+    <app-season-pop/>
+    <app-airing-soon />
+    <app-weekly-schedule />
+    } @placeholder {
     <app-media-skeleton />
-  }
+    }
+  </div>
+  <!-- sidebar  -->
+  <app-sidebar />
+</div>

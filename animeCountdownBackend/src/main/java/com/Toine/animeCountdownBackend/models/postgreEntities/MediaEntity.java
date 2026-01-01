@@ -3,9 +3,6 @@ package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -16,10 +13,12 @@ import java.util.List;
     @Index(name = "idx_media_status", columnList = "status"),
     @Index(name = "idx_media_popularity", columnList = "popularity"),
     @Index(name = "idx_media_season_year", columnList = "season_year"),
+    @Index(name = "idx_media_season", columnList = "season"),
     // Composite indexes for common query patterns
     @Index(name = "idx_media_status_day", columnList = "status, day"),
     @Index(name = "idx_media_status_next_airing", columnList = "status, next_airing_at"),
-    @Index(name = "idx_media_day_popularity", columnList = "day, popularity")
+    @Index(name = "idx_media_day_popularity", columnList = "day, popularity"),
+    @Index(name = "idx_media_season_year_season", columnList = "season_year, season")
 })
 public class MediaEntity {
     @Id
@@ -37,6 +36,9 @@ public class MediaEntity {
     private String day;
     private Long popularity;
     private Integer seasonYear;
+    private String season;
+    @Column(name = "banner_image_url")
+    private String banner_Image_Url;
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<FavoriteMediaEntity> favorites;
@@ -130,5 +132,21 @@ public class MediaEntity {
     @JsonIgnore
     public void setFavorites(List<FavoriteMediaEntity> favorites) {
         this.favorites = favorites;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
+    }
+
+    public String getBanner_Image_Url() {
+        return banner_Image_Url;
+    }
+
+    public void setBanner_Image_Url(String banner_Image_Url) {
+        this.banner_Image_Url = banner_Image_Url;
     }
 }

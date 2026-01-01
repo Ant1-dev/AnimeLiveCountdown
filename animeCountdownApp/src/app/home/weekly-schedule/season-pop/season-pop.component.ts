@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
-import { ScheduleService } from '../../../../services/schedule.service';
-import { Media } from '../../../../models/schedule.model';
-import { ShowComponent } from '../../shows/show/show.component';
-import { MediaSkeletonComponent } from "../../../shared-home/media-skeleton/media-skeleton.component";
+import { ScheduleService } from '../../../services/schedule.service';
+import { Media } from '../../../models/schedule.model';
+import { ShowComponent } from '../shows/show/show.component';
+import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
 
 @Component({
   selector: 'app-season-pop',
