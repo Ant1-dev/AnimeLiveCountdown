@@ -37,9 +37,12 @@ public class FavoriteMediaController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<MediaEntity>> getAllFavoriteMedia(
             @PathVariable @Positive(message = "User ID must be positive") Long userId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+        UserEntity currentUser = getCurrentUser();
+        if (currentUser == null) {
             return ResponseEntity.status(401).build();
+        }
+        if (!currentUser.getId().equals(userId)) {
+            return ResponseEntity.status(403).build();
         }
 
         List<MediaEntity> favorites = favRepository.findAllFavMedia(userId);
@@ -50,11 +53,16 @@ public class FavoriteMediaController {
     public ResponseEntity<Map<String, String>> addFavoriteMedia(
             @PathVariable @Positive(message = "User ID must be positive") Long userId,
             @PathVariable @Positive(message = "Media ID must be positive") Long mediaId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+        UserEntity currentUser = getCurrentUser();
+        if (currentUser == null) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Authentication required");
             return ResponseEntity.status(401).body(errorResponse);
+        }
+        if (!currentUser.getId().equals(userId)) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "You can only modify your own favorites");
+            return ResponseEntity.status(403).body(errorResponse);
         }
 
         Optional<UserEntity> userOpt = userRepository.findById(userId);
@@ -88,16 +96,27 @@ public class FavoriteMediaController {
     @DeleteMapping("/{mediaId}")
     public ResponseEntity<String> deleteFavoriteMedia(
             @PathVariable @Positive(message = "Media ID must be positive") Long mediaId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+        UserEntity currentUser = getCurrentUser();
+        if (currentUser == null) {
             return ResponseEntity.status(401).body("Authentication required");
         }
 
-        int success = favRepository.removeFavoriteMedia(mediaId);
+        int success = favRepository.removeFavoriteMedia(currentUser.getId(), mediaId);
 
         if (success > 0)
             return ResponseEntity.ok("Successfully removed from favorites!");
         else
             return ResponseEntity.badRequest().body("Could not remove from favorites.");
+    }
+
+    /**
+     * Returns the signed-in user set by JwtAuthFilter, or null if the request is not authenticated.
+     */
+    private UserEntity getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof UserEntity user)) {
+            return null;
+        }
+        return user;
     }
 }

@@ -43,7 +43,7 @@
 <a class="link" [href]="'/media/' + media()!.id" (click)="retrieveId()">
   <div class="card">
     <div class="airingDate airing-now-card">
-      <span class="airing-now-text-card">Airing Now</span>
+      <span class="airing-now-text-card">{{ isFinished() ? 'Finished' : 'Airing Now' }}</span>
     </div>
     <div class="poster-container">
       <img
@@ -62,7 +62,11 @@
       >
       <ng-template #showInfo>
         <div class="show-info-container">
+          @if (isFinished()) {
+          <div class="show-info-item">This show has finished airing.</div>
+          } @else {
           <div class="show-info-item">Episode {{ media()?.next_Airing_Episode}} is airing now!</div>
+          }
           <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
           <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
         </div>
