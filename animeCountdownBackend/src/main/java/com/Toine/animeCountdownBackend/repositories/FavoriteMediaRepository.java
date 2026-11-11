@@ -11,8 +11,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface FavoriteMediaRepository extends JpaRepository<FavoriteMediaEntity, Long> {
@@ -22,8 +24,11 @@ public interface FavoriteMediaRepository extends JpaRepository<FavoriteMediaEnti
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM FavoriteMediaEntity fm WHERE fm.media.id = :mediaId")
-    int removeFavoriteMedia(@Param("mediaId") Long mediaId);
+    @Query("DELETE FROM FavoriteMediaEntity fm WHERE fm.user.id = :userId AND fm.media.id = :mediaId")
+    int removeFavoriteMedia(@Param("userId") Long userId, @Param("mediaId") Long mediaId);
+
+    @Query("SELECT DISTINCT fm.media.id FROM FavoriteMediaEntity fm WHERE fm.media.id IN :mediaIds")
+    Set<Long> findFavoritedMediaIds(@Param("mediaIds") Collection<Long> mediaIds);
 
     @Query("SELECT COUNT(f) > 0 FROM FavoriteMediaEntity f WHERE f.user.id = :userId AND f.media.id = :mediaId")
     boolean existsByUserIdAndMediaId(@Param("userId") Long userId, @Param("mediaId") Long mediaId);
