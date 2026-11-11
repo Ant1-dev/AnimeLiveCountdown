@@ -3,6 +3,7 @@ package com.Toine.animeCountdownBackend.services;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Media;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Page;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
+import com.Toine.animeCountdownBackend.repositories.FavoriteMediaRepository;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -23,14 +24,19 @@ import java.util.stream.Collectors;
 public class ScheduleService {
     private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
 
+    private static final String FINISHED_STATUS = "FINISHED";
+
     private final MediaRepository mediaRepository;
+    private final FavoriteMediaRepository favoriteMediaRepository;
     private final HttpGraphQlClient graphQlClient;
 
     private final AtomicBoolean isUpdating = new AtomicBoolean(false);
 
-    public ScheduleService(HttpGraphQlClient graphQlClient, MediaRepository mediaRepository) {
+    public ScheduleService(HttpGraphQlClient graphQlClient, MediaRepository mediaRepository,
+                           FavoriteMediaRepository favoriteMediaRepository) {
         this.graphQlClient = graphQlClient;
         this.mediaRepository = mediaRepository;
+        this.favoriteMediaRepository = favoriteMediaRepository;
     }
 
     /**
@@ -101,6 +107,7 @@ public class ScheduleService {
             int updates = 0;
             int insertions = 0;
             int deletions = 0;
+            int retirements = 0;
 
             // Process each new entity
             for (MediaEntity newEntity : newEntities) {
@@ -151,13 +158,35 @@ public class ScheduleService {
                         .collect(Collectors.toSet());
 
                 if (!idsToDelete.isEmpty()) {
-                    mediaRepository.deleteAllById(idsToDelete);
-                    deletions = idsToDelete.size();
+                    // Shows that users have favorited are kept and marked finished, so deleting
+                    // them doesn't cascade-delete those users' favorites.
+                    Set<Long> favoritedIds = favoriteMediaRepository.findFavoritedMediaIds(idsToDelete);
+                    List<MediaEntity> entitiesToRetire = new ArrayList<>();
+                    for (Long id : favoritedIds) {
+                        MediaEntity entity = existingEntitiesMap.get(id);
+                        if (entity != null && !FINISHED_STATUS.equals(entity.getStatus())) {
+                            entity.setStatus(FINISHED_STATUS);
+                            entity.setNext_Airing_At(null);
+                            entity.setNext_Airing_Episode(null);
+                            entity.setDay(null);
+                            entitiesToRetire.add(entity);
+                        }
+                    }
+                    if (!entitiesToRetire.isEmpty()) {
+                        mediaRepository.saveAll(entitiesToRetire);
+                        retirements = entitiesToRetire.size();
+                    }
+
+                    idsToDelete.removeAll(favoritedIds);
+                    if (!idsToDelete.isEmpty()) {
+                        mediaRepository.deleteAllById(idsToDelete);
+                        deletions = idsToDelete.size();
+                    }
                 }
             }
 
-            logger.info("Database update completed: {} updates, {} insertions, {} deletions",
-                    updates, insertions, deletions);
+            logger.info("Database update completed: {} updates, {} insertions, {} deletions, {} favorited shows marked finished",
+                    updates, insertions, deletions, retirements);
             logger.info("Cache cleared: weekdayAnime, upcomingAnime, trendingAnime");
         } catch (Exception e) {
             logger.error("Error during incremental database update: {}", e.getMessage(), e);
