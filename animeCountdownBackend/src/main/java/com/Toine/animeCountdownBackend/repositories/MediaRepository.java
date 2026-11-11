@@ -24,4 +24,16 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long>, JpaSp
     @Query("SELECT m.id FROM MediaEntity m")
     List<Long> findAllIds();
 
+    /** Shows the upcoming sweep is responsible for. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.status = 'NOT_YET_RELEASED'")
+    List<MediaEntity> findUpcoming();
+
+    /** Shows the airing sweep is responsible for: everything that isn't upcoming. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.status IS NULL OR m.status <> 'NOT_YET_RELEASED'")
+    List<MediaEntity> findNotUpcoming();
+
+    /** Shows whose stored next episode time falls in (from, to], i.e. episodes that have just aired. */
+    @Query("SELECT m.id FROM MediaEntity m WHERE m.next_Airing_At > :from AND m.next_Airing_At <= :to")
+    List<Long> findIdsAiringBetween(@Param("from") Instant from, @Param("to") Instant to);
+
 }
