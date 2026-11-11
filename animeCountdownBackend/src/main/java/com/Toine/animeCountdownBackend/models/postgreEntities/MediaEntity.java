@@ -33,6 +33,8 @@ public class MediaEntity {
     private Integer next_Airing_Episode;
     @Column(name = "cover_image_url")
     private String cover_Image_Url;
+    // Weekday of next_Airing_At in UTC. Not used for the weekly schedule, which groups by the
+    // viewer's timezone (see ScheduleController / AiringDayWindows).
     private String day;
     private Long popularity;
     private Integer seasonYear;
