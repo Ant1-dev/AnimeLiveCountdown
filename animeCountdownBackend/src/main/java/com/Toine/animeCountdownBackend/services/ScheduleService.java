@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services;
 
+import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Media;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.Page;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
@@ -51,6 +52,7 @@ public class ScheduleService {
     private final MediaRepository mediaRepository;
     private final FavoriteMediaRepository favoriteMediaRepository;
     private final HttpGraphQlClient graphQlClient;
+    private final AniListRateLimiter aniListRateLimiter;
 
     private final AtomicBoolean syncInProgress = new AtomicBoolean(false);
 
@@ -61,8 +63,9 @@ public class ScheduleService {
     private ScheduleService self;
 
     public ScheduleService(HttpGraphQlClient graphQlClient, MediaRepository mediaRepository,
-                           FavoriteMediaRepository favoriteMediaRepository) {
+                           FavoriteMediaRepository favoriteMediaRepository, AniListRateLimiter aniListRateLimiter) {
         this.graphQlClient = graphQlClient;
+        this.aniListRateLimiter = aniListRateLimiter;
         this.mediaRepository = mediaRepository;
         this.favoriteMediaRepository = favoriteMediaRepository;
     }
@@ -131,8 +134,8 @@ public class ScheduleService {
         try {
             job.run();
         } catch (org.springframework.graphql.client.GraphQlTransportException e) {
-            if (e.getMessage() != null && e.getMessage().contains("429")) {
-                logger.warn("AniList rate limit hit during {} sync; will retry next cycle", jobName);
+            if (AniListRateLimiter.isRateLimited(e)) {
+                logger.warn("AniList kept rate limiting the {} sync after retries; will try again next cycle", jobName);
             } else {
                 logger.error("AniList request failed during {} sync: {}", jobName, e.getMessage());
             }
@@ -360,11 +363,11 @@ public class ScheduleService {
     /** Fetches every show with the given AniList status, one page of 50 at a time. */
     public Mono<List<MediaEntity>> fetchAllWithStatus(String status) {
         return Flux.range(1, Integer.MAX_VALUE - 1)
-                .concatMap(page -> graphQlClient.document(BY_STATUS_QUERY)
+                .concatMap(page -> aniListRateLimiter.throttle(graphQlClient.document(BY_STATUS_QUERY)
                         .variable("page", page)
                         .variable("status", status)
                         .retrieve("Page")
-                        .toEntity(Page.class))
+                        .toEntity(Page.class)))
                 .takeWhile(p -> p.getMedia() != null && !p.getMedia().isEmpty())
                 .flatMapIterable(Page::getMedia)
                 .map(this::convertToEntity)
@@ -378,10 +381,10 @@ public class ScheduleService {
             batches.add(ids.subList(i, Math.min(i + ID_BATCH_SIZE, ids.size())));
         }
         return Flux.fromIterable(batches)
-                .concatMap(batch -> graphQlClient.document(BY_IDS_QUERY)
+                .concatMap(batch -> aniListRateLimiter.throttle(graphQlClient.document(BY_IDS_QUERY)
                         .variable("ids", batch)
                         .retrieve("Page")
-                        .toEntity(Page.class))
+                        .toEntity(Page.class)))
                 .filter(p -> p.getMedia() != null)
                 .flatMapIterable(Page::getMedia)
                 .map(this::convertToEntity)

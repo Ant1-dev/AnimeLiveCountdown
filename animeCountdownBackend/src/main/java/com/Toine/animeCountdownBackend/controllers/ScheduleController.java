@@ -65,7 +65,7 @@ public class ScheduleController {
     @GetMapping("/soon")
     public ResponseEntity<List<MediaEntity>> getClosestAiring() {
         Pageable pageable = PageRequest.of(0,15);
-        List<MediaEntity> results = mediaRepository.findAllByOrderByNext_Airing_AtAsc(pageable).getContent();
+        List<MediaEntity> results = mediaRepository.findUpcomingEpisodes(Instant.now(), pageable).getContent();
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noCache())
                 .body(results);
