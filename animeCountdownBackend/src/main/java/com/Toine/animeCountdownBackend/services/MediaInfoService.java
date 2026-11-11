@@ -6,7 +6,9 @@ import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.graphql.client.HttpGraphQlClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,12 @@ public class MediaInfoService {
     private final HttpGraphQlClient graphQlClient;
     private final MediaInfoRepository mediaInfoRepository;
     private final AtomicBoolean isUpdating = new AtomicBoolean(false);
+
+    // Calls to updateDatabase must go through the Spring proxy, otherwise @Transactional and
+    // @CacheEvict are skipped (self-invocation). @Lazy avoids a circular-reference error at startup.
+    @Autowired
+    @Lazy
+    private MediaInfoService self;
 
     public MediaInfoService(HttpGraphQlClient graphQlClient, MediaInfoRepository mediaInfoRepository) {
         this.graphQlClient = graphQlClient;
@@ -48,7 +56,7 @@ public class MediaInfoService {
                 logger.info("Successfully fetched {} anime info entries", newEntities.size());
 
                 // Then update the database in a transaction
-                updateDatabase(newEntities);
+                self.updateDatabase(newEntities);
 
                 logger.info("Media info database refresh completed successfully");
             } catch (org.springframework.graphql.client.GraphQlTransportException e) {
