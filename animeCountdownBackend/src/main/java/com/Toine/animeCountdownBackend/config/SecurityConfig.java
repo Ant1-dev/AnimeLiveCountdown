@@ -36,8 +36,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
                 "https://animelivecountdown.com",
-                "https://www.alcountdown.us",
-                "http://alcountdown.us",
+                "https://www.animelivecountdown.com",
                 "http://127.0.0.1:8081",
                 "https://anime-live-countdown-6y6pbb7ma-ant1-devs-projects.vercel.app",
                 "https://anime-live-countdown-git-main-ant1-devs-projects.vercel.app"
@@ -59,6 +58,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/oauth2/**", "/api/login/**").permitAll()
+                        // Authenticated by the refresh token cookie, not by an access token
+                        .requestMatchers("/api/auth/refresh", "/api/auth/logout").permitAll()
                         .requestMatchers("/api/auth/**").authenticated()
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().permitAll()

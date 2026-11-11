@@ -1,179 +1,125 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { TokenStorageService } from '../services/token-storage.service';
-import { User } from '../models/user.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { Observable, ReplaySubject, finalize, map, shareReplay, take, tap } from 'rxjs';
+import { User } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
+// Keys the old version of the app kept tokens under; removed on startup.
+const LEGACY_STORAGE_KEYS = ['accessToken', 'refreshToken'];
+
+/**
+ * Session handling.
+ *
+ * The refresh token lives in an HttpOnly cookie set by the API, so scripts on this page can never
+ * read it. The access token is kept in memory only: on each page load the app calls
+ * /auth/refresh, and the cookie is exchanged for a fresh access token.
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private tokenStorage = inject(TokenStorageService);
   private router = inject(Router);
-  private location = inject(Location);
+
+  private readonly authUrl = environment.apiUrl + 'auth/';
 
   private storedAccessToken = signal<string | null>(null);
-  private storedRefreshToken = signal<string | null>(null);
-
   readonly accessToken = this.storedAccessToken.asReadonly();
-  readonly refreshToken = this.storedRefreshToken.asReadonly();
 
   private storedUser = signal<User | null>(null);
   readonly user = this.storedUser.asReadonly();
   readonly isAuthenticated = computed(() => this.storedUser() !== null);
 
+  // Emits once the session restore on page load has finished (signed in or not)
+  private readonly sessionChecked = new ReplaySubject<void>(1);
+
+  // The refresh request in flight, shared so concurrent 401s trigger a single refresh
+  private refreshInFlight: Observable<string> | null = null;
+
   constructor() {
-    try {
-      this.initializeTokens();
-    } catch (error) {
-      console.error('Error initializing tokens:', error);
-      this.clearTokens();
+    if (typeof window === 'undefined') {
+      this.sessionChecked.next();
+      return;
     }
+
+    this.removeLegacyTokens();
+    this.refresh().subscribe({
+      error: () => this.sessionChecked.next(),
+      complete: () => this.sessionChecked.next(),
+    });
   }
 
-  private initializeTokens(): void {
-    try {
-      // check URL parameters for OAuth2 tokens
-      this.handleOAuth2Tokens();
+  /** Resolves once the app knows whether the visitor is signed in. */
+  whenSessionChecked(): Observable<void> {
+    return this.sessionChecked.pipe(take(1));
+  }
 
-      // Then check stored tokens
-      this.loadStoredTokens();
-    } catch (error) {
-      console.error('Error in initializeTokens:', error);
-      this.clearTokens();
+  /** Exchanges the refresh token cookie for a new access token. Errors if there is no valid session. */
+  refresh(): Observable<string> {
+    if (!this.refreshInFlight) {
+      this.refreshInFlight = this.http
+        .post<{ accessToken: string }>(this.authUrl + 'refresh', null, { withCredentials: true })
+        .pipe(
+          map((response) => response.accessToken),
+          tap({
+            next: (token) => this.setAccessToken(token),
+            error: () => this.clearSession(),
+          }),
+          finalize(() => (this.refreshInFlight = null)),
+          shareReplay(1)
+        );
     }
-  }
-  private handleOAuth2Tokens(): void {
-    // Get URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlAccessToken = urlParams.get('accessToken');
-    const urlRefreshToken = urlParams.get('refreshToken');
-
-    if (urlAccessToken && urlRefreshToken) {
-      // Validate tokens before storing
-      if (
-        !this.isTokenExpired(urlAccessToken) &&
-        !this.isTokenExpired(urlRefreshToken)
-      ) {
-        // Store the tokens
-        this.tokenStorage.setToken(urlAccessToken);
-        this.tokenStorage.setRefreshToken(urlRefreshToken);
-
-        // Update signals
-        this.storedAccessToken.set(urlAccessToken);
-        this.storedRefreshToken.set(urlRefreshToken);
-
-        // Decode and set user
-        try {
-          const user = this.decodeUserFromToken(urlAccessToken);
-          this.storedUser.set(user);
-        } catch (error) {
-          console.error('Failed to decode user from OAuth2 token:', error);
-          this.clearTokens();
-        }
-      } else {
-        console.warn('OAuth2 tokens are expired');
-      }
-
-      // Clean the URL (remove tokens from browser history for security)
-      this.cleanUrl();
-    }
+    return this.refreshInFlight;
   }
 
-  private loadStoredTokens(): void {
-    // Only load from storage if don't already have tokens from URL
-    if (!this.storedAccessToken()) {
-      const accessToken = this.tokenStorage.getToken();
-      const refreshToken = this.tokenStorage.getRefreshToken();
-
-      if (accessToken && !this.isTokenExpired(accessToken) && refreshToken) {
-        this.storedAccessToken.set(accessToken);
-        this.storedRefreshToken.set(refreshToken);
-
-        try {
-          const decoded = this.decodeUserFromToken(accessToken);
-          this.storedUser.set(decoded);
-        } catch {
-          this.clearTokens();
-        }
-      } else if (refreshToken && !this.isTokenExpired(refreshToken)) {
-        // Access token expired but refresh token valid
-        this.storedRefreshToken.set(refreshToken);
-        // Could auto-refresh here, but interceptor will handle it
-      } else {
-        // Clear any invalid stored tokens
-        this.clearTokens();
-      }
-    }
+  isTokenExpired(token: string): boolean {
+    const payload = this.decodePayload(token);
+    return !payload || payload.exp < Math.floor(Date.now() / 1000);
   }
 
-  private cleanUrl(): void {
-    // Get current URL without query parameters
-    const urlWithoutParams = window.location.pathname;
-
-    // Update browser history without the token parameters
-    this.location.replaceState(urlWithoutParams);
+  logout(): void {
+    this.clearSession();
+    // Clears the refresh token cookie; the local session is gone either way
+    this.http
+      .post(this.authUrl + 'logout', null, { withCredentials: true })
+      .subscribe({ error: () => {} });
+    this.router.navigate(['/']);
   }
 
-  private clearTokens(): void {
-    this.tokenStorage.clearTokens();
+  /** Drops the local session without calling the API (used when a refresh fails). */
+  clearSession(): void {
     this.storedAccessToken.set(null);
-    this.storedRefreshToken.set(null);
     this.storedUser.set(null);
   }
 
-  private decodeUserFromToken(token: string | null): User | null {
-    if (!token) return null;
+  private setAccessToken(token: string): void {
+    const payload = this.decodePayload(token);
+    if (!payload) {
+      this.clearSession();
+      return;
+    }
+    this.storedAccessToken.set(token);
+    this.storedUser.set({
+      id: payload.id,
+      email: payload.sub,
+      name: payload.name,
+      picture: payload.picture,
+    });
+  }
+
+  private decodePayload(token: string): any | null {
     try {
-      const payload = token.split('.')[1];
-      const json = atob(payload);
-      const data = JSON.parse(json);
-      return {
-        id: data.id,
-        email: data.sub,
-        name: data.name,
-        picture: data.picture,
-      };
-    } catch (err) {
-      console.error('Failed to decode token:', err);
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch {
       return null;
     }
   }
 
-  public isTokenExpired(token: string): boolean {
+  private removeLegacyTokens(): void {
     try {
-      const payload = token.split('.')[1];
-      const json = atob(payload);
-      const data = JSON.parse(json);
-      const currentTime = Math.floor(Date.now() / 1000);
-      return data.exp < currentTime;
+      LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
     } catch {
-      return true;
+      // Storage can be unavailable (private mode, blocked site data); nothing to clean up then
     }
-  }
-
-  getRefreshTokenFromApi(): Observable<{ accessToken: string }> {
-    const refreshToken = this.refreshToken();
-    return this.http.post<{ accessToken: string }>('/api/auth/refresh', {
-      refreshToken: refreshToken,
-    });
-  }
-
-  setToken(accessToken: string, refreshToken: string): void {
-    this.tokenStorage.setToken(accessToken);
-    this.tokenStorage.setRefreshToken(refreshToken);
-    this.storedAccessToken.set(accessToken);
-    this.storedRefreshToken.set(refreshToken);
-    const user = this.decodeUserFromToken(accessToken);
-    this.storedUser.set(user);
-  }
-
-  logout(): void {
-    this.clearTokens();
-    this.storedAccessToken.set(null);
-    this.storedRefreshToken.set(null);
-    this.storedUser.set(null);
-    this.router.navigate(['/']);
   }
 }

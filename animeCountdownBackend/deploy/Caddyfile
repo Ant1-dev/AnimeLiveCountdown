@@ -1,0 +1,6 @@
+# Reverse proxy for the backend. Caddy obtains and renews the HTTPS certificate automatically.
+# Copy to /etc/caddy/Caddyfile on the VM, then: sudo systemctl reload caddy
+api.animelivecountdown.com {
+	encode gzip
+	reverse_proxy localhost:8080
+}

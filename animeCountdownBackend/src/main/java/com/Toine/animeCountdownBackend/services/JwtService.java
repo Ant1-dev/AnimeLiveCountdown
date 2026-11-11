@@ -77,7 +77,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -103,7 +103,11 @@ public class JwtService {
         }
         try {
             final String username = extractUsername(token);
-            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+            final String tokenType = extractClaim(token, claims -> claims.get("tokenType", String.class));
+            // Only access tokens may authenticate API requests; refresh tokens are for /api/auth/refresh only
+            return (username.equals(userDetails.getUsername()))
+                    && !isTokenExpired(token)
+                    && "access".equals(tokenType);
         } catch (Exception e) {
             return false;
         }
