@@ -58,6 +58,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/oauth2/**", "/api/login/**").permitAll()
+                        // Authenticated by the refresh token cookie, not by an access token
+                        .requestMatchers("/api/auth/refresh", "/api/auth/logout").permitAll()
                         .requestMatchers("/api/auth/**").authenticated()
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().permitAll()
