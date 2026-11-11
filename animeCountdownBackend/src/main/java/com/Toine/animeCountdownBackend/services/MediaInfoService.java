@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services;
 
+import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.MediaInfo;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class MediaInfoService {
     private static final Logger logger = LoggerFactory.getLogger(MediaInfoService.class);
     private final HttpGraphQlClient graphQlClient;
+    private final AniListRateLimiter aniListRateLimiter;
     private final MediaInfoRepository mediaInfoRepository;
     private final AtomicBoolean isUpdating = new AtomicBoolean(false);
 
@@ -33,12 +35,14 @@ public class MediaInfoService {
     @Lazy
     private MediaInfoService self;
 
-    public MediaInfoService(HttpGraphQlClient graphQlClient, MediaInfoRepository mediaInfoRepository) {
+    public MediaInfoService(HttpGraphQlClient graphQlClient, MediaInfoRepository mediaInfoRepository,
+                            AniListRateLimiter aniListRateLimiter) {
         this.graphQlClient = graphQlClient;
+        this.aniListRateLimiter = aniListRateLimiter;
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    @Scheduled(fixedRate = 43200000) //every 3hr
+    @Scheduled(fixedRate = 43200000) // every 12 hours
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {
@@ -282,12 +286,12 @@ public class MediaInfoService {
                 """;
 
         return Flux.range(page, Integer.MAX_VALUE - page)
-                .concatMap(currentPage ->
+                .concatMap(currentPage -> aniListRateLimiter.throttle(
                     graphQlClient.document(query)
                         .variable("page", currentPage)
                         .retrieve("Page.media")
                         .toEntityList(MediaInfo.class)
-                )
+                ))
                 .takeWhile(mediaList -> !mediaList.isEmpty())
                 .flatMapIterable(mediaList -> mediaList);
     }
