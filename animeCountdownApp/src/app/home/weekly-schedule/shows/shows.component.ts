@@ -105,7 +105,7 @@ export class ShowsComponent implements OnInit {
     // Start immediately (0ms), then poll every 60 seconds (60000ms)
     const subscription = timer(0, 60000)
       .pipe(
-        switchMap(() => this.scheduleService.renderMedia(this.weekDay().toUpperCase(), this.error()))
+        switchMap(() => this.scheduleService.renderWeekDay(this.weekDay(), this.error()))
       )
       .subscribe({
         next: (media) => {
