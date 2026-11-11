@@ -1,16 +1,14 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
+import { map } from 'rxjs';
 import { AuthService } from './auth.service';
-import { Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  
-  if (!authService.isAuthenticated()) {
-    router.navigate(['/']);
-    return false;
-  }
-  
-  return true;
+
+  // On a fresh page load the session is restored asynchronously, so wait for that first
+  return authService
+    .whenSessionChecked()
+    .pipe(map(() => (authService.isAuthenticated() ? true : router.createUrlTree(['/']))));
 };
