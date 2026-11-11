@@ -59,6 +59,9 @@ export class ShowComponent implements OnInit, OnChanges {
     return this.timeRemaining() === null && this.showAiringNow();
   });
 
+  // Favorited shows that stopped airing are kept by the backend with status FINISHED
+  isFinished = computed(() => this.media()?.status === 'FINISHED');
+
   getDisplayTitle(): string {
     return this.mediaTimeService.getDisplayTitle(this.media());
   }
