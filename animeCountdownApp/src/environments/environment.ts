@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://www.alcountdown.us/api/',
+    apiUrl: 'https://api.animelivecountdown.com/api/',
 };
