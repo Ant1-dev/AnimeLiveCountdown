@@ -18,10 +18,23 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long>, JpaSp
     @Query("SELECT m FROM MediaEntity m WHERE m.status IN ('RELEASING', 'NOT_YET_RELEASED') AND m.next_Airing_At IS NOT NULL AND m.next_Airing_At <= :bufferEndDate ORDER BY m.popularity DESC")
     Page<MediaEntity> findTrendingByPopularity(@Param("bufferEndDate") Instant bufferEndDate, Pageable pageable);
 
-    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At IS NOT NULL AND m.status IN ('RELEASING', 'NOT_YET_RELEASED') ORDER BY m.next_Airing_At ASC")
-    Page<MediaEntity> findAllByOrderByNext_Airing_AtAsc(Pageable pageable);
+    /** Next episodes that haven't aired yet, soonest first. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.next_Airing_At > :now AND m.status IN ('RELEASING', 'NOT_YET_RELEASED') ORDER BY m.next_Airing_At ASC")
+    Page<MediaEntity> findUpcomingEpisodes(@Param("now") Instant now, Pageable pageable);
 
     @Query("SELECT m.id FROM MediaEntity m")
     List<Long> findAllIds();
+
+    /** Shows the upcoming sweep is responsible for. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.status = 'NOT_YET_RELEASED'")
+    List<MediaEntity> findUpcoming();
+
+    /** Shows the airing sweep is responsible for: everything that isn't upcoming. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.status IS NULL OR m.status <> 'NOT_YET_RELEASED'")
+    List<MediaEntity> findNotUpcoming();
+
+    /** Shows whose stored next episode time falls in (from, to], i.e. episodes that have just aired. */
+    @Query("SELECT m.id FROM MediaEntity m WHERE m.next_Airing_At > :from AND m.next_Airing_At <= :to")
+    List<Long> findIdsAiringBetween(@Param("from") Instant from, @Param("to") Instant to);
 
 }
