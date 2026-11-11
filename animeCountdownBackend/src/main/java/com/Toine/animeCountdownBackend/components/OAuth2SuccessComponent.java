@@ -3,11 +3,11 @@ package com.Toine.animeCountdownBackend.components;
 import com.Toine.animeCountdownBackend.models.postgreEntities.UserEntity;
 import com.Toine.animeCountdownBackend.repositories.UserRepository;
 import com.Toine.animeCountdownBackend.services.JwtService;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -26,16 +25,18 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final FetchGithubEmail githubEmailFetcher;
     private final JwtService jwtService;
+    private final RefreshTokenCookie refreshTokenCookie;
 
     @Value("${app.frontend.url}")
     String frontendUrl;
 
 
-    public OAuth2SuccessComponent(UserRepository userRepository, OAuth2AuthorizedClientService authorizedClientService, FetchGithubEmail githubEmailFetcher, JwtService jwtService) {
+    public OAuth2SuccessComponent(UserRepository userRepository, OAuth2AuthorizedClientService authorizedClientService, FetchGithubEmail githubEmailFetcher, JwtService jwtService, RefreshTokenCookie refreshTokenCookie) {
         this.userRepository = userRepository;
         this.authorizedClientService = authorizedClientService;
         this.githubEmailFetcher = githubEmailFetcher;
         this.jwtService = jwtService;
+        this.refreshTokenCookie = refreshTokenCookie;
     }
 
     @Override
@@ -93,13 +94,12 @@ public class OAuth2SuccessComponent implements AuthenticationSuccessHandler {
         user.setPicture(picture);
 
         user = userRepository.save(user);
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getId());
-        claims.put("name", user.getName());
-        claims.put("picture", user.getPicture());
-        String accessToken = jwtService.generateToken(claims, user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        response.sendRedirect(frontendUrl + "?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
+        // The refresh token goes in an HttpOnly cookie rather than the URL, so it never lands in
+        // browser history, logs or Referer headers. The frontend gets an access token by calling
+        // /api/auth/refresh on load.
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.create(refreshToken));
+        response.sendRedirect(frontendUrl);
     }
 }
