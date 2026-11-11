@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services;
 
+import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
 import com.Toine.animeCountdownBackend.repositories.FavoriteMediaRepository;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
@@ -31,7 +32,7 @@ class ScheduleServiceSyncTest {
         mediaRepository = mock(MediaRepository.class);
         favoriteMediaRepository = mock(FavoriteMediaRepository.class);
         graphQlClient = mock(HttpGraphQlClient.class);
-        service = new ScheduleService(graphQlClient, mediaRepository, favoriteMediaRepository);
+        service = new ScheduleService(graphQlClient, mediaRepository, favoriteMediaRepository, new AniListRateLimiter(0));
         when(favoriteMediaRepository.findFavoritedMediaIds(anyCollection())).thenReturn(Set.of());
     }
 
