@@ -16,6 +16,7 @@
 	<url/>
 	<properties>
 		<java.version>23</java.version>
+		<lombok.version>1.18.42</lombok.version>
 	</properties>
 	<dependencies>
 		<dependency>
