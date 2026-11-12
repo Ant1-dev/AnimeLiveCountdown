@@ -1,0 +1,29 @@
+@if (confetti().length) {
+  <div class="confetti" aria-hidden="true">
+    @for (p of confetti(); track $index) {
+      <span
+        class="piece"
+        [style.left.%]="p.left"
+        [style.background-color]="p.color"
+        [style.animation-delay.s]="p.delay"
+        [style.animation-duration.s]="p.duration"
+        [style.rotate.deg]="p.rotate"
+      ></span>
+    }
+  </div>
+}
+
+<div class="toasts" aria-live="polite">
+  @for (e of events(); track e.mediaId + '-' + e.at) {
+    <div class="toast">
+      <span class="emoji" aria-hidden="true">🎉</span>
+      <a class="toast-body" [routerLink]="['/media', e.mediaId]" (click)="dismiss(e.mediaId)">
+        <strong>It's out!</strong>
+        <span>{{ e.title }}@if (e.episode) { episode {{ e.episode }}} just aired.</span>
+      </a>
+      <button type="button" class="close" (click)="dismiss(e.mediaId)" aria-label="Dismiss">
+        <mat-icon fontIcon="close"></mat-icon>
+      </button>
+    </div>
+  }
+</div>
