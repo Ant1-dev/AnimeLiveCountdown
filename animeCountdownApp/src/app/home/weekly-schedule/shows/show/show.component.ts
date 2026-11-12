@@ -21,6 +21,7 @@ import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
 import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
+import { ShareService } from '../../../../services/share.service';
 
 @Component({
   selector: 'app-show',
