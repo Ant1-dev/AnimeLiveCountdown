@@ -8,9 +8,7 @@
 
     <div class="navbar-actions">
       <div class="navbar-icons">
-        <div class="notification">
-          <mat-icon style="color: white; font-size: 30px; overflow: visible;" fontIcon="notifications"></mat-icon>
-        </div>
+        <app-notification-bell class="notification" />
         @if (user()) {
           <div class="profile">
             <button (click)="setVisible()" style="border: none; background: none; cursor: pointer;"><img [src]="user()?.picture" alt=""></button>

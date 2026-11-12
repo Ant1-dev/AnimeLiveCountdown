@@ -31,7 +31,7 @@
         <div class="show-info-container">
           <div class="show-info-item">Next episode: {{ media()?.next_Airing_Episode}}</div>
           <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
-          <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
+          <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
           <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
         </div>
       </ng-template>
@@ -70,7 +70,7 @@
           <div class="show-info-item">Episode {{ media()?.next_Airing_Episode}} is airing now!</div>
           }
           <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
-          <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
+          <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
           <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
         </div>
       </ng-template>

@@ -1,0 +1,72 @@
+<button
+  type="button"
+  class="bell"
+  (click)="toggle()"
+  [attr.aria-expanded]="open()"
+  aria-haspopup="dialog"
+  [attr.aria-label]="notifications.unread() ? 'Notifications, ' + notifications.unread() + ' unread' : 'Notifications'"
+  title="Notifications">
+  <mat-icon fontIcon="notifications"></mat-icon>
+  @if (notifications.unread() > 0) {
+    <span class="badge" aria-hidden="true">{{ notifications.unread() > 9 ? '9+' : notifications.unread() }}</span>
+  }
+</button>
+
+@if (open()) {
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head">
+      <span class="panel-title">Notifications</span>
+      @if (user() && notifications.unread() > 0) {
+        <button type="button" class="text-btn" (click)="notifications.markAllRead()">Mark all read</button>
+      }
+    </div>
+
+    @if (!user()) {
+      <div class="empty">
+        <p>Sign in to get reminders when episodes of the shows you follow air.</p>
+        <button type="button" class="primary-btn" (click)="signIn()">Sign in</button>
+      </div>
+    } @else if (notifications.items().length === 0) {
+      <div class="empty">
+        @if (notifications.loaded()) {
+          <p>No notifications yet. Use <strong>Add reminder</strong> on a show to get one when its next episode airs.</p>
+        } @else {
+          <p>Loading…</p>
+        }
+      </div>
+    } @else {
+      <ul class="list">
+        @for (item of notifications.items(); track item.id) {
+          <li>
+            <button type="button" class="item" [class.unread]="!item.read" (click)="openItem(item)">
+              @if (item.imageUrl) {
+                <img [src]="item.imageUrl" alt="" width="40" height="56" loading="lazy" />
+              } @else {
+                <span class="thumb" aria-hidden="true"></span>
+              }
+              <span class="text">
+                <span class="title">{{ item.title }}</span>
+                <span class="message">{{ item.message }}</span>
+                <span class="time">{{ timeAgo(item.createdAt) }}</span>
+              </span>
+              @if (!item.read) {
+                <span class="dot" aria-label="Unread"></span>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    <div class="panel-foot">
+      @if (user()) {
+        <a routerLink="/notifications" (click)="open.set(false)">Reminder settings</a>
+      }
+      @if (install.canInstall()) {
+        <button type="button" class="text-btn" (click)="installApp()">
+          <mat-icon fontIcon="install_mobile"></mat-icon> Install app
+        </button>
+      }
+    </div>
+  </div>
+}

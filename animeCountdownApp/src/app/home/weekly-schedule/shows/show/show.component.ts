@@ -22,6 +22,7 @@ import { FavoriteMediaService } from '../../../../services/favorite.media.servic
 import { AuthService } from '../../../../auth/auth.service';
 import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
 import { ShareService } from '../../../../services/share.service';
+import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
 
 @Component({
   selector: 'app-show',
@@ -50,6 +51,7 @@ export class ShowComponent implements OnInit, OnChanges {
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   private shareService = inject(ShareService);
+  private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
 
@@ -106,6 +108,18 @@ export class ShowComponent implements OnInit, OnChanges {
           },
         });
     }
+  }
+
+  addReminder(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const mediaData = this.media();
+    if (!mediaData) return;
+    this.reminderDialog.open({
+      mediaId: mediaData.id,
+      title: this.getDisplayTitle(),
+      nextEpisode: mediaData.next_Airing_Episode,
+    });
   }
 
   ngOnInit(): void {
