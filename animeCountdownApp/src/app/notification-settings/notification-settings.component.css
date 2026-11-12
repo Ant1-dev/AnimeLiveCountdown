@@ -8,7 +8,7 @@
 
 .card {
   background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 20px;
   min-width: 0;
@@ -16,36 +16,36 @@
 
 .card.wide { grid-column: 1 / -1; }
 .card h2 { margin: 0 0 8px; font-size: 1.1rem; color: var(--text-primary); }
-.card p { margin: 0 0 12px; line-height: 1.5; color: #c9ccd2; font-size: 14px; }
+.card p { margin: 0 0 12px; line-height: 1.5; color: var(--text-secondary); font-size: 14px; }
 
-.muted { color: #8a8f98 !important; }
+.muted { color: var(--text-muted) !important; }
 .small { font-size: 13px !important; }
-.warn { color: #ffb4a2 !important; }
-.error { color: #ff6b6b; }
+.warn { color: var(--danger) !important; }
+.error { color: var(--danger); }
 code { font-size: 12px; word-break: break-all; color: var(--text-primary); }
 
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 .row { display: flex; gap: 8px; margin-top: 6px; }
 .row input { flex: 1; min-width: 0; }
-.label { font-size: 13px; font-weight: 600; color: #c9ccd2; }
+.label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
 
 input[type='text'], input[type='url'], select {
   padding: 9px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: #101116;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-dark); color: var(--text-primary);
   color: var(--text-primary);
   font: inherit;
   font-size: 14px;
 }
 
 input:focus-visible, select:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-input[aria-invalid='true'] { border-color: #ff8a80; }
+input[aria-invalid='true'] { border-color: var(--danger); }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
   padding: 8px 14px;
   background: none;
@@ -57,20 +57,20 @@ input[aria-invalid='true'] { border-color: #ff8a80; }
   cursor: pointer;
 }
 
-.btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.06); }
+.btn:hover:not(:disabled) { background: var(--surface-hover); }
 .btn:disabled { opacity: 0.6; cursor: default; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #0b0c10; font-weight: 600; }
-.btn.danger { color: #ff8a80; border-color: rgba(255, 138, 128, 0.4); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.btn.danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
 .small-btn { padding: 6px 10px; font-size: 13px; }
 
 .reminders { list-style: none; margin: 0; padding: 0; }
-.reminder { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.reminder { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border-subtle); }
 .reminder img { flex: none; width: 48px; height: 68px; object-fit: cover; border-radius: 4px; }
 .reminder-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .reminder-title { color: var(--text-primary); font-weight: 600; text-decoration: none; }
 .reminder-title:hover { color: var(--accent); }
 .reminder-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 4px; }
-.check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #c9ccd2; cursor: pointer; }
+.check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-secondary); cursor: pointer; }
 .check input { width: 16px; height: 16px; accent-color: var(--accent); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

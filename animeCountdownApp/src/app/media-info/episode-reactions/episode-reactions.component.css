@@ -4,7 +4,7 @@
   padding: 16px 20px;
   margin: 20px auto;
   max-width: 1200px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 30px var(--shadow-color);
 }
 
 .reactions-header {
@@ -19,11 +19,11 @@
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-strong);
 }
 
 .reactions-total {
-  color: #b4b7c5;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   white-space: nowrap;
 }
@@ -40,9 +40,9 @@
   gap: 8px;
   min-height: 44px;
   padding: 0 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-subtle);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-lighter);
   color: var(--text-primary);
   font: inherit;
   cursor: pointer;
@@ -50,7 +50,7 @@
 }
 
 .reaction:hover:not(:disabled) {
-  border-color: rgba(0, 166, 251, 0.6);
+  border-color: rgb(var(--accent-rgb) / 0.6);
 }
 
 .reaction:focus-visible {
@@ -64,7 +64,7 @@
 
 .reaction.mine {
   border-color: var(--accent);
-  background: rgba(0, 166, 251, 0.18);
+  background: rgb(var(--accent-rgb) / 0.18);
 }
 
 .emoji {
@@ -79,6 +79,6 @@
 
 .hint {
   margin: 10px 0 0;
-  color: #b4b7c5;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
