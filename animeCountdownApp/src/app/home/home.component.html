@@ -1,6 +1,7 @@
 <div class="main-content">
   <app-hero-carousel class="carousel"/>
   <div class="main">
+    <app-live-banner />
     @defer (on viewport) {
       @if (!sessionChecked()) {
         <app-media-skeleton />
@@ -12,6 +13,7 @@
         <app-airing-soon />
       } @else {
         <app-season-pop/>
+        <app-most-hyped />
         <app-airing-soon />
         <ng-container [ngTemplateOutlet]="scheduleBar" />
         <app-weekly-schedule />

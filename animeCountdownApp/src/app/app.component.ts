@@ -4,10 +4,11 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
+import { AiringCelebrationComponent } from './shared-components/airing-celebration/airing-celebration.component';
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FooterComponent, RouterOutlet],
+  imports: [HeaderComponent, FooterComponent, RouterOutlet, AiringCelebrationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

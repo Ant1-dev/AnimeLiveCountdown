@@ -23,6 +23,7 @@
       @if (follow()?.behind) {
       <span class="behind-badge">{{ follow()!.behind }} behind</span>
       }
+      <app-schedule-note-badge variant="overlay" [note]="media()?.scheduleNote" />
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
@@ -36,7 +37,8 @@
           @if (follow()?.behind) {
           <div class="show-info-item">Mark ep {{ follow()!.watchedEpisode + 1 }} watched -<mat-icon class="add-icon" (click)="markWatched($event)">check_circle</mat-icon></div>
           }
-          <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
+          <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
+          <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
         </div>
       </ng-template>
     </div>
@@ -80,7 +82,8 @@
           @if (follow()?.behind) {
           <div class="show-info-item">Mark ep {{ follow()!.watchedEpisode + 1 }} watched -<mat-icon class="add-icon" (click)="markWatched($event)">check_circle</mat-icon></div>
           }
-          <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
+          <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
+          <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
         </div>
       </ng-template>
     </div>

@@ -17,6 +17,11 @@ public class MediaInfo {
     private List<String> genres;
     private Integer seasonYear;
     private String season;
+    private List<ExternalLink> externalLinks;
+
+    public List<ExternalLink> getExternalLinks() {
+        return externalLinks;
+    }
 
     public Integer getSeasonYear() {
         return seasonYear;

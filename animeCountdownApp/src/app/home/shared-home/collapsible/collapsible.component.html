@@ -4,11 +4,11 @@
     <span class="toggle-icon" [class.open]="!isCollapsed()">
       @if (isCollapsed()) {
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="right-arrow">
-          <path d="M9 18L15 12L9 6" stroke="#00a6fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 18L15 12L9 6" style="stroke: var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       } @else {
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="down-arrow">
-          <path d="M9 18L15 12L9 6" stroke="#00a6fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 18L15 12L9 6" style="stroke: var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       }
     </span>

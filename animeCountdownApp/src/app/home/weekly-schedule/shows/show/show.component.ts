@@ -21,6 +21,9 @@ import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FollowingService } from '../../../../services/following.service';
 import { AuthService } from '../../../../auth/auth.service';
 import { Observable } from 'rxjs';
+import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
+import { ShareService } from '../../../../services/share.service';
+import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
 
 @Component({
   selector: 'app-show',
@@ -31,6 +34,7 @@ import { Observable } from 'rxjs';
     TooltipModule,
     Tooltip,
     NgOptimizedImage,
+    ScheduleNoteBadgeComponent,
   ],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
@@ -47,6 +51,8 @@ export class ShowComponent implements OnInit, OnChanges {
   private following = inject(FollowingService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private shareService = inject(ShareService);
+  private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
 
@@ -75,6 +81,11 @@ export class ShowComponent implements OnInit, OnChanges {
     if (mediaData) {
       this.mediaInfoService.getMediaId(mediaData.id);
     }
+  }
+
+  share(): void {
+    const mediaData = this.media();
+    if (mediaData) this.shareService.shareMedia(mediaData.id, this.getDisplayTitle());
   }
 
   toggleFollow(event: Event): void {
@@ -112,6 +123,18 @@ export class ShowComponent implements OnInit, OnChanges {
       duration: 3000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
+    });
+  }
+
+  addReminder(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const mediaData = this.media();
+    if (!mediaData) return;
+    this.reminderDialog.open({
+      mediaId: mediaData.id,
+      title: this.getDisplayTitle(),
+      nextEpisode: mediaData.next_Airing_Episode,
     });
   }
 

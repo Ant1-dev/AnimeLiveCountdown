@@ -4,7 +4,7 @@
   <div class="dropdown-functions">
     <a routerLink="/" [queryParams]="{ view: 'mine' }" (click)="close.emit()">My Schedule</a>
     <div (click)="navigateToFollowing()">Following</div>
-    <div>Notifications</div>
+    <div (click)="navigateToNotifications()">Notifications</div>
     <a routerLink="/" (click)="logout()">Sign out</a>
   </div>
 </div>

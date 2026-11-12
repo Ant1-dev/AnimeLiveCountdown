@@ -49,8 +49,15 @@
       <div class="title">
         <h1 class="english-title">{{ mediaDetails().engtitle }}</h1>
         <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
+        <app-share-button class="share" [mediaId]="mediaDetails().id" [title]="mediaDetails().engtitle || mediaDetails().romtitle" />
       </div>
       <app-follow-controls [mediaId]="mediaDetails().id" />
+
+      @if (scheduleNote(); as note) {
+      <div class="schedule-note">
+        <app-schedule-note-badge [note]="note" />
+      </div>
+      }
 
       @if (mediaDetails().airingat) {
       <div class="airing-info">
@@ -77,6 +84,7 @@
         </h4>
       </div>
     }
+      <app-where-to-watch [links]="mediaDetails().streamingLinks" />
       <h4>Description:</h4>
       <div class="description" [innerHTML]="mediaDetails().description"></div>
 
@@ -128,7 +136,7 @@
       <div class="countdown-label">Minutes</div>
     </div>
     <div class="countdown-item">
-      <div class="countdown-value" style="color: #00a6fb">
+      <div class="countdown-value" style="color: var(--accent)">
         {{ remaining.seconds | number : "2.0-0" }}
       </div>
       <div class="countdown-label">Seconds</div>
@@ -140,6 +148,10 @@
     <h1 class="countdown-message">This anime is out now</h1>
   }
 </div>
+
+@if (mediaDetails().id) {
+<app-episode-reactions [mediaId]="mediaDetails().id" />
+}
 } @else {
 <div class="skeleton-container">
   <p-skeleton width="100%" height="100%"></p-skeleton>

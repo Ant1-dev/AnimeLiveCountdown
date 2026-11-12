@@ -42,7 +42,7 @@
                   <div class="countdown-label">Minutes</div>
                 </div>
                 <div class="countdown-item">
-                  <div class="countdown-value" style="color: #00a6fb">{{remaining.seconds | number:'2.0-0'}}</div>
+                  <div class="countdown-value" style="color: var(--accent)">{{remaining.seconds | number:'2.0-0'}}</div>
                   <div class="countdown-label">Seconds</div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
     <div class="directions">
       <div class="left-arrow" (click)="previousSlide()"><mat-icon fontIcon="arrow_back_ios"></mat-icon></div>
       <div class="carousel-index">
-        <span class="active-index" style="color: #00a6fb;">{{ currentIndex() + 1 }}</span> <span class="index-slash">/</span>
+        <span class="active-index" style="color: var(--accent);">{{ currentIndex() + 1 }}</span> <span class="index-slash">/</span>
         <span class="total-index">{{ mediaList().length }}</span>
       </div>
       <div class="right-arrow" (click)="nextSlide()"><mat-icon fontIcon="arrow_forward_ios"></mat-icon></div>

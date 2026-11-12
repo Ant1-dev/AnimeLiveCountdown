@@ -2,6 +2,7 @@ package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
@@ -44,6 +45,19 @@ public class MediaEntity {
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<FavoriteMediaEntity> favorites;
+
+    // Break / delay detection (see ScheduleNoteDetector). Exposed to clients only as scheduleNote.
+    @Column(name = "schedule_note")
+    private String scheduleNoteType;
+    @Column(name = "schedule_note_detected_at")
+    private Instant scheduleNoteDetectedAt;
+    @Column(name = "schedule_note_original_at")
+    private Instant scheduleNoteOriginalAt;
+    @Column(name = "schedule_note_expires_at")
+    private Instant scheduleNoteExpiresAt;
+    // When the most recent episode aired, so a break can be measured once AniList adds the next date.
+    @Column(name = "last_aired_at")
+    private Instant lastAiredAt;
 
     public Integer getSeasonYear() {
         return seasonYear;
@@ -150,5 +164,56 @@ public class MediaEntity {
 
     public void setBanner_Image_Url(String banner_Image_Url) {
         this.banner_Image_Url = banner_Image_Url;
+    }
+
+    /** The active break/delay note for clients, or null when there is none or it has expired. */
+    @JsonProperty("scheduleNote")
+    public ScheduleNote getScheduleNote() {
+        return ScheduleNote.activeOf(this, Instant.now());
+    }
+
+    @JsonIgnore
+    public ScheduleNote.Type getScheduleNoteType() {
+        return scheduleNoteType == null ? null : ScheduleNote.Type.valueOf(scheduleNoteType);
+    }
+
+    public void setScheduleNoteType(ScheduleNote.Type type) {
+        this.scheduleNoteType = type == null ? null : type.name();
+    }
+
+    @JsonIgnore
+    public Instant getScheduleNoteDetectedAt() {
+        return scheduleNoteDetectedAt;
+    }
+
+    public void setScheduleNoteDetectedAt(Instant scheduleNoteDetectedAt) {
+        this.scheduleNoteDetectedAt = scheduleNoteDetectedAt;
+    }
+
+    @JsonIgnore
+    public Instant getScheduleNoteOriginalAt() {
+        return scheduleNoteOriginalAt;
+    }
+
+    public void setScheduleNoteOriginalAt(Instant scheduleNoteOriginalAt) {
+        this.scheduleNoteOriginalAt = scheduleNoteOriginalAt;
+    }
+
+    @JsonIgnore
+    public Instant getScheduleNoteExpiresAt() {
+        return scheduleNoteExpiresAt;
+    }
+
+    public void setScheduleNoteExpiresAt(Instant scheduleNoteExpiresAt) {
+        this.scheduleNoteExpiresAt = scheduleNoteExpiresAt;
+    }
+
+    @JsonIgnore
+    public Instant getLastAiredAt() {
+        return lastAiredAt;
+    }
+
+    public void setLastAiredAt(Instant lastAiredAt) {
+        this.lastAiredAt = lastAiredAt;
     }
 }

@@ -47,7 +47,7 @@
   padding: 5px;
   gap: 7px;
   font-size: 14px;
-  background-color: rgba(128, 128, 128, 0.2);
+  background-color: var(--surface-subtle);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -60,7 +60,7 @@
 }
 
 .dateItemS {
-  color: #00a6fb;
+  color: var(--accent);
 }
 
 .link {
@@ -108,7 +108,7 @@
 .behind-badge {
   position: absolute;
   left: 6px;
-  bottom: 8px;
+  top: 8px; /* bottom-left is used by the break/delay badge */
   padding: 2px 8px;
   border-radius: 4px;
   background: var(--accent);
@@ -124,7 +124,7 @@
 }
 
 .info-icon:hover {
-  color: #00a6fb;
+  color: var(--accent);
 }
 
 .show-info-container {
@@ -142,7 +142,7 @@
 
 .add-icon:hover {
   cursor: pointer;
-  color: #00a6fb;
+  color: var(--accent);
 }
 
 .airing-now-card {
@@ -155,7 +155,7 @@
 .airing-now-text-card {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #00a6fb;
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 1px;
 }

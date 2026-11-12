@@ -1,0 +1,43 @@
+@if (nextHour().length) {
+  <div class="banner" role="status">
+    <span class="pulse" aria-hidden="true"></span>
+    <span class="banner-text">
+      <strong>{{ bannerText() }}</strong>
+      <span class="banner-sub">
+        Next up {{ firstIn() }}:
+        @for (e of nextHour().slice(0, 3); track e.mediaId + '-' + e.episode; let last = $last) {
+          {{ title(e) }}{{ last ? '' : ', ' }}
+        }
+        @if (nextHour().length > 3) { and {{ nextHour().length - 3 }} more }
+      </span>
+    </span>
+  </div>
+}
+
+@if (airingNow().length) {
+  <section class="now" aria-labelledby="airing-now-heading">
+    <div class="section-header">
+      <h2 id="airing-now-heading" class="section-title">
+        <span class="live-dot" aria-hidden="true"></span> Airing now
+      </h2>
+    </div>
+    <ul class="now-list">
+      @for (item of airingNow(); track item.episode.mediaId + '-' + item.episode.episode) {
+        <li>
+          <a class="now-card" [routerLink]="['/media', item.episode.mediaId]">
+            @if (item.episode.coverimage) {
+              <img [ngSrc]="item.episode.coverimage" alt="" width="56" height="80" class="thumb" />
+            }
+            <span class="now-info">
+              <span class="now-title">{{ title(item.episode) }}</span>
+              <span class="now-meta">Episode {{ item.episode.episode }} · started {{ item.minutesIn }}m ago</span>
+              <span class="progress" role="progressbar" [attr.aria-valuenow]="item.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Episode progress ' + item.progress + '%'">
+                <span class="progress-fill" [style.width.%]="item.progress"></span>
+              </span>
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+}
