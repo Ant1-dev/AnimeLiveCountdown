@@ -6,11 +6,11 @@
       <p>Every new episode this week, counted down to the minute in your time zone.</p>
     </header>
     <app-live-banner />
-    <!-- hydrate on viewport: rendered on the server for crawlers, hydrated lazily in the browser -->
-    @defer (on viewport; hydrate on viewport) {
-      <app-home-feed ngSkipHydration />
-    } @placeholder {
-    <app-media-skeleton />
+    <!-- Rendered on the server (crawlers and first paint get it) and hydrated in place straight away,
+         while its code still loads as a separate chunk. Returning signed-in visitors get "My Schedule"
+         swapped in once their session is restored. -->
+    @defer (on immediate; hydrate on immediate) {
+      <app-home-feed />
     }
     <nav class="browse-days" aria-labelledby="browse-days-heading">
       <h2 id="browse-days-heading">Anime schedule by day</h2>

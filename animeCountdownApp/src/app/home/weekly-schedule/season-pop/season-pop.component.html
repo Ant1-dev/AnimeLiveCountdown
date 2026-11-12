@@ -3,12 +3,14 @@
     <div class="gradient-bar"></div>
 </div>
 
-@defer (when media()) {
+<!-- A plain @if (not @defer) so the cards are in the server-rendered HTML; a deferred block only
+     rendered its placeholder on the server and the cards popped in later, shifting the page. -->
+@if (media().length) {
     <div class="cardContainer">
         @for (show of media(); track show.id) {
             <app-show [media]="show" />
         }
     </div>
-} @placeholder {
+} @else {
     <app-media-skeleton />
 }

@@ -2,23 +2,27 @@
   <div class="carousel-media">
     @for (media of mediaList(); track media.id; let i = $index) {
     <div class="carousel-media-image" [class.active]="currentMedia()!.id === media.id">
-      @if (media.banner) {
-        <img
-        [ngSrc]="media.banner"
-        [alt]="media.engtitle || media.romtitle"
-        class="banner-image"
-        fill
-        [priority]="i === 0"
-      />
+      <!-- Only the first slide's image loads up front (it's the page's largest paint); the others
+           would compete with it for bandwidth and aren't visible until the carousel moves -->
+      @if (i === 0 || restImagesReady()) {
+        @if (media.banner) {
+          <img
+          [ngSrc]="media.banner"
+          [alt]="media.engtitle || media.romtitle"
+          class="banner-image"
+          fill
+          [priority]="i === 0"
+        />
       
-      } @else {
-      <img
-        [ngSrc]="media.coverimage"
-        [alt]="media.engtitle || media.romtitle"
-        class="cover-image"
-        fill
-        [priority]="i === 0"
-      />
+        } @else {
+        <img
+          [ngSrc]="media.coverimage"
+          [alt]="media.engtitle || media.romtitle"
+          class="cover-image"
+          fill
+          [priority]="i === 0"
+        />
+        }
       }
       <div class="carousel-content">
         <h2 class="show-title">{{ media.engtitle || media.romtitle }}</h2>

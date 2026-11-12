@@ -24,10 +24,10 @@
     @if (mediaDetails().coverimage) {
     <div class="poster">
       <img
-        [src]="mediaDetails().coverimage"
+        [src]="mediaDetails().coverimage | optimizedImage: 460"
         [alt]="displayTitle() + ' cover art'"
         class="cover-art"
-        priority
+        fetchpriority="high"
       />
       <div class="score-container">
         <div class="progress-bar-container">

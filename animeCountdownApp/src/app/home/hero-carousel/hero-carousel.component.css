@@ -16,6 +16,12 @@
   overflow: hidden;
   contain: layout paint;
 }
+/* Crop (never stretch) the 1900x400 banners into the 500px-tall hero */
+.banner-image,
+.cover-image {
+  object-fit: cover;
+}
+
 .cover-image {
   filter: blur(8px);
 }

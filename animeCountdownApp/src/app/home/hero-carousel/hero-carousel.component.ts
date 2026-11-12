@@ -32,6 +32,8 @@ export class HeroCarouselComponent implements OnInit {
   isLoading = signal(true);
   currentIndex = signal<number>(0);
   isAnimating = signal<boolean>(false);
+  /** Images for slides after the first; added shortly after load (see the template). */
+  restImagesReady = signal(false);
 
   // Computed values
   currentMedia = computed(() =>
@@ -91,6 +93,7 @@ export class HeroCarouselComponent implements OnInit {
       if (first) this.mediaTimeService.initializeTimerFromMediaInfo(first);
       return;
     }
+    setTimeout(() => this.restImagesReady.set(true), 2000);
     setTimeout(() => {
       const mediaItems = this.mediaList();
       if (mediaItems && mediaItems.length > 0) {
@@ -108,6 +111,7 @@ export class HeroCarouselComponent implements OnInit {
 
   goToSlide(index: number) {
     if (this.isAnimating()) return;
+    this.restImagesReady.set(true);
     this.isAnimating.set(true);
     this.currentIndex.set(index);
     const newMedia = this.mediaList()[index];

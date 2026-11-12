@@ -43,8 +43,20 @@ writeFileSync(
 const previewBots =
   'Discordbot|Twitterbot|Slackbot|facebookexternalhit|Facebot|WhatsApp|TelegramBot|LinkedInBot|SkypeUriPreview|redditbot|Embedly|Iframely|Mastodon|Bluesky|vkShare|Pinterest';
 
+// Must match IMAGE_WIDTHS / IMAGE_QUALITY in src/app/shared/images.ts
+const imageWidths = [256, 640, 1080, 1920];
+
 const config = {
   version: 3,
+  // Vercel Image Optimization at /_vercel/image: resizes AniList images and serves WebP
+  images: {
+    sizes: imageWidths,
+    domains: [],
+    remotePatterns: [{ protocol: 'https', hostname: '^s4\\.anilist\\.co$', pathname: '^/file/.*$' }],
+    qualities: [70],
+    formats: ['image/webp'],
+    minimumCacheTTL: 2678400, // 31 days: AniList image URLs change when the image does
+  },
   routes: [
     // www -> apex, permanently (308). Vercel's domain settings may also do this.
     {
