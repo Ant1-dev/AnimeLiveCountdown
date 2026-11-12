@@ -117,6 +117,12 @@
   font-weight: 400;
 }
 
+/* Break / delay note */
+.schedule-note {
+  display: flex;
+  font-size: 1rem;
+}
+
 /* Airing info */
 .airing-info {
   display: flex;

@@ -1,3 +1,5 @@
+import { ScheduleNote } from './schedule-note.model';
+
 export interface Media {
     id: number;
     title_Romaji: string;
@@ -9,4 +11,5 @@ export interface Media {
     day: string;
     banner_Image_Url?: string;
     season: string;
+    scheduleNote?: ScheduleNote | null;
 }

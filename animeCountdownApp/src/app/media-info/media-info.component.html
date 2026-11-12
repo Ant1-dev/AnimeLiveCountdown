@@ -51,6 +51,12 @@
         <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
       </div>
 
+      @if (scheduleNote(); as note) {
+      <div class="schedule-note">
+        <app-schedule-note-badge [note]="note" />
+      </div>
+      }
+
       @if (mediaDetails().airingat) {
       <div class="airing-info">
         @if (mediaDetails().status === 'RELEASING') {

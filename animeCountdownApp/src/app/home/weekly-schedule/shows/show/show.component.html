@@ -20,6 +20,7 @@
         height="325"
         [priority]="renderPriority() === 'high'"
       />
+      <app-schedule-note-badge variant="overlay" [note]="media()?.scheduleNote" />
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
