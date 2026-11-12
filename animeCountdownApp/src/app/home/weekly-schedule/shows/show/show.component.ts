@@ -18,8 +18,9 @@ import { TimeRemaining } from '../../../../models/time-remaining.model';
 import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
-import { FavoriteMediaService } from '../../../../services/favorite.media.service';
+import { FollowingService } from '../../../../services/following.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { Observable } from 'rxjs';
 import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
 import { ShareService } from '../../../../services/share.service';
 import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
@@ -47,13 +48,16 @@ export class ShowComponent implements OnInit, OnChanges {
 
   private mediaInfoService = inject(MediaInfoService);
   private mediaTimeService = inject(MediaTimeService);
-  private favMediaService = inject(FavoriteMediaService);
+  private following = inject(FollowingService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   private shareService = inject(ShareService);
   private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
+
+  // The viewer's follow of this show (with episode progress), if they follow it
+  protected follow = computed(() => this.following.get(this.media()?.id));
 
   timeRemaining = computed<TimeRemaining | null>(() => {
     const mediaData = this.media();
@@ -84,30 +88,42 @@ export class ShowComponent implements OnInit, OnChanges {
     if (mediaData) this.shareService.shareMedia(mediaData.id, this.getDisplayTitle());
   }
 
-  saveMedia(): void {
-    if (this.user()) {
-      this.favMediaService
-        .addFavoriteMedia(this.user()!.id, this.media()!.id)
-        .subscribe({
-          next: () => {
-            this.snackBar.open('Added to favorites!', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-            });
-          },
-          error: (error) => {
-            const errorMessage = error.error?.error === 'Media is already in favorites'
-              ? 'Already in favorites'
-              : 'Failed to add to favorites';
-            this.snackBar.open(errorMessage, 'Close', {
-              duration: 3000,
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-            });
-          },
-        });
+  toggleFollow(event: Event): void {
+    // The card is a link; keep the click on the button
+    event.preventDefault();
+    event.stopPropagation();
+    const media = this.media();
+    if (!media) return;
+    if (!this.user()) {
+      this.notify('Sign in to follow shows');
+      return;
     }
+    const following = this.follow() !== undefined;
+    const request: Observable<unknown> = following
+      ? this.following.unfollow(media.id)
+      : this.following.follow(media.id);
+    request.subscribe({
+      next: () => this.notify(following ? 'Unfollowed' : 'Following! It is now in My Schedule'),
+      error: () => this.notify(following ? "Couldn't unfollow. Try again." : "Couldn't follow. Try again."),
+    });
+  }
+
+  markWatched(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const media = this.media();
+    if (!media) return;
+    this.following.markNextWatched(media.id).subscribe({
+      error: () => this.notify("Couldn't save your progress. Try again."),
+    });
+  }
+
+  private notify(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
   }
 
   addReminder(event: Event): void {

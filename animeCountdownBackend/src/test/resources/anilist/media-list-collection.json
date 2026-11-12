@@ -1,0 +1,95 @@
+{
+  "data": {
+    "MediaListCollection": {
+      "lists": [
+        {
+          "name": "Watching",
+          "entries": [
+            {
+              "status": "CURRENT",
+              "progress": 5,
+              "media": {
+                "id": 171018, "isAdult": false, "status": "RELEASING", "episodes": 12, "popularity": 98000,
+                "seasonYear": 2026, "season": "FALL", "bannerImage": "https://img.anili.st/banner/171018.jpg",
+                "title": { "english": "Followed Already", "romaji": "Followed Already Romaji" },
+                "nextAiringEpisode": { "airingAt": 1795000000, "episode": 7 },
+                "coverImage": { "large": "https://img.anili.st/cover/171018.jpg" }
+              }
+            },
+            {
+              "status": "CURRENT",
+              "progress": 3,
+              "media": {
+                "id": 182255, "isAdult": false, "status": "RELEASING", "episodes": null, "popularity": 41000,
+                "seasonYear": 2026, "season": "FALL", "bannerImage": null,
+                "title": { "english": null, "romaji": "Not In Our Table Yet" },
+                "nextAiringEpisode": { "airingAt": 1795100000, "episode": 4 },
+                "coverImage": { "large": "https://img.anili.st/cover/182255.jpg" }
+              }
+            },
+            {
+              "status": "CURRENT",
+              "progress": 10,
+              "media": {
+                "id": 21, "isAdult": false, "status": "FINISHED", "episodes": 24, "popularity": 500000,
+                "seasonYear": 2019, "season": "SPRING", "bannerImage": null,
+                "title": { "english": "Old Finished Show", "romaji": "Old Finished Show" },
+                "nextAiringEpisode": null,
+                "coverImage": { "large": "https://img.anili.st/cover/21.jpg" }
+              }
+            },
+            {
+              "status": "CURRENT",
+              "progress": 2,
+              "media": {
+                "id": 99999, "isAdult": true, "status": "RELEASING", "episodes": 8, "popularity": 1000,
+                "seasonYear": 2026, "season": "FALL", "bannerImage": null,
+                "title": { "english": null, "romaji": "Adult Show" },
+                "nextAiringEpisode": { "airingAt": 1795200000, "episode": 3 },
+                "coverImage": { "large": "https://img.anili.st/cover/99999.jpg" }
+              }
+            },
+            {
+              "status": "CURRENT",
+              "progress": 1,
+              "media": {
+                "id": 160000, "isAdult": false, "status": "RELEASING", "episodes": 12, "popularity": 77000,
+                "seasonYear": 2026, "season": "FALL", "bannerImage": null,
+                "title": { "english": "Ahead Locally", "romaji": "Ahead Locally" },
+                "nextAiringEpisode": { "airingAt": 1795300000, "episode": 6 },
+                "coverImage": { "large": "https://img.anili.st/cover/160000.jpg" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Planning",
+          "entries": [
+            {
+              "status": "PLANNING",
+              "progress": 0,
+              "media": {
+                "id": 190000, "isAdult": false, "status": "NOT_YET_RELEASED", "episodes": null, "popularity": 30000,
+                "seasonYear": 2027, "season": "WINTER", "bannerImage": null,
+                "title": { "english": "Premieres Soon", "romaji": "Premieres Soon" },
+                "nextAiringEpisode": { "airingAt": 1798000000, "episode": 1 },
+                "coverImage": { "large": "https://img.anili.st/cover/190000.jpg" }
+              }
+            },
+            {
+              "status": "PLANNING",
+              "progress": 0,
+              "media": {
+                "id": 150000, "isAdult": false, "status": "RELEASING", "episodes": 13, "popularity": 60000,
+                "seasonYear": 2026, "season": "FALL", "bannerImage": null,
+                "title": { "english": "In Table Not Followed", "romaji": "In Table Not Followed" },
+                "nextAiringEpisode": { "airingAt": 1795400000, "episode": 8 },
+                "coverImage": { "large": "https://img.anili.st/cover/150000.jpg" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

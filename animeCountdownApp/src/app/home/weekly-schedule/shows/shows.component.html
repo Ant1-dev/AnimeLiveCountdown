@@ -9,7 +9,7 @@
     <div class="error-message">{{error()}}</div>
   </div>
 } @else if (activeMedia().length <= 0) {
-  <h2>No shows airing this day</h2>
+  <h2>{{ mode() === 'mine' ? 'None of your shows air this day' : 'No shows airing this day' }}</h2>
 } @else {
   <div class="cardContainer">
     @for (show of activeMedia(); track show.id; let i = $index) {

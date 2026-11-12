@@ -32,4 +32,15 @@ public interface FavoriteMediaRepository extends JpaRepository<FavoriteMediaEnti
 
     @Query("SELECT COUNT(f) > 0 FROM FavoriteMediaEntity f WHERE f.user.id = :userId AND f.media.id = :mediaId")
     boolean existsByUserIdAndMediaId(@Param("userId") Long userId, @Param("mediaId") Long mediaId);
+
+    /** The user's follows with their shows loaded, for the Following list and My Schedule. */
+    @Query("SELECT fm FROM FavoriteMediaEntity fm JOIN FETCH fm.media WHERE fm.user.id = :userId")
+    List<FavoriteMediaEntity> findFollowsWithMedia(@Param("userId") Long userId);
+
+    /** One of the user's follows. Empty when the user doesn't follow the show (even if someone else does). */
+    @Query("SELECT fm FROM FavoriteMediaEntity fm JOIN FETCH fm.media WHERE fm.user.id = :userId AND fm.media.id = :mediaId")
+    Optional<FavoriteMediaEntity> findFollow(@Param("userId") Long userId, @Param("mediaId") Long mediaId);
+
+    @Query("SELECT fm FROM FavoriteMediaEntity fm JOIN FETCH fm.media WHERE fm.user.id = :userId AND fm.media.id IN :mediaIds")
+    List<FavoriteMediaEntity> findFollows(@Param("userId") Long userId, @Param("mediaIds") Collection<Long> mediaIds);
 }

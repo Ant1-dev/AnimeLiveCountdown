@@ -2,7 +2,8 @@
 <div class="dropdown-container">
   <div class="user-desc" style="font-weight: bold;">{{ user()?.name }}</div>
   <div class="dropdown-functions">
-    <div (click)="navigateToFavorites()">Saved shows</div>
+    <a routerLink="/" [queryParams]="{ view: 'mine' }" (click)="close.emit()">My Schedule</a>
+    <div (click)="navigateToFollowing()">Following</div>
     <div (click)="navigateToNotifications()">Notifications</div>
     <a routerLink="/" (click)="logout()">Sign out</a>
   </div>

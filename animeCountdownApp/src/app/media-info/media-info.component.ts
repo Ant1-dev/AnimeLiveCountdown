@@ -17,6 +17,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Skeleton } from 'primeng/skeleton';
+import { FollowControlsComponent } from './follow-controls/follow-controls.component';
 import { WhereToWatchComponent } from './where-to-watch/where-to-watch.component';
 import { ScheduleNote } from '../models/schedule-note.model';
 import { ScheduleNoteService } from '../services/schedule-note.service';
@@ -26,7 +27,7 @@ import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton, NgOptimizedImage, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent],
+  imports: [CommonModule, Skeleton, NgOptimizedImage, FollowControlsComponent, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
