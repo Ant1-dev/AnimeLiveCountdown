@@ -12,6 +12,10 @@ export const routes: Routes = [
         loadComponent: () => import('./media-info/media-info.component').then(m => m.MediaInfoComponent)
     },
     {
+        path: 'seasons',
+        loadComponent: () => import('./seasons/season-browser.component').then(m => m.SeasonBrowserComponent)
+    },
+    {
         path: 'favorites',
         loadComponent: () => import('./favorites/favorites.component').then(m => m.FavoritesComponent),
         canActivate: [authGuard]

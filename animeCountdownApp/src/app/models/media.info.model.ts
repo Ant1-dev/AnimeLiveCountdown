@@ -13,4 +13,14 @@ export interface MediaInfo {
   coverimage: string;
   banner: string;
   airingat?: Date;
+  streamingLinks?: StreamingLink[];
+}
+
+/** Legal streaming site from AniList externalLinks. */
+export interface StreamingLink {
+  site: string;
+  url: string;
+  icon?: string;
+  color?: string;
+  language?: string;
 }

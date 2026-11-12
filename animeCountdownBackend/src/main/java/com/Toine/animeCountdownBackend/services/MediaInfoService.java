@@ -1,6 +1,8 @@
 package com.Toine.animeCountdownBackend.services;
 
 import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
+import com.Toine.animeCountdownBackend.models.discovery.StreamingLink;
+import com.Toine.animeCountdownBackend.models.graphQlMedia.ExternalLink;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.MediaInfo;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
@@ -181,7 +183,8 @@ public class MediaInfoService {
                !Objects.equals(existing.getAvgscore(), newEntity.getAvgscore()) ||
                !Objects.equals(existing.getDescription(), newEntity.getDescription()) ||
                !Objects.equals(existing.getCoverimage(), newEntity.getCoverimage()) ||
-               !Objects.equals(existing.getBanner(), newEntity.getBanner());
+               !Objects.equals(existing.getBanner(), newEntity.getBanner()) ||
+               !Objects.equals(existing.getStreamingLinks(), newEntity.getStreamingLinks());
     }
 
     /**
@@ -208,6 +211,7 @@ public class MediaInfoService {
         existing.setDescription(newEntity.getDescription());
         existing.setCoverimage(newEntity.getCoverimage());
         existing.setBanner(newEntity.getBanner());
+        existing.setStreamingLinks(newEntity.getStreamingLinks());
     }
 
     public MediaInfoEntity convertToEntity(MediaInfo mediaInfo) {
@@ -236,8 +240,22 @@ public class MediaInfoService {
 
         entity.setCoverimage(mediaInfo.getCoverImage().getExtraLarge());
         entity.setBanner(mediaInfo.getBannerImage());
+        entity.setStreamingLinks(toStreamingLinks(mediaInfo.getExternalLinks()));
 
         return entity;
+    }
+
+    /** Keeps the enabled STREAMING links (Crunchyroll, Netflix, ...) and drops info/social ones. */
+    static List<StreamingLink> toStreamingLinks(List<ExternalLink> externalLinks) {
+        if (externalLinks == null) {
+            return List.of();
+        }
+        return externalLinks.stream()
+                .filter(link -> "STREAMING".equals(link.type()))
+                .filter(link -> !Boolean.TRUE.equals(link.isDisabled()))
+                .filter(link -> link.url() != null && link.url().startsWith("https://"))
+                .map(link -> new StreamingLink(link.site(), link.url(), link.icon(), link.color(), link.language()))
+                .toList();
     }
 
     // maps all the media gotten from the graphql call to lists from the first page
@@ -283,6 +301,15 @@ public class MediaInfoService {
                       genres
                       averageScore
                       description
+                      externalLinks {
+                        site
+                        url
+                        icon
+                        color
+                        language
+                        type
+                        isDisabled
+                      }
                     }
                   }
                 }

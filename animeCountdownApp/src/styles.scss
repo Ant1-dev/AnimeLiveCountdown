@@ -1,33 +1,92 @@
 @use '@angular/material' as mat;
 
+/*
+ * Theme tokens. Dark is the default; [data-theme="light"] on <html> switches to light.
+ * index.html sets data-theme before first paint (saved choice, else prefers-color-scheme) and
+ * ThemeService keeps it in sync. Use these variables instead of hard-coded colors.
+ */
 :root {
     /* Color variables */
     --bg-dark: #101116;
+    --bg-page-end: #23252c;
+    --page-rgb: 16 17 22;          /* page background as RGB channels, for fades over images */
     --bg-card: #1F2833;
+    --card-rgb: 31 40 51;
+    --bg-elevated: #1c1d22;        /* dropdowns, search results */
+    --bg-lighter: rgba(255, 255, 255, 0.06);
+    --header-bg: #101116;
+    --footer-bg: #171923;
+    --surface-subtle: rgba(128, 128, 128, 0.2);
+    --surface-hover: rgba(255, 255, 255, 0.08);
+    --surface-panel: rgba(0, 0, 0, 0.3);
     --text-primary: #e3e3e3;
+    --text-strong: #ffffff;
+    --text-secondary: #b4b7c5;
+    --text-muted: #a0a3b1;
     --accent: #00a6fb;
+    --accent-rgb: 0 166 251;
+    --on-accent: #ffffff;
+    --danger: #ff6b6b;
     --border: rgba(102, 252, 241, 0.1);
-  
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: #a9a9a9;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --banner-text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+
     /* Typography variables */
     --font-main: 'Poppins', 'Segoe UI', system-ui, sans-serif;
-  
+
     /* Layout variables */
     --grid-gap: 30px;
     --spacing-md: 1rem;
     --spacing-lg: 2rem;
-  
+
     /* System settings */
     color-scheme: dark;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    
+
   @include mat.dialog-overrides((
-    container-color: #1f2833,
+    container-color: var(--bg-card),
+  ));
+  @include mat.snack-bar-overrides((
+    container-color: var(--bg-card),
+    supporting-text-color: var(--text-primary),
   ));
 }
 
+:root[data-theme="light"] {
+    --bg-dark: #f4f6fa;
+    --bg-page-end: #e8ecf2;
+    --page-rgb: 244 246 250;
+    --bg-card: #ffffff;
+    --card-rgb: 255 255 255;
+    --bg-elevated: #ffffff;
+    --bg-lighter: rgba(15, 23, 42, 0.06);
+    --header-bg: #ffffff;
+    --footer-bg: #ffffff;
+    --surface-subtle: rgba(15, 23, 42, 0.07);
+    --surface-hover: rgba(15, 23, 42, 0.06);
+    --surface-panel: #ffffff;
+    --text-primary: #1b1e27;
+    --text-strong: #0d1117;
+    --text-secondary: #4a5163;
+    --text-muted: #5f6677;
+    --accent: #0072b8;
+    --accent-rgb: 0 114 184;
+    --danger: #c92a2a;
+    --border: rgba(15, 23, 42, 0.1);
+    --border-subtle: rgba(15, 23, 42, 0.1);
+    --border-strong: #8a8f9c;
+    --shadow-color: rgba(15, 23, 42, 0.12);
+    --banner-text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+    color-scheme: light;
+}
+
 body {
-  background: linear-gradient( #101116, #23252c);
+  background: linear-gradient(var(--bg-dark), var(--bg-page-end));
+  background-attachment: fixed;
+  min-height: 100vh;
   color: var(--text-primary);
   font-family: var(--font-main);
   overflow-x: hidden;
@@ -63,7 +122,7 @@ body {
 
 .cardContainer > *:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px var(--shadow-color);
 }
 
 

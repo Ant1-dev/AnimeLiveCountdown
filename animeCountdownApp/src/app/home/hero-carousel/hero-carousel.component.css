@@ -33,15 +33,15 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(16, 17, 22, 1) 0%,
-    rgba(16, 17, 22, 0.9) 5%,
-    rgba(16, 17, 22, 0.9) 20%,
-    rgba(16, 17, 22, 0.7) 40%,
-    rgba(16, 17, 22, 0) 50%,
-    rgba(16, 17, 22, 0) 65%,
-    rgba(16, 17, 22, 0) 75%,
-    rgba(16, 17, 22, 0) 95%,
-    rgba(16, 17, 22, 1) 100%
+    rgb(var(--page-rgb) / 1) 0%,
+    rgb(var(--page-rgb) / 0.9) 5%,
+    rgb(var(--page-rgb) / 0.9) 20%,
+    rgb(var(--page-rgb) / 0.7) 40%,
+    rgb(var(--page-rgb) / 0) 50%,
+    rgb(var(--page-rgb) / 0) 65%,
+    rgb(var(--page-rgb) / 0) 75%,
+    rgb(var(--page-rgb) / 0) 95%,
+    rgb(var(--page-rgb) / 1) 100%
   );
   z-index: 2;
   pointer-events: none;
@@ -55,11 +55,11 @@
   height: 50%;
   background: linear-gradient(
     0deg,
-    rgba(16, 17, 22, 1) 0%,
-    rgba(16, 17, 22, 0.9) 10%,
-    rgba(16, 17, 22, 0.7) 25%,
-    rgba(16, 17, 22, 0.4) 50%,
-    rgba(16, 17, 22, 0) 80%
+    rgb(var(--page-rgb) / 1) 0%,
+    rgb(var(--page-rgb) / 0.9) 10%,
+    rgb(var(--page-rgb) / 0.7) 25%,
+    rgb(var(--page-rgb) / 0.4) 50%,
+    rgb(var(--page-rgb) / 0) 80%
   );
   z-index: 2;
   pointer-events: none;
@@ -68,7 +68,7 @@
   position: absolute;
   display: flex;
   z-index: 3;
-  color: white;
+  color: var(--text-strong);
   width: 60%;
   flex-direction: column;
   top: 30%;
@@ -84,13 +84,13 @@
   line-height: 1.5rem;
 }
 .episodeA {
-  color: #00a6fb;
+  color: var(--accent);
   font-weight: bold;
 }
 .countdown-timer {
   display: flex;
   gap: 15px;
-  background-color: black;
+  background-color: var(--bg-card);
   width: fit-content;
   padding: 10px;
   border-radius: 10px;
@@ -127,8 +127,8 @@
 .airing-now-text {
   font-size: 2rem;
   font-weight: 700;
-  color: #00a6fb;
-  background-color: black;
+  color: var(--accent);
+  background-color: var(--bg-card);
   border-radius: 10px;
   padding: 15px 30px;
   width: fit-content;
@@ -147,7 +147,7 @@
   z-index: 3;
   right: 3rem;
   bottom: 2rem;
-  color: white;
+  color: var(--text-strong);
 }
 
 .carousel-index {
@@ -163,7 +163,7 @@
 
 .right-arrow:hover, .left-arrow:hover {
   cursor: pointer;
-  color: #00a6fb;
+  color: var(--accent);
 }
 
 @media (max-width: 992px) {
@@ -180,7 +180,7 @@
   .show-title {
     height: fit-content;
     font-size: 2.5rem;
-    background-color: rgba(16, 17, 22, 0.7);
+    background-color: rgb(var(--page-rgb) / 0.7);
     width: fit-content;
     border-radius: 10px;
     padding: 5px 5px 5px 0;

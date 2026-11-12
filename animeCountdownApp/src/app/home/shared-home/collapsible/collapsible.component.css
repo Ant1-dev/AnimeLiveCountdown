@@ -1,8 +1,7 @@
-:root {
-    --primary-color: #00a6fb;
-    --bg-dark: #0B0C10;
-    --bg-slightly-lighter: #131419; 
-    --text-color: #C5C6C7;
+:host {
+    --primary-color: var(--accent);
+    --bg-slightly-lighter: var(--bg-card);
+    --text-color: var(--text-primary);
   }
   
   .collapsible-container {
@@ -33,7 +32,7 @@
   .gradient-bar {
     width: 100%;
     height: 2px;
-    background-image: linear-gradient(90deg, var(--bg-dark), #00a6fb);
+    background-image: linear-gradient(90deg, var(--bg-dark), var(--accent));
     margin-bottom: 10px;
   }
   

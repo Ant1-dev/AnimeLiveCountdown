@@ -1,5 +1,7 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
+import com.Toine.animeCountdownBackend.models.discovery.StreamingLink;
+import com.Toine.animeCountdownBackend.models.discovery.StreamingLinksConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +65,19 @@ public class MediaInfoEntity {
     private Instant airingat;
     private Integer seasonYear;
     private String season;
+
+    // Legal streaming sites from AniList (JSON array). Null until the next media_info sync.
+    @Convert(converter = StreamingLinksConverter.class)
+    @Column(name = "streaming_links", columnDefinition = "TEXT")
+    private List<StreamingLink> streamingLinks;
+
+    public List<StreamingLink> getStreamingLinks() {
+        return streamingLinks;
+    }
+
+    public void setStreamingLinks(List<StreamingLink> streamingLinks) {
+        this.streamingLinks = streamingLinks;
+    }
 
     public Integer getSeasonYear() {
         return seasonYear;
