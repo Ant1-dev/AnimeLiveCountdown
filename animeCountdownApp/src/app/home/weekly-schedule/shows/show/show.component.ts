@@ -48,6 +48,7 @@ export class ShowComponent implements OnInit, OnChanges {
   private favMediaService = inject(FavoriteMediaService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private shareService = inject(ShareService);
 
   protected user = this.authService.user;
 
@@ -73,6 +74,11 @@ export class ShowComponent implements OnInit, OnChanges {
     if (mediaData) {
       this.mediaInfoService.getMediaId(mediaData.id);
     }
+  }
+
+  share(): void {
+    const mediaData = this.media();
+    if (mediaData) this.shareService.shareMedia(mediaData.id, this.getDisplayTitle());
   }
 
   saveMedia(): void {

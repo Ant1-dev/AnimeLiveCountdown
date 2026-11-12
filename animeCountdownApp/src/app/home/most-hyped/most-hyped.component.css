@@ -1,0 +1,35 @@
+.gradient-bar {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #00a6fb 0%, rgba(0, 166, 251, 0.7) 50%, rgba(0, 166, 251, 0.1) 100%);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+}
+
+/* auto-fill keeps cards at normal width when only a few shows are ranked */
+.cardContainer {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+@media screen and (max-width: 600px) {
+  .cardContainer {
+    grid-template-columns: repeat(2, 45vw);
+  }
+}
+
+.hype-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.rank {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hype-caption {
+  margin: 6px 0 0;
+  color: #b4b7c5;
+  font-size: 0.85rem;
+  text-align: center;
+}

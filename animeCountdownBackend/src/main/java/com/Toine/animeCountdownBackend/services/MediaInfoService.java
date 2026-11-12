@@ -42,7 +42,10 @@ public class MediaInfoService {
         this.mediaInfoRepository = mediaInfoRepository;
     }
 
-    @Scheduled(fixedRate = 43200000) // every 12 hours
+    // Full media_info refresh (~19 AniList requests). Runs at startup by default; set
+    // app.sync.media-info.initial-delay (e.g. PT10H) to skip it when running the app locally.
+    @Scheduled(initialDelayString = "${app.sync.media-info.initial-delay:PT0S}",
+               fixedRateString = "${app.sync.media-info.interval:PT12H}")
     public void scheduledDatabaseRefresh() {
         // Only proceed if no update is in progress
         if (isUpdating.compareAndSet(false, true)) {
