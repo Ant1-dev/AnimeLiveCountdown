@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import com.Toine.animeCountdownBackend.services.watchorder.WatchOrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
 public class MediaInfoController {
 
     private final MediaInfoRepository mediaInfoRepository;
+    private final WatchOrderService watchOrderService;
     private static final Pattern BANNER_PATTERN = Pattern.compile("/([^/]+)\\.jpg$");
 
     // Image dimension cache - avoid modifying entity
@@ -35,8 +37,9 @@ public class MediaInfoController {
         // can add more as needed, this is just a hacky cache for now
     }
 
-    public MediaInfoController (MediaInfoRepository mediaInfoRepository) {
+    public MediaInfoController (MediaInfoRepository mediaInfoRepository, WatchOrderService watchOrderService) {
         this.mediaInfoRepository = mediaInfoRepository;
+        this.watchOrderService = watchOrderService;
     }
 
     @GetMapping("/{id}")
@@ -47,6 +50,19 @@ public class MediaInfoController {
         }
         // The explicit body lets the site tell "no such show" (404 page) from "API unreachable" (503)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(java.util.Map.of("error", "not_found"));
+    }
+
+    /** The franchise in release order (main story plus side stories), built from AniList relations. */
+    @GetMapping("/{id}/watch-order")
+    public ResponseEntity<?> getWatchOrder(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok()
+                    .cacheControl(org.springframework.http.CacheControl.maxAge(java.time.Duration.ofHours(1)).cachePublic())
+                    .body(watchOrderService.watchOrder(id));
+        } catch (RuntimeException e) {
+            // AniList unreachable or rate limiting: the page just hides the section
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header("Retry-After", "300").build();
+        }
     }
 
     @GetMapping("/trending")

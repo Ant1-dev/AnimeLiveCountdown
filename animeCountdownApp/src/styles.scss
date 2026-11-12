@@ -223,3 +223,10 @@ h2.section-title {
 .page-message a {
   color: var(--accent);
 }
+
+/* Section headings on the media page and its child sections (trailer, watch order, release times) */
+.info-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.33em 0 0.5em;
+}

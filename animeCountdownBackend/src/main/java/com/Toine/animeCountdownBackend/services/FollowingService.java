@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services;
 
+import com.Toine.animeCountdownBackend.anilist.AniListSyncService;
 import com.Toine.animeCountdownBackend.dto.FollowView;
 import com.Toine.animeCountdownBackend.models.postgreEntities.FavoriteMediaEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
@@ -35,6 +36,14 @@ public class FollowingService {
     private final MediaInfoRepository mediaInfoRepository;
     private final UserRepository userRepository;
     private final Clock clock;
+
+    /** Pushes follows and progress to the user's AniList list; absent in tests. */
+    private AniListSyncService aniListSync;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setAniListSync(AniListSyncService aniListSync) {
+        this.aniListSync = aniListSync;
+    }
 
     @Value("${app.media.buffer-days:14}")
     private int bufferDays = 14;
@@ -83,6 +92,9 @@ public class FollowingService {
             // Followed concurrently (double click); the row exists now
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Already following");
         }
+        if (aniListSync != null) {
+            aniListSync.followed(userId, mediaId);
+        }
         return view(follow);
     }
 
@@ -109,6 +121,9 @@ public class FollowingService {
         follow.setWatchedEpisode(watchedEpisode);
         follow.setProgressUpdatedAt(now);
         favoriteRepository.save(follow);
+        if (aniListSync != null) {
+            aniListSync.progressed(userId, mediaId, watchedEpisode, total);
+        }
         return view(follow, total, now);
     }
 

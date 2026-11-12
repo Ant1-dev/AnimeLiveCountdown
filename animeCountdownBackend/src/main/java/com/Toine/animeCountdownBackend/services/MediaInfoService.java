@@ -4,6 +4,7 @@ import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
 import com.Toine.animeCountdownBackend.models.discovery.StreamingLink;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.ExternalLink;
 import com.Toine.animeCountdownBackend.models.graphQlMedia.MediaInfo;
+import com.Toine.animeCountdownBackend.models.graphQlMedia.Trailer;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaInfoEntity;
 import com.Toine.animeCountdownBackend.repositories.MediaInfoRepository;
 import jakarta.transaction.Transactional;
@@ -184,7 +185,10 @@ public class MediaInfoService {
                !Objects.equals(existing.getDescription(), newEntity.getDescription()) ||
                !Objects.equals(existing.getCoverimage(), newEntity.getCoverimage()) ||
                !Objects.equals(existing.getBanner(), newEntity.getBanner()) ||
-               !Objects.equals(existing.getStreamingLinks(), newEntity.getStreamingLinks());
+               !Objects.equals(existing.getStreamingLinks(), newEntity.getStreamingLinks()) ||
+               !Objects.equals(existing.getTrailerId(), newEntity.getTrailerId()) ||
+               !Objects.equals(existing.getTrailerSite(), newEntity.getTrailerSite()) ||
+               !Objects.equals(existing.getTrailerThumbnail(), newEntity.getTrailerThumbnail());
     }
 
     /**
@@ -212,6 +216,9 @@ public class MediaInfoService {
         existing.setCoverimage(newEntity.getCoverimage());
         existing.setBanner(newEntity.getBanner());
         existing.setStreamingLinks(newEntity.getStreamingLinks());
+        existing.setTrailerSite(newEntity.getTrailerSite());
+        existing.setTrailerId(newEntity.getTrailerId());
+        existing.setTrailerThumbnail(newEntity.getTrailerThumbnail());
     }
 
     public MediaInfoEntity convertToEntity(MediaInfo mediaInfo) {
@@ -241,6 +248,12 @@ public class MediaInfoService {
         entity.setCoverimage(mediaInfo.getCoverImage().getExtraLarge());
         entity.setBanner(mediaInfo.getBannerImage());
         entity.setStreamingLinks(toStreamingLinks(mediaInfo.getExternalLinks()));
+        Trailer trailer = mediaInfo.getTrailer();
+        if (trailer != null && trailer.id() != null && ("youtube".equals(trailer.site()) || "dailymotion".equals(trailer.site()))) {
+            entity.setTrailerSite(trailer.site());
+            entity.setTrailerId(trailer.id());
+            entity.setTrailerThumbnail(trailer.thumbnail());
+        }
 
         return entity;
     }
@@ -301,6 +314,11 @@ public class MediaInfoService {
                       genres
                       averageScore
                       description
+                      trailer {
+                        id
+                        site
+                        thumbnail
+                      }
                       externalLinks {
                         site
                         url

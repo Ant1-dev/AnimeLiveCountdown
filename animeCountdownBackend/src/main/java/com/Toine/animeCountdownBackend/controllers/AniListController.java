@@ -42,6 +42,12 @@ public class AniListController {
     }
 
     /** Imports (or re-syncs) the user's AniList CURRENT and PLANNING lists. */
+    /** Body: {"enabled": true|false}. */
+    @PutMapping("/sync")
+    public AniListAccountService.Status setSync(@RequestBody Map<String, Boolean> body) {
+        return service.setSyncEnabled(CurrentUser.require(), Boolean.TRUE.equals(body.get("enabled")));
+    }
+
     @PostMapping("/import")
     public AniListAccountService.ImportResult importList() {
         return service.importList(CurrentUser.require());

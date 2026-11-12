@@ -68,3 +68,18 @@ button:disabled {
 .result.error {
   color: var(--danger);
 }
+
+.sync-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.sync-toggle input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}

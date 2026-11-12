@@ -35,7 +35,7 @@ public class AniListRateLimiter {
         this(Duration.ofMillis(spacingMs), Duration.ofSeconds(61), 2);
     }
 
-    AniListRateLimiter(Duration spacing, Duration rateLimitBackoff, int maxRetries) {
+    public AniListRateLimiter(Duration spacing, Duration rateLimitBackoff, int maxRetries) {
         this.spacingNanos = spacing.toNanos();
         this.rateLimitBackoff = rateLimitBackoff;
         this.maxRetries = maxRetries;
