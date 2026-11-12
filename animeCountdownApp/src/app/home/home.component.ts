@@ -5,10 +5,11 @@ import { MediaSkeletonComponent } from './shared-home/media-skeleton/media-skele
 import { SidebarComponent } from "../shared-components/sidebar/sidebar.component";
 import { SeasonPopComponent } from "./weekly-schedule/season-pop/season-pop.component";
 import { HeroCarouselComponent } from "./hero-carousel/hero-carousel.component";
+import { MostHypedComponent } from "./most-hyped/most-hyped.component";
 
 @Component({
   selector: 'app-home',
-  imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SidebarComponent, SeasonPopComponent, HeroCarouselComponent],
+  imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SidebarComponent, SeasonPopComponent, HeroCarouselComponent, MostHypedComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
