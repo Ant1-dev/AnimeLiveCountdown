@@ -25,6 +25,8 @@ import { ScheduleNoteService } from '../services/schedule-note.service';
 import { ScheduleNoteBadgeComponent } from '../shared-components/schedule-note-badge/schedule-note-badge.component';
 import { ShareButtonComponent } from '../shared-components/share-button/share-button.component';
 import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions.component';
+import { TrailerComponent } from './trailer/trailer.component';
+import { WatchOrderComponent } from './watch-order/watch-order.component';
 import { SeoService, breadcrumbs, plainText, truncate } from '../seo/seo.service';
 import { animePath, preferredTitle } from '../seo/slug';
 import { SITE_URL } from '../seo/site';
@@ -39,7 +41,7 @@ type LoadState = 'loading' | 'ready' | 'not-found' | 'unavailable';
 
 @Component({
   selector: 'app-media-info',
-  imports: [OptimizedImagePipe, CommonModule, Skeleton, NgOptimizedImage, RouterLink, FollowControlsComponent, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent],
+  imports: [OptimizedImagePipe, CommonModule, Skeleton, NgOptimizedImage, RouterLink, FollowControlsComponent, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent, TrailerComponent, WatchOrderComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -209,6 +211,14 @@ function tvSeriesSchema(media: MediaInfo, title: string, path: string, airing: {
       target: l.url,
       name: `Watch on ${l.site}`,
     }));
+  }
+  if (media.trailerSite === 'youtube' && media.trailerId) {
+    schema['trailer'] = {
+      '@type': 'VideoObject',
+      name: `${title} trailer`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${media.trailerId}`,
+      thumbnailUrl: `https://i.ytimg.com/vi/${media.trailerId}/hqdefault.jpg`,
+    };
   }
   if (airing) {
     schema['episode'] = {
