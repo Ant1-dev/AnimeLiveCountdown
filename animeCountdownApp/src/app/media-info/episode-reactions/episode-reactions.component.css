@@ -1,0 +1,84 @@
+.reactions {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.reactions-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.reactions-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.reactions-total {
+  color: #b4b7c5;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.reaction-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.reaction:hover:not(:disabled) {
+  border-color: rgba(0, 166, 251, 0.6);
+}
+
+.reaction:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.reaction:disabled {
+  cursor: progress;
+}
+
+.reaction.mine {
+  border-color: var(--accent);
+  background: rgba(0, 166, 251, 0.18);
+}
+
+.emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 10px 0 0;
+  color: #b4b7c5;
+  font-size: 0.9rem;
+}
