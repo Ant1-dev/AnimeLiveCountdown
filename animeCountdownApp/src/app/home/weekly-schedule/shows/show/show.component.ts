@@ -20,6 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
 
 @Component({
   selector: 'app-show',
@@ -46,6 +47,7 @@ export class ShowComponent implements OnInit, OnChanges {
   private favMediaService = inject(FavoriteMediaService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
 
@@ -97,6 +99,18 @@ export class ShowComponent implements OnInit, OnChanges {
           },
         });
     }
+  }
+
+  addReminder(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const mediaData = this.media();
+    if (!mediaData) return;
+    this.reminderDialog.open({
+      mediaId: mediaData.id,
+      title: this.getDisplayTitle(),
+      nextEpisode: mediaData.next_Airing_Episode,
+    });
   }
 
   ngOnInit(): void {

@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthService } from '../auth/auth.service';
 import { ProfileDropdownComponent } from "./profile-dropdown/profile-dropdown.component";
+import { NotificationBellComponent } from './notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,8 @@ import { ProfileDropdownComponent } from "./profile-dropdown/profile-dropdown.co
     SelectButtonModule,
     ReactiveFormsModule,
     MatIcon,
-    ProfileDropdownComponent
+    ProfileDropdownComponent,
+    NotificationBellComponent
 ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
