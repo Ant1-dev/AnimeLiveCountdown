@@ -2,6 +2,7 @@ package com.Toine.animeCountdownBackend.services;
 
 import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
 import com.Toine.animeCountdownBackend.models.postgreEntities.MediaEntity;
+import com.Toine.animeCountdownBackend.models.postgreEntities.ScheduleNote;
 import com.Toine.animeCountdownBackend.repositories.FavoriteMediaRepository;
 import com.Toine.animeCountdownBackend.repositories.MediaRepository;
 import com.Toine.animeCountdownBackend.services.ScheduleService.SyncScope;
@@ -103,6 +104,22 @@ class ScheduleServiceSyncTest {
         assertEquals(SOON.plusSeconds(7 * 86400), stored.getNext_Airing_At());
         verify(mediaRepository, never()).deleteAllById(any());
         verifyNoInteractions(favoriteMediaRepository);
+    }
+
+    @Test
+    void justAiredUpdateFlagsAShowThatSkipsAWeek() {
+        Instant aired = Instant.now().minusSeconds(60);
+        MediaEntity stored = media(8L, "RELEASING", aired);
+        stored.setNext_Airing_Episode(4);
+        when(mediaRepository.findAllById(any())).thenReturn(List.of(stored));
+
+        MediaEntity fresh = media(8L, "RELEASING", aired.plusSeconds(14 * 86400));
+        fresh.setNext_Airing_Episode(5);
+        service.applyUpdates(List.of(fresh));
+
+        assertNotNull(stored.getScheduleNote());
+        assertEquals(ScheduleNote.Type.ON_BREAK, stored.getScheduleNote().type());
+        assertEquals(aired.plusSeconds(14 * 86400), stored.getScheduleNote().expiresAt());
     }
 
     @Test
