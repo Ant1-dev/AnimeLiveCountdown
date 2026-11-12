@@ -79,7 +79,7 @@
 
 .view-toggle button[aria-pressed="true"] {
   background: var(--accent);
-  color: #101116;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
