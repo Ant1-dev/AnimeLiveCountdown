@@ -23,6 +23,9 @@ rmSync(out, { recursive: true, force: true });
 
 // Static assets (hashed bundles, icons, images, robots.txt, sw.js)
 cpSync(join(dist, 'browser'), join(out, 'static'), { recursive: true });
+// The client-only shell is used by the server (it keeps its own copy); as a static file Vercel served
+// it for "/" ahead of the SSR function, so the home page was never server-rendered.
+rmSync(join(out, 'static/index.csr.html'), { force: true });
 
 // SSR function. The server bundle is self-contained (only Node built-ins are imported).
 const fn = join(out, 'functions/ssr.func');
@@ -63,6 +66,12 @@ const config = {
       src: '^/(.*)$',
       has: [{ type: 'host', value: 'www.animelivecountdown.com' }],
       headers: { Location: 'https://animelivecountdown.com/$1' },
+      status: 308,
+    },
+    // /index.html would otherwise be a second copy of the home page
+    {
+      src: '^/index(?:\\.csr)?\\.html$',
+      headers: { Location: '/' },
       status: 308,
     },
     // Hashed build files never change
