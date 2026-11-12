@@ -1,0 +1,31 @@
+<div class="section-header">
+  <h1 class="section-title">Following</h1>
+  <div class="gradient-bar"></div>
+</div>
+
+<app-anilist-panel />
+<app-continue-watching />
+
+@if (following.loadError()) {
+  <div class="error-container">
+    <div class="error-message">Couldn't load the shows you follow. Refresh the page to try again.</div>
+  </div>
+} @else if (!following.loaded()) {
+  <app-media-skeleton/>
+} @else if (media().length <= 0) {
+  <div class="empty-state">
+    <h2>You're not following any shows yet</h2>
+    <p>Follow a show from its card or page to get its countdown in My Schedule.</p>
+    <a class="empty-cta" routerLink="/" [queryParams]="{ view: 'all' }">Browse this week's shows</a>
+  </div>
+} @else {
+  <h2 class="grid-title">All followed shows</h2>
+  <div class="cardContainer">
+    @for (show of media(); track show.id; let i = $index) {
+      <app-show
+        [media]="show"
+        [renderPriority]="getShowPriority(i)"
+        [showAiringNow]="true" />
+    }
+  </div>
+}

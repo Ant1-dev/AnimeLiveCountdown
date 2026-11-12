@@ -1,0 +1,71 @@
+.follow-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 0.75rem 0 1rem;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.follow-button {
+  min-height: 40px;
+  padding: 0 1.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #101116;
+  font-weight: 600;
+}
+
+.follow-button.following {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: rgba(227, 227, 227, 0.4);
+}
+
+.progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(128, 128, 128, 0.15);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.progress-text {
+  min-width: 10ch;
+}
+
+.behind {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.error {
+  flex-basis: 100%;
+  margin: 0;
+  color: #ff6b6b;
+  font-size: 14px;
+}

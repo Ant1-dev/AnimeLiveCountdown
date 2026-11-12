@@ -50,6 +50,7 @@
         <h1 class="english-title">{{ mediaDetails().engtitle }}</h1>
         <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
       </div>
+      <app-follow-controls [mediaId]="mediaDetails().id" />
 
       @if (mediaDetails().airingat) {
       <div class="airing-info">

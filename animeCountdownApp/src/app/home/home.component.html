@@ -2,9 +2,20 @@
   <app-hero-carousel class="carousel"/>
   <div class="main">
     @defer (on viewport) {
-    <app-season-pop/>
-    <app-airing-soon />
-    <app-weekly-schedule />
+      @if (!sessionChecked()) {
+        <app-media-skeleton />
+      } @else if (view() === 'mine') {
+        <app-continue-watching />
+        <ng-container [ngTemplateOutlet]="scheduleBar" />
+        <app-weekly-schedule mode="mine" />
+        <app-season-pop/>
+        <app-airing-soon />
+      } @else {
+        <app-season-pop/>
+        <app-airing-soon />
+        <ng-container [ngTemplateOutlet]="scheduleBar" />
+        <app-weekly-schedule />
+      }
     } @placeholder {
     <app-media-skeleton />
     }
@@ -12,3 +23,15 @@
   <!-- sidebar  -->
   <app-sidebar />
 </div>
+
+<ng-template #scheduleBar>
+  @if (signedIn()) {
+  <div class="schedule-bar">
+    <h2 class="schedule-title">{{ view() === 'mine' ? 'My Schedule' : 'All shows this week' }}</h2>
+    <div class="view-toggle" role="group" aria-label="Weekly schedule">
+      <button type="button" [attr.aria-pressed]="view() === 'mine'" (click)="setView('mine')">My shows</button>
+      <button type="button" [attr.aria-pressed]="view() === 'all'" (click)="setView('all')">All shows</button>
+    </div>
+  </div>
+  }
+</ng-template>

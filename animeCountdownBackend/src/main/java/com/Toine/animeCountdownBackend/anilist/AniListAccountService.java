@@ -118,7 +118,7 @@ public class AniListAccountService {
     public ConnectStart startConnect(UserEntity user, String redirectUri) {
         requireConfigured();
         AniListOAuthState.Issued issued = oauthState.issue(user.getId());
-        String url = UriComponentsBuilder.fromUriString(AniListOAuthSettings.AUTHORIZE_URL)
+        String url = UriComponentsBuilder.fromUriString(settings.authorizeUrl())
                 .queryParam("client_id", settings.clientId())
                 .queryParam("redirect_uri", redirectUri)
                 .queryParam("response_type", "code")

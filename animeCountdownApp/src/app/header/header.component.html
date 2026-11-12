@@ -7,6 +7,12 @@
     <app-searchbar class="searchBar" />
 
     <div class="navbar-actions">
+      @if (user()) {
+      <nav class="nav-links" aria-label="Your shows">
+        <a routerLink="/" [queryParams]="{ view: 'mine' }">My Schedule</a>
+        <a routerLink="/following" routerLinkActive="active">Following</a>
+      </nav>
+      }
       <div class="navbar-icons">
         <div class="notification">
           <mat-icon style="color: white; font-size: 30px; overflow: visible;" fontIcon="notifications"></mat-icon>

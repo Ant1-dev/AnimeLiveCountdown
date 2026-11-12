@@ -1,0 +1,21 @@
+@if (user()) {
+<div class="follow-controls">
+  <button type="button" class="follow-button" [class.following]="follow()" [disabled]="busy()" (click)="toggleFollow()">
+    {{ follow() ? 'Unfollow' : 'Follow' }}
+  </button>
+
+  @if (follow(); as f) {
+  <div class="progress" role="group" aria-label="Episode progress">
+    <button type="button" class="step" aria-label="Unmark last watched episode" [disabled]="busy() || !canGoBack()" (click)="step(-1)">−</button>
+    <span class="progress-text" aria-live="polite">
+      Watched {{ f.watchedEpisode }}@if (f.latestAiredEpisode != null) { of {{ f.latestAiredEpisode }} aired }
+      @if (f.behind) { <span class="behind">· {{ f.behind }} behind</span> }
+    </span>
+    <button type="button" class="step" [attr.aria-label]="'Mark episode ' + (f.watchedEpisode + 1) + ' watched'" [disabled]="busy() || !canGoForward()" (click)="step(1)">+</button>
+  </div>
+  }
+  @if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+  }
+</div>
+}
