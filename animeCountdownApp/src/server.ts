@@ -16,17 +16,23 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-app.use(compression({
-  level: 6,
-  threshold: 0,
-  filter: (req, res) => {
-    // Images and video are already compressed
-    if (req.headers['accept']?.includes('image/') || req.headers['accept']?.includes('video/')) {
-      return false;
-    }
-    return compression.filter(req, res);
-  },
-}));
+// Compress text responses (HTML, JSON, JS, CSS). The default filter decides by the response's
+// Content-Type; images are already compressed.
+app.use(compression());
+
+/**
+ * Optimized images. On Vercel, /_vercel/image is served by Vercel's image optimizer before requests
+ * reach this server. When running this server directly (local testing), there is no optimizer, so
+ * send the browser to the original image instead.
+ */
+app.get('/_vercel/image', (req, res) => {
+  const url = typeof req.query['url'] === 'string' ? req.query['url'] : '';
+  if (!/^https:\/\/s4\.anilist\.co\//.test(url)) {
+    res.status(400).send('Unsupported image URL');
+    return;
+  }
+  res.redirect(302, url);
+});
 
 /**
  * sitemap.xml, generated here rather than by the API so it keeps working when the API is down:

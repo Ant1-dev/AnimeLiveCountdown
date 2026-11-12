@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MediaSkeletonComponent } from './shared-home/media-skeleton/media-skeleton.component';
 import { SidebarComponent } from '../shared-components/sidebar/sidebar.component';
 import { HeroCarouselComponent } from './hero-carousel/hero-carousel.component';
 import { LiveBannerComponent } from './live-banner/live-banner.component';
@@ -10,7 +9,7 @@ import { WEEK_DAYS, dayLabel } from '../shared/week-days';
 
 @Component({
   selector: 'app-home',
-  imports: [MediaSkeletonComponent, SidebarComponent, HeroCarouselComponent, LiveBannerComponent, HomeFeedComponent, RouterLink],
+  imports: [SidebarComponent, HeroCarouselComponent, LiveBannerComponent, HomeFeedComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

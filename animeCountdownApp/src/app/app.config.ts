@@ -1,4 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { IMAGE_CONFIG, IMAGE_LOADER } from '@angular/common';
+import { IMAGE_WIDTHS, vercelImageLoader } from './shared/images';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -25,6 +27,9 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([serverTimeoutInterceptor, AuthInterceptor])
     ),
+    // Responsive, re-encoded AniList images (Vercel Image Optimization in production)
+    { provide: IMAGE_LOADER, useValue: vercelImageLoader },
+    { provide: IMAGE_CONFIG, useValue: { breakpoints: IMAGE_WIDTHS } },
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

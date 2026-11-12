@@ -9,7 +9,7 @@ import { MediaSkeletonComponent } from '../shared-home/media-skeleton/media-skel
 import { SeasonPopComponent } from '../weekly-schedule/season-pop/season-pop.component';
 import { ContinueWatchingComponent } from '../../shared-components/continue-watching/continue-watching.component';
 import { MostHypedComponent } from '../most-hyped/most-hyped.component';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService, readSessionHint } from '../../auth/auth.service';
 
 export type ScheduleView = 'mine' | 'all';
 const VIEW_STORAGE_KEY = 'alc.scheduleView';
@@ -18,8 +18,8 @@ const VIEW_STORAGE_KEY = 'alc.scheduleView';
  * The home page body: "All shows" for everyone, or "My Schedule" for signed-in visitors.
  *
  * The server never knows who is signed in, so it always renders "All shows" (what crawlers see).
- * The home page marks this component ngSkipHydration: the browser re-renders it instead of trying
- * to reuse server HTML that may be the wrong view.
+ * Signed-out visitors hydrate that HTML as-is. For a returning signed-in visitor the browser picks a
+ * different @if branch, and Angular replaces the server-rendered branch with it.
  */
 @Component({
   selector: 'app-home-feed',
@@ -35,8 +35,12 @@ export class HomeFeedComponent {
   private router = inject(Router);
 
   protected signedIn = this.auth.isAuthenticated;
-  // Wait for the session restore so signed-in visitors don't see "All shows" flash first
-  protected sessionChecked = toSignal(this.auth.whenSessionChecked().pipe(map(() => true)), { initialValue: false });
+  private checked = toSignal(this.auth.whenSessionChecked().pipe(map(() => true)), { initialValue: false });
+  // Returning signed-in visitors wait for the session restore (so "All shows" doesn't flash before
+  // "My Schedule"); everyone else gets "All shows" straight away, matching the server-rendered page
+  // (no skeleton swap, no layout shift).
+  private hadSession = readSessionHint();
+  protected sessionChecked = computed(() => this.checked() || !this.hadSession);
   private viewParam = toSignal(this.route.queryParamMap.pipe(map((params) => params.get('view'))), {
     initialValue: null,
   });

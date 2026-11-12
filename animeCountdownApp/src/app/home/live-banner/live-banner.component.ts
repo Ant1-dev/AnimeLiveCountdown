@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
-import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { interval } from 'rxjs';
 import { LiveService } from '../../services/live.service';
 import { LiveEpisode } from '../../models/live.model';
 import { MediaTimeService } from '../../services/media-time.service';
@@ -70,12 +69,16 @@ export class LiveBannerComponent {
   });
 
   constructor() {
-    if (!isPlatformBrowser(inject(PLATFORM_ID))) return;
-    tickEvery(15_000, injectIsBrowser()).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
+    // Loads on the server too: the banner is part of the server-rendered page, and the browser then
+    // hydrates it from the cached response. (Loading it only in the browser inserted it after first
+    // paint and pushed the rest of the page down: a large layout shift.)
+    const isBrowser = injectIsBrowser();
+    tickEvery(15_000, isBrowser).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
     this.live.poll().pipe(takeUntilDestroyed()).subscribe((response) => {
       if (!response) return;
       this.episodes.set(response.episodes);
       this.now.set(Date.now());
+      if (!isBrowser) return;
       // Let the celebration fire for episodes in the next hour even if no card shows them.
       for (const e of response.episodes) {
         if (Date.parse(e.airingAt) > Date.now()) {

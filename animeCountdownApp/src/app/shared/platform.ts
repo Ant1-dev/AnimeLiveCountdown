@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, PLATFORM_ID } from '@angular/core';
-import { EMPTY, interval, Observable, of, timer } from 'rxjs';
+import { concat, EMPTY, interval, Observable, of } from 'rxjs';
 
 /**
  * Helpers for code that must behave differently during server-side rendering.
@@ -15,9 +15,15 @@ export function injectIsBrowser(): boolean {
   return isPlatformBrowser(inject(PLATFORM_ID));
 }
 
-/** `timer(0, period)` in the browser; a single immediate emission on the server. */
+/**
+ * Emits now, then every `period` ms in the browser; emits once on the server.
+ *
+ * The first emission is synchronous (unlike `timer(0, period)`), so the first request is answered
+ * from Angular's server-rendering HTTP cache during hydration and the first browser render matches
+ * the server HTML. An async first tick rendered loading placeholders first, which caused layout shift.
+ */
 export function pollEvery(period: number, isBrowser: boolean): Observable<number> {
-  return isBrowser ? timer(0, period) : of(0);
+  return isBrowser ? concat(of(0), interval(period)) : of(0);
 }
 
 /** `interval(period)` in the browser; never emits on the server. */
