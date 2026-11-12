@@ -52,7 +52,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   background: var(--accent);
-  color: #101116;
+  color: var(--on-accent);
   font-size: 12px;
   font-weight: 700;
 }
@@ -102,7 +102,7 @@
 
 .watch-button:hover:not(:disabled) {
   background: var(--accent);
-  color: #101116;
+  color: var(--on-accent);
 }
 
 .watch-button:focus-visible,

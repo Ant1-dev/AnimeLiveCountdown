@@ -27,14 +27,14 @@ button:disabled {
   border-radius: 6px;
   border: 1px solid var(--accent);
   background: var(--accent);
-  color: #101116;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
 .follow-button.following {
   background: transparent;
   color: var(--text-primary);
-  border-color: rgba(227, 227, 227, 0.4);
+  border-color: var(--border-strong);
 }
 
 .progress {
@@ -66,6 +66,6 @@ button:disabled {
 .error {
   flex-basis: 100%;
   margin: 0;
-  color: #ff6b6b;
+  color: var(--danger);
   font-size: 14px;
 }

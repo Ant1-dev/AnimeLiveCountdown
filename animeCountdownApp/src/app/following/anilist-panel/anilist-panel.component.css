@@ -40,12 +40,12 @@ button {
 .primary {
   border: 1px solid var(--accent);
   background: var(--accent);
-  color: #101116;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
 .secondary {
-  border: 1px solid rgba(227, 227, 227, 0.4);
+  border: 1px solid var(--border-strong);
   background: transparent;
   color: var(--text-primary);
 }
@@ -66,5 +66,5 @@ button:disabled {
 }
 
 .result.error {
-  color: #ff6b6b;
+  color: var(--danger);
 }
