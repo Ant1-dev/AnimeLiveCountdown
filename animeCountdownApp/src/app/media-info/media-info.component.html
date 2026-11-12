@@ -1,4 +1,4 @@
-@if (!isLoading()) {
+@if (state() === 'ready') {
 
 <!-- First body container -->
 <div class="anime-container">
@@ -6,7 +6,7 @@
   <div class="banner-container">
     <img
       [ngSrc]="mediaDetails()!.banner"
-      alt="Anime Banner"
+      [alt]="displayTitle() + ' banner art'"
       class="img-banner"
       fill
       priority
@@ -15,7 +15,7 @@
   </div>
   } @else {
   <div class="banner-container">
-    <img src="images/defaultBanner.png" alt="Anime Banner" class="img-banner" />
+    <img src="images/defaultBanner.png" alt="" class="img-banner" />
     <div class="banner-gradient"></div>
   </div>
   }
@@ -24,10 +24,10 @@
     @if (mediaDetails().coverimage) {
     <div class="poster">
       <img
-        [src]="mediaDetails().coverimage"
-        alt="Anime Cover Image"
+        [src]="mediaDetails().coverimage | optimizedImage: 460"
+        [alt]="displayTitle() + ' cover art'"
         class="cover-art"
-        priority
+        fetchpriority="high"
       />
       <div class="score-container">
         <div class="progress-bar-container">
@@ -47,9 +47,18 @@
     <!-- Media info section -->
     <div class="media-info">
       <div class="title">
-        <h1 class="english-title">{{ mediaDetails().engtitle }}</h1>
-        <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
-        <app-share-button class="share" [mediaId]="mediaDetails().id" [title]="mediaDetails().engtitle || mediaDetails().romtitle" />
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a routerLink="/">Home</a>
+          @if (seasonLink(); as season) {
+          <span aria-hidden="true">›</span>
+          <a [routerLink]="season.path">{{ season.label }}</a>
+          }
+        </nav>
+        <h1 class="english-title">{{ displayTitle() }}</h1>
+        @if (altTitle()) {
+        <p class="romaji-title">{{ altTitle() }}</p>
+        }
+        <app-share-button class="share" [mediaId]="mediaDetails().id" [title]="displayTitle()" />
       </div>
       <app-follow-controls [mediaId]="mediaDetails().id" />
 
@@ -76,16 +85,16 @@
       }
       @if (mediaDetails().genres) {
       <div class="genres-container">
-        <h4>
+        <h2 class="info-heading">
           Genres:
           <span style="font-weight: normal">{{
             mediaDetails()!.genres.join(", ")
           }}</span>
-        </h4>
+        </h2>
       </div>
     }
       <app-where-to-watch [links]="mediaDetails().streamingLinks" />
-      <h4>Description:</h4>
+      <h2 class="info-heading">Description</h2>
       <div class="description" [innerHTML]="mediaDetails().description"></div>
 
       <div class="details-grid">
@@ -143,15 +152,27 @@
     </div>
   </div>
   } @else if (mediaDetails().status != 'RELEASING') {
-  <h1 class="countdown-message">Countdown data not available</h1>
+  <h2 class="countdown-message">Countdown data not available</h2>
   } @else if (mediaDetails().status == 'RELEASING' && timeRemaining() == null) {
-    <h1 class="countdown-message">This anime is out now</h1>
+    <h2 class="countdown-message">This anime is out now</h2>
   }
 </div>
 
 @if (mediaDetails().id) {
 <app-episode-reactions [mediaId]="mediaDetails().id" />
 }
+} @else if (state() === 'not-found') {
+<div class="page-message">
+  <h1>Anime not found</h1>
+  <p>This show isn’t in our schedule. It may have finished airing a while ago.</p>
+  <p><a routerLink="/seasons">Browse this season’s anime</a> or <a routerLink="/">see what’s airing this week</a>.</p>
+</div>
+} @else if (state() === 'unavailable') {
+<div class="page-message">
+  <h1>Show details are temporarily unavailable</h1>
+  <p>We couldn’t load this show right now. Please try again in a few minutes.</p>
+  <p><a routerLink="/">Back to the schedule</a></p>
+</div>
 } @else {
 <div class="skeleton-container">
   <p-skeleton width="100%" height="100%"></p-skeleton>

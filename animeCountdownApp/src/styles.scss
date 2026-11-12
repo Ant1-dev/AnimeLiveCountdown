@@ -179,3 +179,47 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Section headings on the home page are h2 (one h1 per page); keep their original size */
+h2.section-title {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Breadcrumb trail and full-page messages (media page, not-found states) */
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.page-message {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 0 16px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.page-message h1 {
+  color: var(--text-strong);
+  margin-bottom: 12px;
+}
+
+.page-message a {
+  color: var(--accent);
+}

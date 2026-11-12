@@ -5,6 +5,7 @@ import { ShowComponent } from '../home/weekly-schedule/shows/show/show.component
 import { MediaSkeletonComponent } from '../home/shared-home/media-skeleton/media-skeleton.component';
 import { ContinueWatchingComponent } from '../shared-components/continue-watching/continue-watching.component';
 import { AniListPanelComponent } from './anilist-panel/anilist-panel.component';
+import { SeoService } from '../seo/seo.service';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
@@ -17,6 +18,14 @@ type RenderPriority = 'high' | 'medium' | 'low';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowingComponent {
+  // Signed-in pages: keep them out of search results
+  private readonly _seo = inject(SeoService).setPage({
+    title: 'Following',
+    description: 'Your personal Anime Live Countdown page.',
+    path: '/following',
+    noindex: true,
+  });
+
   protected following = inject(FollowingService);
 
   // Next to air first; finished and unscheduled shows last

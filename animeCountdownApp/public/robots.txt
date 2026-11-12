@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# Signed-in pages have nothing for search engines
+Disallow: /following
+Disallow: /notifications
+
+Sitemap: https://animelivecountdown.com/sitemap.xml

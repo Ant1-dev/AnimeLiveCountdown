@@ -1,39 +1,28 @@
 <div class="main-content">
   <app-hero-carousel class="carousel"/>
   <div class="main">
+    <header class="page-intro">
+      <h1>Anime airing schedule &amp; live episode countdowns</h1>
+      <p>Every new episode this week, counted down to the minute in your time zone.</p>
+    </header>
     <app-live-banner />
-    @defer (on viewport) {
-      @if (!sessionChecked()) {
-        <app-media-skeleton />
-      } @else if (view() === 'mine') {
-        <app-continue-watching />
-        <ng-container [ngTemplateOutlet]="scheduleBar" />
-        <app-weekly-schedule mode="mine" />
-        <app-season-pop/>
-        <app-airing-soon />
-      } @else {
-        <app-season-pop/>
-        <app-most-hyped />
-        <app-airing-soon />
-        <ng-container [ngTemplateOutlet]="scheduleBar" />
-        <app-weekly-schedule />
-      }
-    } @placeholder {
-    <app-media-skeleton />
+    <!-- Rendered on the server (crawlers and first paint get it) and hydrated in place straight away,
+         while its code still loads as a separate chunk. Returning signed-in visitors get "My Schedule"
+         swapped in once their session is restored. -->
+    @defer (on immediate; hydrate on immediate) {
+      <app-home-feed />
     }
+    <nav class="browse-days" aria-labelledby="browse-days-heading">
+      <h2 id="browse-days-heading">Anime schedule by day</h2>
+      <ul>
+        @for (day of days; track day) {
+        <li><a [routerLink]="['/schedule', day]">{{ label(day) }}</a></li>
+        }
+        <li><a routerLink="/seasons">This season</a></li>
+        <li><a routerLink="/most-hyped">Most hyped</a></li>
+      </ul>
+    </nav>
   </div>
   <!-- sidebar  -->
   <app-sidebar />
 </div>
-
-<ng-template #scheduleBar>
-  @if (signedIn()) {
-  <div class="schedule-bar">
-    <h2 class="schedule-title">{{ view() === 'mine' ? 'My Schedule' : 'All shows this week' }}</h2>
-    <div class="view-toggle" role="group" aria-label="Weekly schedule">
-      <button type="button" [attr.aria-pressed]="view() === 'mine'" (click)="setView('mine')">My shows</button>
-      <button type="button" [attr.aria-pressed]="view() === 'all'" (click)="setView('all')">All shows</button>
-    </div>
-  </div>
-  }
-</ng-template>

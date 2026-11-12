@@ -24,10 +24,11 @@ import { Observable } from 'rxjs';
 import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
 import { ShareService } from '../../../../services/share.service';
 import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
+import { AnimePathPipe } from '../../../../seo/anime-path.pipe';
 
 @Component({
   selector: 'app-show',
-  imports: [
+  imports: [AnimePathPipe, 
     CommonModule,
     SkeletonModule,
     MatIcon,

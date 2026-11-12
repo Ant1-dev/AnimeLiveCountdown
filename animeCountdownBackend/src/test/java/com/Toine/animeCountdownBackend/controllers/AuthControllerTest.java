@@ -64,10 +64,11 @@ class AuthControllerTest {
     }
 
     @Test
-    void refreshWithoutCookieIsUnauthorized() {
+    void refreshWithoutCookieMeansNoSession() {
         ResponseEntity<?> response = controller.refreshToken(new MockHttpServletRequest());
 
-        assertEquals(401, response.getStatusCode().value());
+        assertEquals(204, response.getStatusCode().value());
+        assertNull(response.getBody());
     }
 
     @Test

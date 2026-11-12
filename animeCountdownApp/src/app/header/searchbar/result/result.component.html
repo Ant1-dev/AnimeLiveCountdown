@@ -1,7 +1,7 @@
-<a [href]="'/media/' + result()!.id">
+<a [href]="result()! | animePath">
 <li (click)="retrieveId()" class="result-item">
     <div class="media-item">
-      <img [src]="result()?.coverimage" class="cover-image">
+      <img [src]="result()?.coverimage | optimizedImage: 128" [alt]="(result()?.engtitle || result()?.romtitle) + ' cover art'" class="cover-image" loading="lazy">
       <div class="media-details">
           @if (result()?.engtitle) {
               <h3 class="media-title">{{result()?.engtitle}}</h3>

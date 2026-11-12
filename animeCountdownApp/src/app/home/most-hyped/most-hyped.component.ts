@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HypeEntry } from '../../models/reaction.model';
 import { ReactionService } from '../../services/reaction.service';
@@ -17,10 +17,14 @@ export class MostHypedComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   protected entries = signal<HypeEntry[]>([]);
+  /** How many shows to rank. */
+  limit = input(10);
+  /** The standalone /most-hyped page has its own h1, so it hides the section heading. */
+  showHeading = input(true);
 
   ngOnInit(): void {
     this.reactionService
-      .mostHyped(10)
+      .mostHyped(this.limit())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (entries) => this.entries.set(entries ?? []),

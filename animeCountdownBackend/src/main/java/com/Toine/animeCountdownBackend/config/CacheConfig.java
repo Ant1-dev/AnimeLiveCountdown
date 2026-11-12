@@ -15,7 +15,6 @@ public class CacheConfig {
         // Simple in-memory cache for frequently accessed endpoints
         return new ConcurrentMapCacheManager(
                 "trendingCache",
-                "sitemapCache",
                 "upcomingAnime",
                 "trendingAnime",
                 "weekdayAnime"

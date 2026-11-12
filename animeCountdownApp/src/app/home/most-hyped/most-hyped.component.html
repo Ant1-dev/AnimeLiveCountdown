@@ -1,9 +1,11 @@
 @if (entries().length > 0) {
-<section aria-labelledby="most-hyped-heading">
+<section [attr.aria-labelledby]="showHeading() ? 'most-hyped-heading' : null">
+  @if (showHeading()) {
   <div class="section-header">
-    <h1 id="most-hyped-heading" class="section-title">Most Hyped This Week</h1>
+    <h2 id="most-hyped-heading" class="section-title">Most Hyped This Week</h2>
     <div class="gradient-bar"></div>
   </div>
+  }
   <div class="cardContainer">
     @for (entry of entries(); track entry.media.id; let i = $index) {
     <div class="hype-item">

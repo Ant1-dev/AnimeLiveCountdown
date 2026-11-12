@@ -4,11 +4,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FollowingService } from '../../services/following.service';
 import { MediaTimeService } from '../../services/media-time.service';
 import { Follow } from '../../models/follow.model';
+import { AnimePathPipe } from '../../seo/anime-path.pipe';
+import { OptimizedImagePipe } from '../../shared/optimized-image.pipe';
 
 /** "Continue watching": followed shows with aired episodes the user hasn't marked watched. */
 @Component({
   selector: 'app-continue-watching',
-  imports: [RouterLink],
+  imports: [OptimizedImagePipe, AnimePathPipe, RouterLink],
   templateUrl: './continue-watching.component.html',
   styleUrl: './continue-watching.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

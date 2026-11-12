@@ -10,6 +10,7 @@ import { NotificationService } from '../services/notifications/notification.serv
 import { PushService } from '../services/notifications/push.service';
 import { PwaInstallService } from '../services/notifications/pwa-install.service';
 import { ReminderService } from '../services/notifications/reminder.service';
+import { SeoService } from '../seo/seo.service';
 
 /** Settings page: channels (browser push, Discord), calendar feed, installing, and all reminders. */
 @Component({
@@ -20,6 +21,14 @@ import { ReminderService } from '../services/notifications/reminder.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationSettingsComponent implements OnInit {
+  // Signed-in pages: keep them out of search results
+  private readonly _seo = inject(SeoService).setPage({
+    title: 'Reminders & notifications',
+    description: 'Your personal Anime Live Countdown page.',
+    path: '/notifications',
+    noindex: true,
+  });
+
   private reminderService = inject(ReminderService);
   private notifications = inject(NotificationService);
   private snackBar = inject(MatSnackBar);

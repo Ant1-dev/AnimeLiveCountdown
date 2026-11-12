@@ -7,55 +7,85 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import compression from 'compression'
+import compression from 'compression';
+import { environment } from './environments/environment';
+import { buildSitemap, SitemapShow } from './app/seo/sitemap';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-// Add compression middleware - this is the key addition
-app.use(compression({
-  level: 6, // Default compression level is 6, can increase up to 9 for max compression
-  threshold: 0, // Compress all responses
-  filter: (req, res) => {
-    // Compress everything except images and videos
-    if (req.headers['accept']?.includes('image/') || 
-        req.headers['accept']?.includes('video/')) {
-      return false;
-    }
-    return compression.filter(req, res);
-  }
-}));
+// Compress text responses (HTML, JSON, JS, CSS). The default filter decides by the response's
+// Content-Type; images are already compressed.
+app.use(compression());
 
 /**
- * Serve static files from /browser with improved cache settings
+ * Optimized images. On Vercel, /_vercel/image is served by Vercel's image optimizer before requests
+ * reach this server. When running this server directly (local testing), there is no optimizer, so
+ * send the browser to the original image instead.
+ */
+app.get('/_vercel/image', (req, res) => {
+  const url = typeof req.query['url'] === 'string' ? req.query['url'] : '';
+  if (!/^https:\/\/s4\.anilist\.co\//.test(url)) {
+    res.status(400).send('Unsupported image URL');
+    return;
+  }
+  res.redirect(302, url);
+});
+
+/**
+ * sitemap.xml, generated here rather than by the API so it keeps working when the API is down:
+ * static and season pages are always listed, show pages whenever the API answers.
+ */
+let sitemapCache: { xml: string; expires: number } | null = null;
+
+app.get('/sitemap.xml', async (_req, res) => {
+  const now = Date.now();
+  if (!sitemapCache || sitemapCache.expires < now) {
+    let shows: SitemapShow[] = [];
+    let complete = false;
+    try {
+      const response = await fetch(`${environment.apiUrl}sitemap/media`, { signal: AbortSignal.timeout(8000) });
+      if (response.ok) {
+        shows = await response.json();
+        complete = true;
+      }
+    } catch {
+      // API unreachable: serve the static part and try again soon
+    }
+    // A full sitemap is cached for an hour; a partial one only for 5 minutes
+    sitemapCache = { xml: buildSitemap(shows, new Date(now)), expires: now + (complete ? 3_600_000 : 300_000) };
+  }
+  res
+    .type('application/xml')
+    .set('Cache-Control', `public, max-age=${Math.max(60, Math.round((sitemapCache.expires - now) / 1000))}`)
+    .send(sitemapCache.xml);
+});
+
+/**
+ * Serve static files from /browser (only used when running this server directly; on Vercel the
+ * static files are served from the CDN before requests reach this function).
  */
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
     index: false,
     redirect: false,
-    etag: true, // Enable ETags
-    lastModified: true, // Enable Last-Modified
   }),
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Render every other request with Angular. Pages set their own status codes (404 for unknown
+ * pages, 301 to canonical URLs, 503 when the API is unavailable).
  */
-app.use('/**', (req, res, next) => {
+app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
-/**
- * Start the server if this module is the main entry point.
- */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
@@ -63,7 +93,5 @@ if (isMainModule(import.meta.url)) {
   });
 }
 
-/**
- * Request handler used by the Angular CLI or Firebase Cloud Functions.
- */
+/** Request handler used by the Angular CLI dev server and by the Vercel function (scripts/vercel-build.mjs). */
 export const reqHandler = createNodeRequestHandler(app);
