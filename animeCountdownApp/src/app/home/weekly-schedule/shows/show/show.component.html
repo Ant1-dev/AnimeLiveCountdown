@@ -20,6 +20,9 @@
         height="325"
         [priority]="renderPriority() === 'high'"
       />
+      @if (follow()?.behind) {
+      <span class="behind-badge">{{ follow()!.behind }} behind</span>
+      }
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
@@ -29,7 +32,10 @@
       <ng-template #showInfo>
         <div class="show-info-container">
           <div class="show-info-item">Next episode: {{ media()?.next_Airing_Episode}}</div>
-          <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
+          <div class="show-info-item">{{ follow() ? 'Unfollow' : 'Follow' }} -<mat-icon class="add-icon" (click)="toggleFollow($event)">{{ follow() ? 'remove_circle' : 'add_circle' }}</mat-icon></div>
+          @if (follow()?.behind) {
+          <div class="show-info-item">Mark ep {{ follow()!.watchedEpisode + 1 }} watched -<mat-icon class="add-icon" (click)="markWatched($event)">check_circle</mat-icon></div>
+          }
           <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
         </div>
       </ng-template>
@@ -54,6 +60,9 @@
         height="325"
         [priority]="renderPriority() === 'high'"
       />
+      @if (follow()?.behind) {
+      <span class="behind-badge">{{ follow()!.behind }} behind</span>
+      }
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
@@ -67,7 +76,10 @@
           } @else {
           <div class="show-info-item">Episode {{ media()?.next_Airing_Episode}} is airing now!</div>
           }
-          <div class="show-info-item">Save to favorites -<mat-icon class="add-icon" (click)="saveMedia()">add_circle</mat-icon></div>
+          <div class="show-info-item">{{ follow() ? 'Unfollow' : 'Follow' }} -<mat-icon class="add-icon" (click)="toggleFollow($event)">{{ follow() ? 'remove_circle' : 'add_circle' }}</mat-icon></div>
+          @if (follow()?.behind) {
+          <div class="show-info-item">Mark ep {{ follow()!.watchedEpisode + 1 }} watched -<mat-icon class="add-icon" (click)="markWatched($event)">check_circle</mat-icon></div>
+          }
           <div class="show-info-item">Add reminder -<mat-icon class="add-icon">add_circle</mat-icon></div>
         </div>
       </ng-template>

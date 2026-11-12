@@ -17,8 +17,8 @@ export class ProfileDropdownComponent {
   private router = inject(Router);
   protected user = this.authService.user;
 
-  navigateToFavorites(): void {
-    this.router.navigate(['/favorites']);
+  navigateToFollowing(): void {
+    this.router.navigate(['/following']);
     this.close.emit();
   }
 

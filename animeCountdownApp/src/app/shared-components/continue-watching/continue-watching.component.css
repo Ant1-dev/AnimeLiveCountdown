@@ -1,0 +1,124 @@
+.continue {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.continue-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+}
+
+.continue-row {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.continue-item {
+  flex: 0 0 auto;
+  width: 280px;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(128, 128, 128, 0.1);
+  scroll-snap-align: start;
+}
+
+.poster-link {
+  position: relative;
+  flex: 0 0 auto;
+  display: block;
+}
+
+.poster {
+  display: block;
+  width: 96px;
+  height: 136px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.behind-badge {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #101116;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.show-title {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.show-title:hover,
+.show-title:focus-visible {
+  text-decoration: underline;
+}
+
+.progress-text {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.watch-button {
+  margin-top: auto;
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+
+.watch-button:hover:not(:disabled) {
+  background: var(--accent);
+  color: #101116;
+}
+
+.watch-button:focus-visible,
+.poster-link:focus-visible,
+.show-title:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.watch-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .watch-button {
+    transition: none;
+  }
+}

@@ -18,16 +18,30 @@ public class AniListOAuthSettings {
     private final String clientId;
     private final String clientSecret;
     private final String redirectUriOverride;
+    private final String authorizeUrl;
 
+    @org.springframework.beans.factory.annotation.Autowired
     public AniListOAuthSettings(
             @Value("${app.anilist.client-id:${ANILIST_CLIENT_ID:}}") String clientId,
             @Value("${app.anilist.client-secret:${ANILIST_CLIENT_SECRET:}}") String clientSecret,
             // Optional: the exact redirect URI registered on AniList. By default it's built from the
             // request (this API's own host, which honours X-Forwarded-* behind the proxy).
-            @Value("${app.anilist.redirect-uri:${ANILIST_REDIRECT_URI:}}") String redirectUriOverride) {
+            @Value("${app.anilist.redirect-uri:${ANILIST_REDIRECT_URI:}}") String redirectUriOverride,
+            // Overridable only so the flow can be exercised against a local stub
+            @Value("${app.anilist.authorize-url:" + AUTHORIZE_URL + "}") String authorizeUrl) {
         this.clientId = clientId == null ? "" : clientId.trim();
         this.clientSecret = clientSecret == null ? "" : clientSecret.trim();
         this.redirectUriOverride = redirectUriOverride == null ? "" : redirectUriOverride.trim();
+        this.authorizeUrl = authorizeUrl == null || authorizeUrl.isBlank() ? AUTHORIZE_URL : authorizeUrl.trim();
+    }
+
+    /** Convenience for tests: real AniList authorize URL. */
+    public AniListOAuthSettings(String clientId, String clientSecret, String redirectUriOverride) {
+        this(clientId, clientSecret, redirectUriOverride, AUTHORIZE_URL);
+    }
+
+    public String authorizeUrl() {
+        return authorizeUrl;
     }
 
     public boolean isEnabled() {

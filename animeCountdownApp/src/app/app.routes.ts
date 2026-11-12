@@ -12,8 +12,10 @@ export const routes: Routes = [
         loadComponent: () => import('./media-info/media-info.component').then(m => m.MediaInfoComponent)
     },
     {
-        path: 'favorites',
-        loadComponent: () => import('./favorites/favorites.component').then(m => m.FavoritesComponent),
+        path: 'following',
+        loadComponent: () => import('./following/following.component').then(m => m.FollowingComponent),
         canActivate: [authGuard]
     },
+    // Favorites were renamed to Following
+    { path: 'favorites', redirectTo: 'following' },
 ];

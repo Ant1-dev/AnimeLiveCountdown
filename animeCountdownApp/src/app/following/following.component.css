@@ -41,3 +41,27 @@
   font-size: 1rem;
   opacity: 0.8;
 }
+
+.grid-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0;
+}
+
+.empty-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #101116;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.empty-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

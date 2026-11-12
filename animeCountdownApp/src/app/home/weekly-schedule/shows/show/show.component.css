@@ -104,6 +104,19 @@
   position: relative;
 }
 
+/* Followed show with aired episodes the viewer hasn't watched */
+.behind-badge {
+  position: absolute;
+  left: 6px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #101116;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .info-icon {
   position: absolute;
   right: 2px;
