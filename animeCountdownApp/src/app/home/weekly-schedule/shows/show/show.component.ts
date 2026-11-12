@@ -20,6 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
 
 @Component({
   selector: 'app-show',
@@ -30,6 +31,7 @@ import { AuthService } from '../../../../auth/auth.service';
     TooltipModule,
     Tooltip,
     NgOptimizedImage,
+    ScheduleNoteBadgeComponent,
   ],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
