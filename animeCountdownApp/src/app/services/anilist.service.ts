@@ -32,6 +32,11 @@ export class AniListService {
       .pipe(tap(() => this.following.load().subscribe({ error: () => {} })));
   }
 
+  /** Turns pushing follows and watched episodes to AniList on or off. */
+  setSync(enabled: boolean): Observable<AniListStatus> {
+    return this.http.put<AniListStatus>(`${this.url}/sync`, { enabled });
+  }
+
   disconnect(): Observable<void> {
     return this.http.delete<void>(this.url);
   }

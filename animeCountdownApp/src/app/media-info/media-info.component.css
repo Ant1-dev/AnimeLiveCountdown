@@ -308,10 +308,4 @@
   margin-top: 12px;
 }
 
-/* Section headings (were h4; h2 keeps the outline valid with the same look) */
-.info-heading {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 1.33em 0 0.5em;
-}
 

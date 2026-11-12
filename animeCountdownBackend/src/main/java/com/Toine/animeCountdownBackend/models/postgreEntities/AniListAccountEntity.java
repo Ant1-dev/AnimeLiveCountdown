@@ -41,6 +41,18 @@ public class AniListAccountEntity {
     @Column(name = "last_synced_at")
     private Instant lastSyncedAt;
 
+    /** Push follows and watched episodes to the user's AniList list. Null (existing rows) means on. */
+    @Column(name = "sync_enabled")
+    private Boolean syncEnabled;
+
+    public boolean isSyncEnabled() {
+        return syncEnabled == null || syncEnabled;
+    }
+
+    public void setSyncEnabled(boolean syncEnabled) {
+        this.syncEnabled = syncEnabled;
+    }
+
     public Long getId() {
         return id;
     }

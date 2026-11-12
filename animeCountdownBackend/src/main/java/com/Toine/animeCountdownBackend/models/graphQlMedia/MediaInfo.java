@@ -18,6 +18,11 @@ public class MediaInfo {
     private Integer seasonYear;
     private String season;
     private List<ExternalLink> externalLinks;
+    private Trailer trailer;
+
+    public Trailer getTrailer() {
+        return trailer;
+    }
 
     public List<ExternalLink> getExternalLinks() {
         return externalLinks;

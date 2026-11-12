@@ -24,6 +24,13 @@
       </button>
     </div>
   </div>
+  <label class="sync-toggle">
+    <input type="checkbox" [checked]="s.syncEnabled" [disabled]="busy() !== null" (change)="toggleSync($any($event.target).checked)" />
+    <span>
+      Update my AniList list when I follow a show or mark episodes watched here
+      <span class="muted">(never removes entries or lowers progress)</span>
+    </span>
+  </label>
   }
 
   @if (result(); as r) {
