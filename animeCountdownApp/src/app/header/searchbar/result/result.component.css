@@ -1,7 +1,7 @@
 .result-item {
     list-style-type: none;
     padding: 8px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-subtle);
     z-index: 5;
   }
   
@@ -20,7 +20,7 @@
   }
   
   .media-item:hover {
-    background-color: #323232;
+    background-color: var(--surface-hover);
   }
   
   .media-details {
@@ -44,7 +44,7 @@
   .media-airing-date {
     margin: 0;
     font-size: .9rem;
-    color: #00a6fb;
+    color: var(--accent);
   }
 
   a {

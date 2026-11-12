@@ -11,6 +11,8 @@ import { SeasonPopComponent } from "./weekly-schedule/season-pop/season-pop.comp
 import { HeroCarouselComponent } from "./hero-carousel/hero-carousel.component";
 import { ContinueWatchingComponent } from '../shared-components/continue-watching/continue-watching.component';
 import { AuthService } from '../auth/auth.service';
+import { LiveBannerComponent } from "./live-banner/live-banner.component";
+import { MostHypedComponent } from "./most-hyped/most-hyped.component";
 
 export type ScheduleView = 'mine' | 'all';
 const VIEW_STORAGE_KEY = 'alc.scheduleView';
@@ -18,7 +20,7 @@ const VIEW_STORAGE_KEY = 'alc.scheduleView';
 @Component({
   selector: 'app-home',
   imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SidebarComponent, SeasonPopComponent,
-    HeroCarouselComponent, ContinueWatchingComponent, NgTemplateOutlet],
+    HeroCarouselComponent, ContinueWatchingComponent, NgTemplateOutlet, LiveBannerComponent, MostHypedComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

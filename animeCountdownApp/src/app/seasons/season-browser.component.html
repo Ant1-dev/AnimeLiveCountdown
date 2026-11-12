@@ -1,0 +1,100 @@
+<section class="season-page" aria-labelledby="season-heading">
+  <header class="page-head">
+    <div class="title-row">
+      <button type="button" class="icon-btn" (click)="step(-1)" aria-label="Previous season" title="Previous season">
+        <mat-icon fontIcon="chevron_left"></mat-icon>
+      </button>
+      <div class="titles">
+        <h1 id="season-heading">{{ heading() }}</h1>
+        <p class="sub" aria-live="polite">{{ subheading() }}</p>
+      </div>
+      <button type="button" class="icon-btn" (click)="step(1)" [disabled]="!canGoNext()" aria-label="Next season" title="Next season">
+        <mat-icon fontIcon="chevron_right"></mat-icon>
+      </button>
+    </div>
+
+    <div class="quick" role="group" aria-label="Jump to season">
+      <button type="button" class="pill" [class.active]="isCurrent()" [attr.aria-pressed]="isCurrent()" (click)="goCurrent()">
+        This season
+      </button>
+      <button type="button" class="pill" [class.active]="isNext()" [attr.aria-pressed]="isNext()" (click)="goNext()">
+        Next season
+      </button>
+    </div>
+  </header>
+
+  @if (query(); as q) {
+    <div class="filters">
+      <label class="field">
+        <span>Season</span>
+        <select [value]="q.key.season" (change)="onSeason($any($event.target).value)">
+          @for (s of seasons; track s) {
+            <option [value]="s" [selected]="s === q.key.season">{{ seasonLabel(s) }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Year</span>
+        <select [value]="q.key.year" (change)="onYear($any($event.target).value)">
+          @for (y of years(); track y) {
+            <option [value]="y" [selected]="y === q.key.year">{{ y }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Genre</span>
+        <select (change)="onGenre($any($event.target).value)">
+          <option value="" [selected]="!q.genre">All genres</option>
+          @for (g of data()?.genres ?? []; track g) {
+            <option [value]="g" [selected]="g === q.genre">{{ g }}</option>
+          }
+          @if (q.genre && !(data()?.genres ?? []).includes(q.genre)) {
+            <option [value]="q.genre" selected>{{ q.genre }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Sort by</span>
+        <select (change)="onSort($any($event.target).value)">
+          @for (o of sorts; track o.value) {
+            <option [value]="o.value" [selected]="o.value === q.sort">{{ o.label }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="grid" aria-busy="true" aria-label="Loading shows">
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+        <div class="skeleton"></div>
+      }
+    </div>
+  } @else if (error(); as message) {
+    <div class="state" role="alert">
+      <p>{{ message }}</p>
+      <button type="button" class="pill active" (click)="retry()">Try again</button>
+    </div>
+  } @else if (data(); as d) {
+    @if (d.media.length) {
+      <div class="grid">
+        @for (m of d.media; track m.id; let i = $index) {
+          <app-season-card [media]="m" [external]="d.source === 'anilist'" [now]="now()" [priority]="i < 4" />
+        }
+      </div>
+      @if (d.source === 'anilist') {
+        <p class="source-note">Past seasons show the {{ d.media.length }} most popular titles from AniList. Cards open on AniList.</p>
+      }
+    } @else if (query()?.genre) {
+      <div class="state">
+        <p>No {{ query()?.genre }} shows in {{ heading() }}.</p>
+        <button type="button" class="pill active" (click)="onGenre('')">Show all genres</button>
+      </div>
+    } @else {
+      <div class="state">
+        <p>No shows announced for {{ heading() }} yet.</p>
+        <button type="button" class="pill active" (click)="goCurrent()">Browse this season</button>
+      </div>
+    }
+  }
+</section>

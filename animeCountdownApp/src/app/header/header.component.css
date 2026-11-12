@@ -1,6 +1,6 @@
 
 .header {
-  background-color: #101116;
+  background-color: var(--header-bg);
     width: calc(100% - 20px);
     margin: 0 auto 0 0;
     box-sizing: border-box;
@@ -36,14 +36,14 @@
     flex: 0.7;
     height: 2.3rem;
     border-radius: 100px;
-    outline: #a9a9a9 solid 1px;
+    outline: var(--border-strong) solid 1px;
     margin: 0 0.5rem;
     transition: flex 0.3s ease;
   }
 
   
   .searchBar:hover {
-    outline: white solid 1px;
+    outline: var(--text-strong) solid 1px;
   }
   
   
@@ -87,7 +87,7 @@
 
   .logo-container span {
     margin-left: 10px;
-    color: #00a6fe;
+    color: var(--accent);
     font-size: 1.2rem;
     font-weight: bold;
     text-decoration: none;

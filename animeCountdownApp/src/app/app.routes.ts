@@ -18,4 +18,13 @@ export const routes: Routes = [
     },
     // Favorites were renamed to Following
     { path: 'favorites', redirectTo: 'following' },
+    {
+        path: 'seasons',
+        loadComponent: () => import('./seasons/season-browser.component').then(m => m.SeasonBrowserComponent)
+    },
+    {
+        path: 'notifications',
+        loadComponent: () => import('./notification-settings/notification-settings.component').then(m => m.NotificationSettingsComponent),
+        canActivate: [authGuard]
+    },
 ];

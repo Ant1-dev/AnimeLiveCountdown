@@ -22,7 +22,7 @@
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: var(--danger);
   font-size: 1.1rem;
 }
 
