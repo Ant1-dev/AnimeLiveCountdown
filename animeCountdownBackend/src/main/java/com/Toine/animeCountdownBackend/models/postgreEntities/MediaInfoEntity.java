@@ -71,6 +71,23 @@ public class MediaInfoEntity {
     @Column(name = "streaming_links", columnDefinition = "TEXT")
     private List<StreamingLink> streamingLinks;
 
+    /** Trailer from AniList: site is "youtube" or "dailymotion"; id is that site's video id. */
+    @Column(name = "trailer_site")
+    private String trailerSite;
+
+    @Column(name = "trailer_id")
+    private String trailerId;
+
+    @Column(name = "trailer_thumbnail", length = 1024)
+    private String trailerThumbnail;
+
+    public String getTrailerSite() { return trailerSite; }
+    public void setTrailerSite(String trailerSite) { this.trailerSite = trailerSite; }
+    public String getTrailerId() { return trailerId; }
+    public void setTrailerId(String trailerId) { this.trailerId = trailerId; }
+    public String getTrailerThumbnail() { return trailerThumbnail; }
+    public void setTrailerThumbnail(String trailerThumbnail) { this.trailerThumbnail = trailerThumbnail; }
+
     public List<StreamingLink> getStreamingLinks() {
         return streamingLinks;
     }

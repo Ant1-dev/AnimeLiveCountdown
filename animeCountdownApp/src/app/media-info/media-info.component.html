@@ -97,6 +97,13 @@
       <h2 class="info-heading">Description</h2>
       <div class="description" [innerHTML]="mediaDetails().description"></div>
 
+      <app-trailer
+        [site]="mediaDetails().trailerSite"
+        [videoId]="mediaDetails().trailerId"
+        [thumbnailUrl]="mediaDetails().trailerThumbnail"
+        [title]="displayTitle()" />
+      <app-watch-order [mediaId]="mediaDetails().id" />
+
       <div class="details-grid">
         <div class="detail-item">
           <div class="detail-label">Expected: Episodes</div>
