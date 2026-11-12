@@ -22,7 +22,7 @@ import { inject } from '@angular/core';
               allowfullscreen
               referrerpolicy="strict-origin-when-cross-origin"></iframe>
           } @else {
-            <button type="button" class="facade" (click)="playing.set(true)" [attr.aria-label]="'Play the ' + title() + ' trailer'">
+            <button type="button" class="facade" (click)="playing.set(true)" [attr.aria-label]="'Play trailer: ' + title()">
               @if (thumbnail()) {
                 <img [src]="thumbnail()" alt="" loading="lazy" decoding="async" />
               }
