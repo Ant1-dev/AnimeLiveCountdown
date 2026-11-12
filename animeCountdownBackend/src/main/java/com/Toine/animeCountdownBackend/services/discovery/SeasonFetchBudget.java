@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services.discovery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ public class SeasonFetchBudget {
     private final Clock clock;
     private final Deque<Instant> recent = new ArrayDeque<>();
 
+    @Autowired
     public SeasonFetchBudget(@Value("${app.seasons.max-fetches-per-window:6}") int maxFetches,
                              @Value("${app.seasons.fetch-window:PT10M}") Duration window) {
         this(maxFetches, window, Clock.systemUTC());
