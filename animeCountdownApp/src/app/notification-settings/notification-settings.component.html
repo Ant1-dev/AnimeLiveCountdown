@@ -1,0 +1,163 @@
+<div class="section-header">
+  <h1 class="section-title">Reminders &amp; notifications</h1>
+  <div class="gradient-bar"></div>
+</div>
+
+@if (loading()) {
+  <p class="muted">Loading…</p>
+} @else if (loadError()) {
+  <p class="error" role="alert">Couldn't load your notification settings. Refresh the page to try again.</p>
+} @else {
+  <div class="layout">
+    <section class="card" aria-labelledby="push-heading">
+      <h2 id="push-heading">Browser notifications</h2>
+      @switch (push.state()) {
+        @case ('on') {
+          <p>On for this device. Reminders with “Browser notification” turned on show up here.</p>
+          <div class="actions">
+            <button type="button" class="btn" (click)="testPush()" [disabled]="busy() !== null">Send test</button>
+            <button type="button" class="btn" (click)="disablePush()" [disabled]="busy() !== null">Turn off on this device</button>
+          </div>
+        }
+        @case ('off') {
+          <p>Get a notification on this device when a reminder is due, even when the site is closed.</p>
+          <div class="actions">
+            <button type="button" class="btn primary" (click)="enablePush()" [disabled]="busy() !== null">Turn on for this device</button>
+          </div>
+        }
+        @case ('denied') {
+          <p class="warn">Notifications are blocked for this site. Allow them in your browser's site settings, then reload this page.</p>
+        }
+        @case ('unavailable') {
+          <p class="muted">Browser notifications aren't available on this server yet.</p>
+        }
+        @default {
+          @if (install.showIosHint()) {
+            <p>On iPhone and iPad, notifications work once the site is on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>, and open it from there.</p>
+          } @else {
+            <p class="muted">This browser doesn't support web notifications.</p>
+          }
+        }
+      }
+    </section>
+
+    @if (config()?.discordEnabled) {
+      <section class="card" aria-labelledby="discord-heading">
+        <h2 id="discord-heading">Discord</h2>
+        @if (settings()?.discordWebhookSet) {
+          <p>Posting to <code>{{ settings()?.discordWebhookHint }}</code></p>
+          <div class="actions">
+            <button type="button" class="btn" (click)="testDiscord()" [disabled]="busy() !== null">Send test</button>
+            <button type="button" class="btn danger" (click)="removeWebhook()" [disabled]="busy() !== null">Remove webhook</button>
+          </div>
+        } @else {
+          <p>Reminders can be posted to a Discord channel you manage. In Discord, open the channel's settings → Integrations → Webhooks → New Webhook → Copy Webhook URL, then paste it here.</p>
+          <form class="inline-form" (ngSubmit)="saveWebhook()">
+            <label for="webhook" class="label">Webhook URL</label>
+            <div class="row">
+              <input id="webhook" name="webhook" type="url" autocomplete="off" spellcheck="false"
+                     placeholder="https://discord.com/api/webhooks/…"
+                     [ngModel]="webhookInput()" (ngModelChange)="webhookInput.set($event); webhookError.set('')"
+                     [attr.aria-invalid]="webhookError() ? true : null" aria-describedby="webhook-error" />
+              <button type="submit" class="btn primary" [disabled]="busy() !== null || !webhookInput().trim()">Save webhook</button>
+            </div>
+            @if (webhookError()) {
+              <p id="webhook-error" class="warn">{{ webhookError() }}</p>
+            }
+          </form>
+        }
+      </section>
+    }
+
+    <section class="card" aria-labelledby="calendar-heading">
+      <h2 id="calendar-heading">Calendar feed</h2>
+      <p>Subscribe in Google Calendar, Apple Calendar or Outlook to see the next episode of every show you follow, in your own timezone. Treat the link like a password: anyone with it can see what you follow.</p>
+      @if (settings()?.calendarUrl) {
+        <label for="calendar-url" class="label">Your calendar link</label>
+        <div class="row">
+          <input id="calendar-url" type="text" readonly [value]="settings()?.calendarUrl" (focus)="$any($event.target).select()" />
+          <button type="button" class="btn" (click)="copyCalendarUrl()">Copy link</button>
+        </div>
+        <div class="actions">
+          <a class="btn primary" [href]="settings()?.calendarWebcalUrl">Open in calendar app</a>
+          <button type="button" class="btn" (click)="createCalendar()" [disabled]="busy() !== null">Create new link</button>
+          <button type="button" class="btn danger" (click)="disableCalendar()" [disabled]="busy() !== null">Turn off</button>
+        </div>
+        <p class="muted small">Creating a new link stops the old one from working. Google Calendar: Other calendars → From URL, and paste the link.</p>
+      } @else {
+        <div class="actions">
+          <button type="button" class="btn primary" (click)="createCalendar()" [disabled]="busy() !== null">Create calendar link</button>
+        </div>
+      }
+    </section>
+
+    @if (install.canInstall() || install.showIosHint()) {
+      <section class="card" aria-labelledby="install-heading">
+        <h2 id="install-heading">Install the app</h2>
+        @if (install.canInstall()) {
+          <p>Add Anime Live Countdown to your home screen or dock, so it opens in its own window.</p>
+          <div class="actions">
+            <button type="button" class="btn primary" (click)="install.install()">Install app</button>
+          </div>
+        } @else {
+          <p>Tap Share, then <strong>Add to Home Screen</strong>.</p>
+        }
+      </section>
+    }
+
+    <section class="card wide" aria-labelledby="reminders-heading">
+      <h2 id="reminders-heading">Your reminders</h2>
+      @if (reminders().length === 0) {
+        <p class="muted">No reminders yet. Open the info icon on any show and choose <strong>Add reminder</strong>.</p>
+        <div class="actions"><a class="btn" routerLink="/">Browse this week's shows</a></div>
+      } @else {
+        <ul class="reminders">
+          @for (reminder of reminders(); track reminder.mediaId) {
+            <li class="reminder">
+              @if (reminder.coverImageUrl) {
+                <img [src]="reminder.coverImageUrl" alt="" width="48" height="68" loading="lazy" />
+              }
+              <div class="reminder-main">
+                <a class="reminder-title" [routerLink]="['/media', reminder.mediaId]">{{ reminder.title ?? 'Show ' + reminder.mediaId }}</a>
+                <span class="muted small">
+                  @if (!reminder.following) {
+                    Paused: not in your favorites
+                  } @else if (reminder.nextAiringAt) {
+                    Episode {{ reminder.nextEpisode }} · {{ reminder.nextAiringAt | date: 'EEE d MMM, h:mm a' }}
+                  } @else {
+                    No upcoming episode scheduled
+                  }
+                </span>
+                <div class="reminder-controls">
+                  <label class="sr-only" [for]="'lead-' + reminder.mediaId">Remind me</label>
+                  <select [id]="'lead-' + reminder.mediaId" [ngModel]="reminder.leadMinutes"
+                          (ngModelChange)="updateReminder(reminder, { leadMinutes: $event })">
+                    @for (option of leadOptions; track option.minutes) {
+                      <option [ngValue]="option.minutes">{{ option.label }}</option>
+                    }
+                  </select>
+                  @if (config()?.pushEnabled) {
+                    <label class="check">
+                      <input type="checkbox" [ngModel]="reminder.push" (ngModelChange)="updateReminder(reminder, { push: $event })" />
+                      Browser
+                    </label>
+                  }
+                  @if (config()?.discordEnabled) {
+                    <label class="check">
+                      <input type="checkbox" [disabled]="!settings()?.discordWebhookSet" [ngModel]="reminder.discord"
+                             (ngModelChange)="updateReminder(reminder, { discord: $event })" />
+                      Discord
+                    </label>
+                  }
+                </div>
+              </div>
+              <button type="button" class="btn danger small-btn" (click)="removeReminder(reminder)"
+                      [disabled]="busy() === 'reminder-' + reminder.mediaId"
+                      [attr.aria-label]="'Remove reminder for ' + (reminder.title ?? 'this show')">Remove</button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </div>
+}

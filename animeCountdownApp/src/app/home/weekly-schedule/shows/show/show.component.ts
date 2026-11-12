@@ -20,6 +20,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedule-note-badge/schedule-note-badge.component';
+import { ShareService } from '../../../../services/share.service';
+import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
 
 @Component({
   selector: 'app-show',
@@ -30,6 +33,7 @@ import { AuthService } from '../../../../auth/auth.service';
     TooltipModule,
     Tooltip,
     NgOptimizedImage,
+    ScheduleNoteBadgeComponent,
   ],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
@@ -46,6 +50,8 @@ export class ShowComponent implements OnInit, OnChanges {
   private favMediaService = inject(FavoriteMediaService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private shareService = inject(ShareService);
+  private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
 
@@ -73,6 +79,11 @@ export class ShowComponent implements OnInit, OnChanges {
     }
   }
 
+  share(): void {
+    const mediaData = this.media();
+    if (mediaData) this.shareService.shareMedia(mediaData.id, this.getDisplayTitle());
+  }
+
   saveMedia(): void {
     if (this.user()) {
       this.favMediaService
@@ -97,6 +108,18 @@ export class ShowComponent implements OnInit, OnChanges {
           },
         });
     }
+  }
+
+  addReminder(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const mediaData = this.media();
+    if (!mediaData) return;
+    this.reminderDialog.open({
+      mediaId: mediaData.id,
+      title: this.getDisplayTitle(),
+      nextEpisode: mediaData.next_Airing_Episode,
+    });
   }
 
   ngOnInit(): void {
