@@ -42,8 +42,8 @@
 }
 
 /* Links Section */
-.footer-links h4, 
-.footer-connect h4 {
+.footer-heading {
+  margin-top: 0;
   color: var(--text-strong);
   font-size: 1.1rem;
   margin-bottom: 20px;
@@ -51,8 +51,7 @@
   display: inline-block;
 }
 
-.footer-links h4::after, 
-.footer-connect h4::after {
+.footer-heading::after {
   content: '';
   position: absolute;
   bottom: -8px;

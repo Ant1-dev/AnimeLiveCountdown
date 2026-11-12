@@ -61,10 +61,10 @@
         </g>
       </g>
     </svg>
-    <h3>Trending!</h3>
+    <h2 class="sidebar-title">Trending!</h2>
   </div>
   @for (m of media(); track m.id; let i = $index) {
-  <a [routerLink]="['/media', m.id]" class="media-content">
+  <a [routerLink]="m | animePath" class="media-content">
     <div
       class="image-banner"
       [style.background-image]="getBackgroundImage(m.banner_Image_Url)"

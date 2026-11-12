@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { AiredEvent, MediaTimeService } from '../../services/media-time.service';
+import { AnimePathPipe } from '../../seo/anime-path.pipe';
 
 const VISIBLE_MS = 9000;
 const CONFETTI_COLORS = ['#00a6fb', '#00fbdc', '#f44370', '#ffd166', '#6a55fa'];
@@ -21,7 +22,7 @@ interface Piece {
  */
 @Component({
   selector: 'app-airing-celebration',
-  imports: [RouterLink, MatIcon],
+  imports: [AnimePathPipe, RouterLink, MatIcon],
   templateUrl: './airing-celebration.component.html',
   styleUrl: './airing-celebration.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

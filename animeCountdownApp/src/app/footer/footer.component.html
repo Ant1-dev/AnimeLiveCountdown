@@ -12,18 +12,28 @@
       <p class="tagline">Track your favorite anime in real-time</p>
     </div>
 
-    <!-- Quick Links Section -->
-    <div class="footer-links">
-      <h4>Quick Links</h4>
+    <!-- Browse links: also how crawlers find the landing pages -->
+    <nav class="footer-links" aria-labelledby="footer-browse">
+      <h2 id="footer-browse" class="footer-heading">Browse</h2>
       <ul>
-        <li><a routerLink="">Home</a></li>
-        <li><a routerLink="">Browse Anime</a></li>
+        <li><a routerLink="/">This week’s schedule</a></li>
+        <li><a routerLink="/seasons">This season’s anime</a></li>
+        <li><a routerLink="/most-hyped">Most hyped this week</a></li>
       </ul>
-    </div>
+    </nav>
+
+    <nav class="footer-links" aria-labelledby="footer-days">
+      <h2 id="footer-days" class="footer-heading">Schedule by day</h2>
+      <ul>
+        @for (day of days; track day) {
+        <li><a [routerLink]="['/schedule', day]">{{ day.charAt(0).toUpperCase() + day.slice(1) }}</a></li>
+        }
+      </ul>
+    </nav>
 
     <!-- Connect Section -->
     <div class="footer-connect">
-      <h4>Connect With Us</h4>
+      <h2 class="footer-heading">Connect With Us</h2>
       <div class="contact-item">
         <mat-icon>mail</mat-icon>
         <a href="mailto:animelivecountdown@gmail.com"

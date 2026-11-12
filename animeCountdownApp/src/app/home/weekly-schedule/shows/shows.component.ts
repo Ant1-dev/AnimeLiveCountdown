@@ -19,6 +19,7 @@ import { timer, interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
 import { FollowingService } from '../../../services/following.service';
+import { injectIsBrowser, pollEvery, tickEvery } from '../../../shared/platform';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
@@ -41,6 +42,7 @@ export class ShowsComponent implements OnInit {
 
   private scheduleService = inject(ScheduleService);
   private destroyRef = inject(DestroyRef);
+  private isBrowser = injectIsBrowser();
   private mediaStoreService = inject(MediaStoreService);
   private followingService = inject(FollowingService);
 
@@ -64,7 +66,7 @@ export class ShowsComponent implements OnInit {
       this.loadAndStoreMedia();
 
       // Poll for new data every 10 minutes to refresh the store
-      interval(10 * 60 * 1000) // 10 minutes
+      tickEvery(10 * 60 * 1000, this.isBrowser) // 10 minutes
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.loadAndStoreMedia();
@@ -107,7 +109,7 @@ export class ShowsComponent implements OnInit {
     this.isLoading.set(true);
 
     // Start immediately (0ms), then poll every 60 seconds (60000ms)
-    const subscription = timer(0, 60000)
+    const subscription = pollEvery(60000, this.isBrowser)
       .pipe(
         switchMap(() => this.mode() === 'mine'
           ? this.followingService.airingOn(this.weekDay())

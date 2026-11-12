@@ -3,8 +3,8 @@
   <div class="user-desc" style="font-weight: bold;">{{ user()?.name }}</div>
   <div class="dropdown-functions">
     <a routerLink="/" [queryParams]="{ view: 'mine' }" (click)="close.emit()">My Schedule</a>
-    <div (click)="navigateToFollowing()">Following</div>
-    <div (click)="navigateToNotifications()">Notifications</div>
+    <a routerLink="/following" (click)="close.emit()">Following</a>
+    <a routerLink="/notifications" (click)="close.emit()">Notifications</a>
     <a routerLink="/" (click)="logout()">Sign out</a>
   </div>
 </div>

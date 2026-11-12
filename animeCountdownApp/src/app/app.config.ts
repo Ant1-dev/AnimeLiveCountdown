@@ -7,6 +7,7 @@ import { routes } from './app.routes';
 import {
   provideClientHydration,
   withEventReplay,
+  withIncrementalHydration,
 } from '@angular/platform-browser';
 import {
   provideHttpClient,
@@ -14,6 +15,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { serverTimeoutInterceptor } from './seo/server-timeout.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withFetch(),
-      withInterceptors([AuthInterceptor])
+      withInterceptors([serverTimeoutInterceptor, AuthInterceptor])
     ),
     provideAnimationsAsync(),
     providePrimeNG({
@@ -31,6 +33,8 @@ export const appConfig: ApplicationConfig = {
         options: { darkModeSelector: '[data-theme="dark"]' },
       },
     }),
-    provideClientHydration(withEventReplay()),
+    // Incremental hydration lets @defer blocks with hydrate triggers render on the server (for crawlers)
+    // while their code still loads lazily in the browser.
+    provideClientHydration(withEventReplay(), withIncrementalHydration()),
   ],
 };
