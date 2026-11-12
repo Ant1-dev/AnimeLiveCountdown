@@ -6,10 +6,11 @@ import { SidebarComponent } from "../shared-components/sidebar/sidebar.component
 import { SeasonPopComponent } from "./weekly-schedule/season-pop/season-pop.component";
 import { HeroCarouselComponent } from "./hero-carousel/hero-carousel.component";
 import { LiveBannerComponent } from "./live-banner/live-banner.component";
+import { MostHypedComponent } from "./most-hyped/most-hyped.component";
 
 @Component({
   selector: 'app-home',
-  imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SidebarComponent, SeasonPopComponent, HeroCarouselComponent, LiveBannerComponent],
+  imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SidebarComponent, SeasonPopComponent, HeroCarouselComponent, LiveBannerComponent, MostHypedComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

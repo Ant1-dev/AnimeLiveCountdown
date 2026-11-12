@@ -1,0 +1,30 @@
+@if (summary(); as s) {
+  @if (s.episode) {
+  <section class="reactions" aria-labelledby="reactions-heading">
+    <div class="reactions-header">
+      <h2 id="reactions-heading" class="reactions-title">Episode {{ s.episode }} reactions</h2>
+      <span class="reactions-total">{{ s.total }} {{ s.total === 1 ? 'reaction' : 'reactions' }}</span>
+    </div>
+    <div class="reaction-list" role="group" aria-label="React to this episode">
+      @for (option of options(); track option.type) {
+      <button
+        type="button"
+        class="reaction"
+        [class.mine]="option.mine"
+        [attr.aria-pressed]="option.mine"
+        [attr.aria-label]="option.label + ', ' + option.count"
+        [title]="option.label"
+        [disabled]="pending()"
+        (click)="toggle(option.type)"
+      >
+        <span class="emoji" aria-hidden="true">{{ option.emoji }}</span>
+        <span class="count">{{ option.count }}</span>
+      </button>
+      }
+    </div>
+    @if (!signedIn()) {
+    <p class="hint">Sign in to add your reaction.</p>
+    }
+  </section>
+  }
+}
