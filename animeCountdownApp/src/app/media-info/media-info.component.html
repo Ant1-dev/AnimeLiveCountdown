@@ -83,6 +83,7 @@
         </h4>
       </div>
     }
+      <app-where-to-watch [links]="mediaDetails().streamingLinks" />
       <h4>Description:</h4>
       <div class="description" [innerHTML]="mediaDetails().description"></div>
 
@@ -134,7 +135,7 @@
       <div class="countdown-label">Minutes</div>
     </div>
     <div class="countdown-item">
-      <div class="countdown-value" style="color: #00a6fb">
+      <div class="countdown-value" style="color: var(--accent)">
         {{ remaining.seconds | number : "2.0-0" }}
       </div>
       <div class="countdown-label">Seconds</div>

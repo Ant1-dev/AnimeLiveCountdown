@@ -9,11 +9,11 @@
     font-size: 16px;
     line-height: normal;
     z-index: 3;
-    color: #f0f0f0;
+    color: var(--text-primary);
   }
 
 .search-input::placeholder {
-  color: #f0f0f0;
+  color: var(--text-primary);
 }
 
   .search-wrapper {
@@ -37,16 +37,16 @@
 
   mat-icon {
     margin-right: 8px;
-    color: #00a6fb; 
+    color: var(--accent); 
   }
   
   .search-results {
     margin-top: 0.5rem;
     width: 100%;
     z-index: 5;
-    background-color: #141414;
+    background-color: var(--bg-elevated);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px var(--shadow-color);
     animation: fadeIn 0.2s ease-in-out;
   }
   

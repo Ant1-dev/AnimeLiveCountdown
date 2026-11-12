@@ -1,9 +1,9 @@
 /* sidebar body */
 .sidebar-content {
     border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--surface-panel);
     padding: 0 1rem 1rem 1rem;
-    color: white;
+    color: var(--text-strong);
 }
 
 /* Head */
@@ -52,7 +52,7 @@ h3 {
 /* media content */
 .media-content {
     border-radius: 10px;
-    background-color: #1F2833;
+    background-color: var(--bg-card);
     height: fit-content;
     min-height: 100px;
     margin: 1rem 0;
@@ -73,11 +73,11 @@ h3 {
   align-items: center;
   font-size: 1.4rem;
   font-weight: bold;
-  color: #00a6fb;
+  color: var(--accent);
   z-index: 2;
   position: relative;
   border-radius: 50%;
-  outline: rgba(255, 255, 255, 0.5) solid 1px;
+  outline: var(--border-strong) solid 1px;
   width: 2rem;
   height: 2rem;
   flex-shrink: 0;
@@ -98,17 +98,17 @@ h3 {
   grid-column: 1 / -1;
   font-weight: 600;
   font-size: 1rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  text-shadow: var(--banner-text-shadow);
 }
 
 .media-episode {
-  color: #00a6fb;
+  color: var(--accent);
   font-size: 1rem;
 }
 
 .timestamp {
   font-size: 1rem;
-  color: white;
+  color: var(--text-strong);
   text-align: right;
 }
 
@@ -133,7 +133,7 @@ h3 {
 }
 
 .media-content:hover .rank-index {
-  background-color: #00a6fb;
+  background-color: var(--accent);
   outline: none;
   color: white;
 }

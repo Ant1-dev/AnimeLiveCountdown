@@ -27,6 +27,8 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: Aura,
+        // Follow the site theme (data-theme on <html>, see ThemeService) instead of the OS setting
+        options: { darkModeSelector: '[data-theme="dark"]' },
       },
     }),
     provideClientHydration(withEventReplay()),

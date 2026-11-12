@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      // Set the theme before first paint so there's no flash (ThemeService takes over after boot).
+      (function () {
+        var theme;
+        try { theme = localStorage.getItem('alc-theme'); } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          try { theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+          catch (e) { theme = 'dark'; }
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGKZ0BCMWD"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
