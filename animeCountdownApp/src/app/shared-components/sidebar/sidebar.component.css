@@ -15,7 +15,8 @@
     gap: clamp(.5rem, 1rem, 2rem);
 }
 
-h3 {
+h3,
+.sidebar-title {
   font-size: 1.5rem;
   font-weight: bold;
   background: linear-gradient(
@@ -138,3 +139,9 @@ h3 {
   color: white;
 }
 
+
+/* Was an h3; h2 keeps the heading outline valid with the same look */
+.sidebar-title {
+  font-size: 1.17em;
+  margin: 1em 0;
+}

@@ -24,7 +24,7 @@
     <ul class="now-list">
       @for (item of airingNow(); track item.episode.mediaId + '-' + item.episode.episode) {
         <li>
-          <a class="now-card" [routerLink]="['/media', item.episode.mediaId]">
+          <a class="now-card" [routerLink]="item.episode.mediaId | animePath: title(item.episode)">
             @if (item.episode.coverimage) {
               <img [ngSrc]="item.episode.coverimage" alt="" width="56" height="80" class="thumb" />
             }

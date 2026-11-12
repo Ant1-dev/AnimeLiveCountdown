@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, computed, inject, signal } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Title } from '@angular/platform-browser';
-import { catchError, distinctUntilChanged, interval, map, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { SeasonCardComponent } from './season-card.component';
 import {
@@ -13,6 +11,11 @@ import {
 import {
   SeasonService, sameSeason, seasonLabel, seasonOf, shiftSeason, timeUntil,
 } from '../services/season.service';
+import { injectIsBrowser, tickEvery } from '../shared/platform';
+import { SeoService, breadcrumbs } from '../seo/seo.service';
+import { injectResponseStatus } from '../seo/http-status';
+import { SITE_URL } from '../seo/site';
+import { animePath, preferredTitle } from '../seo/slug';
 
 interface Query {
   key: SeasonKey;
@@ -37,9 +40,10 @@ export class SeasonBrowserComponent {
   private seasonService = inject(SeasonService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private title = inject(Title);
+  private seo = inject(SeoService);
+  private setStatus = injectResponseStatus();
   private destroyRef = inject(DestroyRef);
-  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private isBrowser = injectIsBrowser();
 
   protected readonly seasons = SEASON_NAMES;
   protected readonly sorts = SORTS;
@@ -87,23 +91,28 @@ export class SeasonBrowserComponent {
   });
 
   constructor() {
-    if (!this.isBrowser) return; // prerender: render the shell only
-
-    interval(30_000).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
+    // Renders on the server too, so crawlers get the season's shows and per-season meta tags
+    tickEvery(30_000, this.isBrowser).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
 
     this.seasonService.overview().pipe(
       catchError(() => of(null)),
       takeUntilDestroyed(),
     ).subscribe((o) => this.overview.set(o));
 
-    this.route.queryParamMap.pipe(
-      map((params) => this.parseQuery(params.get('season'), params.get('year'), params.get('genre'), params.get('sort'))),
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(
+      tap(([path, query]) => this.redirectLegacyUrl(path.has('year'), query.get('season'), query.get('year'))),
+      map(([path, query]) => this.parseQuery(
+        path.get('season') ?? query.get('season'),
+        path.get('year') ?? query.get('year'),
+        query.get('genre'),
+        query.get('sort'),
+      )),
       distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
       tap((q) => {
         this.query.set(q);
         this.loading.set(true);
         this.error.set(null);
-        this.title.setTitle(`${seasonLabel(q.key.season)} ${q.key.year} Anime | Anime Live Countdown`);
+        this.applySeo(q, null);
       }),
       switchMap((q) => this.seasonService.season(q.key, q.genre, q.sort).pipe(
         catchError((err: HttpErrorResponse) => {
@@ -117,6 +126,61 @@ export class SeasonBrowserComponent {
     ).subscribe((response) => {
       this.data.set(response);
       this.loading.set(false);
+      const q = this.query();
+      if (q) this.applySeo(q, response);
+      if (!response && this.error()) this.setStatus(503, { 'Retry-After': '300' });
+    });
+  }
+
+  /** Canonical season URL: /seasons/2026/fall. Genre and sort are filters, not separate pages. */
+  private seasonPath(key: SeasonKey): string {
+    return `/seasons/${key.year}/${key.season.toLowerCase()}`;
+  }
+
+  /** Old links used ?season=FALL&year=2026; move them to the path form (301 on the server). */
+  private redirectLegacyUrl(hasPath: boolean, season: string | null, year: string | null): void {
+    if (hasPath || !season || !year) return;
+    const q = this.parseQuery(season, year, null, null);
+    const target = this.seasonPath(q.key);
+    if (this.isBrowser) {
+      this.router.navigateByUrl(target, { replaceUrl: true });
+    } else {
+      this.setStatus(301, { Location: target });
+    }
+  }
+
+  private applySeo(q: Query, response: SeasonResponse | null): void {
+    const name = `${seasonLabel(q.key.season)} ${q.key.year}`;
+    const path = this.seasonPath(q.key);
+    const count = response?.media.length;
+    const top = (response?.media ?? []).slice(0, 4)
+      .map((m) => preferredTitle(m.engtitle, m.romtitle)).filter(Boolean);
+    const intro = this.isCurrent() ? `Every anime airing this season (${name})`
+      : this.isNext() ? `Every anime premiering in ${name}` : `Every anime from ${name}`;
+    const description = `${intro}${count ? `: ${count} shows` : ''}${top.length ? ` including ${top.join(', ')}` : ''}. Air dates, live episode countdowns and where to watch.`;
+    this.seo.setPage({
+      title: `${name} Anime: Schedule & Release Dates`,
+      description,
+      path,
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: `${name} anime`,
+          url: SITE_URL + path,
+          mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: count ?? 0,
+            itemListElement: (response?.media ?? []).slice(0, 50).map((m, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              url: SITE_URL + animePath(m.id, preferredTitle(m.engtitle, m.romtitle)),
+              name: preferredTitle(m.engtitle, m.romtitle) || undefined,
+            })),
+          },
+        },
+        breadcrumbs([['Home', '/'], ['Seasons', '/seasons'], [name, path]]),
+      ],
     });
   }
 
@@ -143,11 +207,8 @@ export class SeasonBrowserComponent {
       genre: changes.genre !== undefined ? changes.genre : q.genre,
       sort: changes.sort ?? q.sort,
     };
-    this.router.navigate([], {
-      relativeTo: this.route,
+    this.router.navigate([this.seasonPath({ season: merged.season, year: merged.year })], {
       queryParams: {
-        season: merged.season,
-        year: merged.year,
         genre: merged.genre || null,
         sort: merged.sort === 'popularity' ? null : merged.sort,
       },

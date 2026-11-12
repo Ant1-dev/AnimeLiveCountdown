@@ -7,6 +7,8 @@ import { LiveService } from '../../services/live.service';
 import { LiveEpisode } from '../../models/live.model';
 import { MediaTimeService } from '../../services/media-time.service';
 import { timeUntil } from '../../services/season.service';
+import { injectIsBrowser, tickEvery } from '../../shared/platform';
+import { AnimePathPipe } from '../../seo/anime-path.pipe';
 
 interface NowAiring {
   episode: LiveEpisode;
@@ -22,7 +24,7 @@ const HOUR = 3600_000;
  */
 @Component({
   selector: 'app-live-banner',
-  imports: [RouterLink, NgOptimizedImage],
+  imports: [AnimePathPipe, RouterLink, NgOptimizedImage],
   templateUrl: './live-banner.component.html',
   styleUrl: './live-banner.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,7 +71,7 @@ export class LiveBannerComponent {
 
   constructor() {
     if (!isPlatformBrowser(inject(PLATFORM_ID))) return;
-    interval(15_000).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
+    tickEvery(15_000, injectIsBrowser()).pipe(takeUntilDestroyed()).subscribe(() => this.now.set(Date.now()));
     this.live.poll().pipe(takeUntilDestroyed()).subscribe((response) => {
       if (!response) return;
       this.episodes.set(response.episodes);

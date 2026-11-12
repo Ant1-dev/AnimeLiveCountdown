@@ -12,13 +12,9 @@ export class MediaInfoService {
   private httpClient = inject(HttpClient);
   private mediaId = signal<number | undefined>(undefined);
 
+  /** Rethrows the HttpErrorResponse as-is so callers can tell "not found" from "unavailable". */
   getMedia() {
-    return this.httpClient.get<MediaInfo>(this.baseUrl + this.mediaId()).pipe(
-      catchError((error) => {
-        console.log(error);
-        return throwError(() => new Error(error));
-      })
-    );
+    return this.httpClient.get<MediaInfo>(this.baseUrl + this.mediaId());
   }
 
   getTrendingMedia(error: string): Observable<MediaInfo[]> {

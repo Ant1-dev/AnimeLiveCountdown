@@ -4,6 +4,7 @@ import { ScheduleService } from '../../../services/schedule.service';
 import { ShowComponent } from '../shows/show/show.component';
 import { MediaSkeletonComponent } from "../../shared-home/media-skeleton/media-skeleton.component";
 import { timer, switchMap } from 'rxjs';
+import { injectIsBrowser, pollEvery } from '../../../shared/platform';
 
 @Component({
   selector: 'app-airing-soon',
@@ -18,12 +19,13 @@ export class AiringSoonComponent implements OnInit {
   error = signal<string>('');
   private scheduleService = inject(ScheduleService);
   private destroyRef = inject(DestroyRef);
+  private isBrowser = injectIsBrowser();
 
   ngOnInit(): void {
     this.isLoading.set(true);
 
     // Start immediately (0ms), then poll every 60 seconds (60000ms)
-    const subscription = timer(0, 60000)
+    const subscription = pollEvery(60000, this.isBrowser)
       .pipe(
         switchMap(() => this.scheduleService.renderMedia('soon', this.error()))
       )

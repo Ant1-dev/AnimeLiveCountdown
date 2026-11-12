@@ -3,10 +3,11 @@ import { Media } from '../../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { MediaInfoService } from '../../../services/media.info.service';
 import { MediaInfo } from '../../../models/media.info.model';
+import { AnimePathPipe } from '../../../seo/anime-path.pipe';
 
 @Component({
   selector: 'app-result',
-  imports: [CommonModule],
+  imports: [AnimePathPipe, CommonModule],
   templateUrl: './result.component.html',
   styleUrl: './result.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

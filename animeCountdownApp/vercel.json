@@ -1,26 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/sitemap.xml", "destination": "https://api.animelivecountdown.com/sitemap.xml" },
-    {
-      "source": "/media/:id(\\d+)",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": ".*(Discordbot|Twitterbot|Slackbot|facebookexternalhit|Facebot|WhatsApp|TelegramBot|LinkedInBot|SkypeUriPreview|redditbot|Embedly|Iframely|Mastodon|Bluesky|vkShare|Pinterest).*"
-        }
-      ],
-      "destination": "https://api.animelivecountdown.com/api/share/media/:id"
-    },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/anime-countdown-app/browser"
-      }
-    }
-  ]
- }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm ci",
+  "buildCommand": "node scripts/vercel-build.mjs"
+}

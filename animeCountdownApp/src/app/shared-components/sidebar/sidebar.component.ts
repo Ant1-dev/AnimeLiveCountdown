@@ -4,10 +4,11 @@ import { ScheduleService } from '../../services/schedule.service';
 import { Media } from '../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { AnimePathPipe } from '../../seo/anime-path.pipe';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterLink],
+  imports: [AnimePathPipe, CommonModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })

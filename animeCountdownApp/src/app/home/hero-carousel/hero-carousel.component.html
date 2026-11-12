@@ -1,6 +1,6 @@
 <div class="carousel">
   <div class="carousel-media">
-    @for (media of mediaList(); track media.id) {
+    @for (media of mediaList(); track media.id; let i = $index) {
     <div class="carousel-media-image" [class.active]="currentMedia()!.id === media.id">
       @if (media.banner) {
         <img
@@ -8,7 +8,7 @@
         [alt]="media.engtitle || media.romtitle"
         class="banner-image"
         fill
-        priority
+        [priority]="i === 0"
       />
       
       } @else {
@@ -17,11 +17,11 @@
         [alt]="media.engtitle || media.romtitle"
         class="cover-image"
         fill
-        priority
+        [priority]="i === 0"
       />
       }
       <div class="carousel-content">
-        <h1 class="show-title">{{ media.engtitle || media.romtitle }}</h1>
+        <h2 class="show-title">{{ media.engtitle || media.romtitle }}</h2>
         <p class="genres-episodes"> Next Episode: <span class="episodeA">{{media.nextepisode + " "}}</span> <br> Genres: {{ media.genres.join(", ") }}</p>
         <div class="airing-block">
           @if (isAiringNow()) {

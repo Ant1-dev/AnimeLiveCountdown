@@ -3,6 +3,7 @@ import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Media } from '../models/schedule.model';
 import { MediaTimeService } from './media-time.service';
+import { injectIsBrowser, tickEvery } from '../shared/platform';
 
 interface MediaStore {
   [weekDay: string]: Media[];
@@ -26,7 +27,7 @@ export class MediaStoreService {
 
   constructor() {
     // Check every 30 seconds if we need to pull from the queue
-    interval(30000)
+    tickEvery(30000, injectIsBrowser())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.checkAndUpdateDisplayedMedia());
   }
