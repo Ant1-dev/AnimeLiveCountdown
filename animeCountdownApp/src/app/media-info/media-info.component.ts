@@ -17,10 +17,11 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Skeleton } from 'primeng/skeleton';
+import { WhereToWatchComponent } from './where-to-watch/where-to-watch.component';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton, NgOptimizedImage],
+  imports: [CommonModule, Skeleton, NgOptimizedImage, WhereToWatchComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

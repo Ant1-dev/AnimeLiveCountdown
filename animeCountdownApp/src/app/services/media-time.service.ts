@@ -8,6 +8,16 @@ import { TimeRemaining } from '../models/time-remaining.model';
 interface TimerData {
   airingTime: number;
   timeLeft: number | undefined;
+  title?: string;
+  episode?: number;
+}
+
+/** A countdown that reached zero while the page was open. */
+export interface AiredEvent {
+  mediaId: number;
+  title: string;
+  episode?: number;
+  at: number;
 }
 
 @Injectable({
@@ -18,6 +28,9 @@ export class MediaTimeService {
   private timerMap = signal<Map<number, TimerData>>(new Map());
 
   private destroyRef = inject(DestroyRef);
+
+  /** Countdowns that just hit zero, newest last. The airing celebration listens to this. */
+  readonly justAired = signal<AiredEvent[]>([]);
 
   constructor() {
     // Set up a single interval for all timers
@@ -71,6 +84,8 @@ export class MediaTimeService {
       updatedMap.set(mediaInfo.id, {
         airingTime,
         timeLeft: airingTime - Date.now(),
+        title: mediaInfo.engtitle || mediaInfo.romtitle,
+        episode: mediaInfo.nextepisode,
       });
 
       // Update the signal with the new Map
@@ -99,6 +114,8 @@ export class MediaTimeService {
       updatedMap.set(media.id, {
         airingTime,
         timeLeft: airingTime - Date.now(),
+        title: this.getDisplayTitle(media),
+        episode: media.next_Airing_Episode,
       });
 
       // Update the signal with the new Map
@@ -108,10 +125,28 @@ export class MediaTimeService {
     }
   }
 
+  /**
+   * Tracks an upcoming episode that may not have a card on screen (e.g. from the live banner) so
+   * the celebration can fire for it. Doesn't replace a timer that's already tracking that show.
+   */
+  watchAiring(mediaId: number, airingAt: string | Date, title: string, episode?: number): void {
+    if (typeof window === 'undefined' || this.timerMap().has(mediaId)) return;
+    const airingTime = new Date(airingAt).getTime();
+    if (!Number.isFinite(airingTime) || airingTime <= Date.now()) return;
+    const updatedMap = new Map(this.timerMap());
+    updatedMap.set(mediaId, { airingTime, timeLeft: airingTime - Date.now(), title, episode });
+    this.timerMap.set(updatedMap);
+  }
+
+  dismissAired(mediaId: number): void {
+    this.justAired.update((events) => events.filter((e) => e.mediaId !== mediaId));
+  }
+
   private updateAllTimers(): void {
     const currentTime = Date.now();
     const currentMap = this.timerMap();
     const updatedMap = new Map<number, TimerData>();
+    const aired: AiredEvent[] = [];
     let hasUpdates = false;
 
     // Update each timer
@@ -120,14 +155,19 @@ export class MediaTimeService {
 
       if (remainingTime > 0) {
         updatedMap.set(mediaId, {
-          airingTime: timer.airingTime,
+          ...timer,
           timeLeft: remainingTime,
         });
         hasUpdates = true;
       } else {
+        // Crossed zero during this tick (not a timer that was already expired when added)
+        if (timer.timeLeft && timer.timeLeft > 0) {
+          aired.push({ mediaId, title: timer.title || 'A new episode', episode: timer.episode, at: currentTime });
+          hasUpdates = true;
+        }
         // Keep expired timers with 0 time
         updatedMap.set(mediaId, {
-          airingTime: timer.airingTime,
+          ...timer,
           timeLeft: 0,
         });
       }
@@ -136,6 +176,9 @@ export class MediaTimeService {
     // Only update the signal if there were changes
     if (hasUpdates) {
       this.timerMap.set(updatedMap);
+    }
+    if (aired.length) {
+      this.justAired.update((events) => [...events, ...aired].slice(-5));
     }
   }
 }

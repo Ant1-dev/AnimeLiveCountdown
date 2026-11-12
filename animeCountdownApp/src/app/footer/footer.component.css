@@ -1,11 +1,9 @@
-:root {
+:host {
   --primary-color: #6a55fa;
   --secondary-color: #f44370;
-  --text-color: #e4e6f1;
-  --bg-dark: #1a1b26;
-  --bg-card: #24273a;
-  --bg-footer: #171923;
-  --border-color: #2d3748;
+  --text-color: var(--text-primary);
+  --bg-footer: var(--footer-bg);
+  --border-color: var(--border-subtle);
   --font-main: 'Poppins', sans-serif;
 }
 
@@ -38,7 +36,7 @@
 }
 
 .tagline {
-  color: #a0a3b1;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -46,7 +44,7 @@
 /* Links Section */
 .footer-links h4, 
 .footer-connect h4 {
-  color: white;
+  color: var(--text-strong);
   font-size: 1.1rem;
   margin-bottom: 20px;
   position: relative;
@@ -76,7 +74,7 @@
 }
 
 .footer-links a {
-  color: #a0a3b1;
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
   display: inline-block;
@@ -102,7 +100,7 @@
 }
 
 .contact-item a {
-  color: #a0a3b1;
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 0.9rem;
@@ -125,7 +123,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #2d3748;
+  background-color: var(--surface-subtle);
   color: var(--text-color);
   transition: all 0.2s ease;
 }
@@ -147,7 +145,7 @@
 
 .footer-bottom p {
   margin: 0;
-  color: #a0a3b1;
+  color: var(--text-muted);
 }
 
 .footer-bottom-links {
@@ -156,7 +154,7 @@
 }
 
 .footer-bottom-links a {
-  color: #a0a3b1;
+  color: var(--text-muted);
   text-decoration: none;
 }
 
