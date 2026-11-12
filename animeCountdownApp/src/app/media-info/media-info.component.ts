@@ -20,10 +20,12 @@ import { Skeleton } from 'primeng/skeleton';
 import { ScheduleNote } from '../models/schedule-note.model';
 import { ScheduleNoteService } from '../services/schedule-note.service';
 import { ScheduleNoteBadgeComponent } from '../shared-components/schedule-note-badge/schedule-note-badge.component';
+import { ShareButtonComponent } from '../shared-components/share-button/share-button.component';
+import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions.component';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton, NgOptimizedImage, ScheduleNoteBadgeComponent],
+  imports: [CommonModule, Skeleton, NgOptimizedImage, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
