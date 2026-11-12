@@ -29,4 +29,14 @@ public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long
 
     @Query("SELECT m.id FROM MediaInfoEntity m")
     List<Long> findAllIds();
+
+    /** Id and titles of every show, for the site's sitemap (the frontend builds the URLs). */
+    interface SitemapEntry {
+        Long getId();
+        String getEngtitle();
+        String getRomtitle();
+    }
+
+    @Query("SELECT m.id AS id, m.engtitle AS engtitle, m.romtitle AS romtitle FROM MediaInfoEntity m ORDER BY m.popularity DESC")
+    List<SitemapEntry> findSitemapEntries();
 }

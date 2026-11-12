@@ -62,10 +62,10 @@ class ReminderDispatchServiceTest {
         verify(push).sendToUser(eq(1L), message.capture(), any());
         assertEquals("Frieren", message.getValue().title());
         assertEquals("Episode 5 airs in 15 minutes", message.getValue().body());
-        assertEquals("/media/10", message.getValue().url());
+        assertEquals("/anime/10/frieren", message.getValue().url());
         assertEquals("m10e5", message.getValue().tag());
         verify(discord).send(eq(WEBHOOK), eq("Frieren"), eq("Episode 5 airs in 15 minutes"),
-                eq("https://animelivecountdown.com/media/10"), eq("https://img/1.png"), any());
+                eq("https://animelivecountdown.com/anime/10/frieren"), eq("https://img/1.png"), any());
     }
 
     @Test
