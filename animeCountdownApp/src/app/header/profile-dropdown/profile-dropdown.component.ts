@@ -22,6 +22,11 @@ export class ProfileDropdownComponent {
     this.close.emit();
   }
 
+  navigateToNotifications(): void {
+    this.router.navigate(['/notifications']);
+    this.close.emit();
+  }
+
   logout(): void {
     this.authService.logout();
   }

@@ -1,10 +1,23 @@
 {
-    "name":"",
-    "short_name":"",
-    "icons":[{"src":"/icons/android-chrome-192x192.png",
-    "sizes":"192x192","type":"image/png"
-},
-{
-    "src":"/icons/android-chrome-512x512.png",
-    "sizes":"512x512","type":"image/png"
-    }],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+  "id": "/",
+  "name": "Anime Live Countdown",
+  "short_name": "AniCountdown",
+  "description": "Live countdowns to new anime episodes, with reminders for the shows you follow.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#101116",
+  "background_color": "#101116",
+  "categories": ["entertainment"],
+  "icons": [
+    { "src": "/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Favorites", "url": "/favorites", "icons": [{ "src": "/icons/android-chrome-192x192.png", "sizes": "192x192" }] },
+    { "name": "Notifications", "url": "/notifications", "icons": [{ "src": "/icons/android-chrome-192x192.png", "sizes": "192x192" }] }
+  ]
+}
