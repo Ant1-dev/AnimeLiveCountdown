@@ -117,6 +117,12 @@
   font-weight: 400;
 }
 
+/* Break / delay note */
+.schedule-note {
+  display: flex;
+  font-size: 1rem;
+}
+
 /* Airing info */
 .airing-info {
   display: flex;
@@ -293,4 +299,8 @@
   .english-title {
     font-size: 1.8rem;
   }
+}
+.title .share {
+  display: inline-block;
+  margin-top: 12px;
 }

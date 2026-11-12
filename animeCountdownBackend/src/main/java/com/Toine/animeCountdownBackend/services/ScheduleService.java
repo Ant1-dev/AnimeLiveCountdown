@@ -275,6 +275,9 @@ public class ScheduleService {
      * Update the fields of an existing entity with values from a new entity
      */
     private void updateEntityFields(MediaEntity existing, MediaEntity newEntity) {
+        // Compare stored vs fresh airing info before it's overwritten
+        ScheduleNoteDetector.detect(existing, newEntity, Instant.now());
+
         // Update basic info
         existing.setTitle_English(newEntity.getTitle_English());
         existing.setTitle_Romaji(newEntity.getTitle_Romaji());

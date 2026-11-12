@@ -1,0 +1,16 @@
+@if (entries().length > 0) {
+<section aria-labelledby="most-hyped-heading">
+  <div class="section-header">
+    <h1 id="most-hyped-heading" class="section-title">Most Hyped This Week</h1>
+    <div class="gradient-bar"></div>
+  </div>
+  <div class="cardContainer">
+    @for (entry of entries(); track entry.media.id; let i = $index) {
+    <div class="hype-item">
+      <app-show [media]="entry.media" [showAiringNow]="true" />
+      <p class="hype-caption"><span class="rank">#{{ i + 1 }}</span> {{ caption(entry) }}</p>
+    </div>
+    }
+  </div>
+</section>
+}
