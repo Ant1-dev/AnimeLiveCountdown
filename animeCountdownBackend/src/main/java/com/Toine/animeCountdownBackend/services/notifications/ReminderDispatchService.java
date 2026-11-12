@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services.notifications;
 
+import com.Toine.animeCountdownBackend.utils.Slugs;
 import com.Toine.animeCountdownBackend.models.postgreEntities.NotificationSettingsEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.ReminderEntity;
 import com.Toine.animeCountdownBackend.repositories.NotificationRepository;
@@ -86,7 +87,7 @@ public class ReminderDispatchService {
             return false; // Already notified about this episode
         }
 
-        String path = "/media/" + c.mediaId();
+        String path = Slugs.animePath(c.mediaId(), title);
         if (c.pushEnabled() && webPushService.isEnabled()) {
             // Keep it queued for an offline device until an hour after airing, then let it drop
             Duration ttl = Duration.between(now, c.airingAt().plus(Duration.ofHours(1)));

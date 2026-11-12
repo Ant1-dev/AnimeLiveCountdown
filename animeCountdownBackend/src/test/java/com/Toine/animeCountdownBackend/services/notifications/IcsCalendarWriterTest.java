@@ -25,7 +25,7 @@ class IcsCalendarWriterTest {
         assertTrue(ics.contains("\r\nDTSTAMP:20261111T120000Z\r\n"));
         assertTrue(ics.contains("\r\nDTSTART:20261113T150000Z\r\nDTEND:20261113T152400Z\r\n"));
         assertTrue(ics.contains("\r\nSUMMARY:Frieren - Episode 5\r\n"));
-        assertTrue(ics.contains("\r\nURL:https://animelivecountdown.com/media/1\r\n"));
+        assertTrue(ics.contains("\r\nURL:https://animelivecountdown.com/anime/1/frieren\r\n"));
         // Unknown duration falls back to 24 minutes
         assertTrue(ics.contains("\r\nDTSTART:20261114T093000Z\r\nDTEND:20261114T095400Z\r\n"));
         assertTrue(ics.indexOf("UID:1-5@") < ics.indexOf("UID:2-7@"));

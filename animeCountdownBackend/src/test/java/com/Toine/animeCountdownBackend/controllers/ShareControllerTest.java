@@ -41,7 +41,7 @@ class ShareControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertTrue(response.getHeaders().getCacheControl().contains("max-age=300"));
-        assertTrue(html.contains("<meta property=\"og:url\" content=\"https://animelivecountdown.com/media/171018\">"));
+        assertTrue(html.contains("<meta property=\"og:url\" content=\"https://animelivecountdown.com/anime/171018/frieren-beyond-journeys-end\">"));
         assertTrue(html.contains("<meta property=\"og:image\" content=\"https://api.example.com/api/share/media/171018/card.jpg?v=10\">"));
         assertTrue(html.contains("<meta name=\"twitter:card\" content=\"summary_large_image\">"));
         assertTrue(html.contains("Ep 5 airs in 2d 4h (Fri, Nov 13 at 15:00 UTC). An elf mage outlives her party."));
