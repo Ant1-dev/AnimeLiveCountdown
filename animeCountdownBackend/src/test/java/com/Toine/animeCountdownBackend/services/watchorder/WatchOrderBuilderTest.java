@@ -78,4 +78,21 @@ class WatchOrderBuilderTest {
         assertEquals(List.of(0L, 1L, 2L), order.stream().map(WatchOrderEntry::id).toList());
         assertEquals(List.of(2L), WatchOrderBuilder.frontier(byId, 1));
     }
+
+    @Test
+    void mergesRelationsWhenACopyOfANodeComesBackEmpty() {
+        // Real AniList shape (Apothecary Diaries): Season 2 reached through the novel comes back with
+        // an empty relations list; the copy reached directly has the prequel link to Season 1.
+        Node s1 = node(1, "TV", 2023);
+        Node s2Full = node(2, "TV", 2025, edge("PREQUEL", s1));
+        Node s2Empty = new Node(2L, "ANIME", "TV", "FINISHED", 24, new FuzzyDate(2025, 1, 1),
+                new Titles("Show 2", null), null, new Relations(List.of()));
+        Node novel = new Node(99L, "MANGA", "NOVEL", "RELEASING", null, new FuzzyDate(2014, 1, 1),
+                new Titles(null, "Novel"), null, new Relations(List.of(edge("ADAPTATION", s2Empty))));
+        Node s3 = node(3, "TV", 2026, edge("ADAPTATION", novel), edge("PREQUEL", s2Full));
+
+        List<WatchOrderEntry> order = WatchOrderBuilder.build(WatchOrderBuilder.index(List.of(s3)), 3, Set.of());
+
+        assertEquals(List.of(1L, 2L, 3L), order.stream().map(WatchOrderEntry::id).toList());
+    }
 }

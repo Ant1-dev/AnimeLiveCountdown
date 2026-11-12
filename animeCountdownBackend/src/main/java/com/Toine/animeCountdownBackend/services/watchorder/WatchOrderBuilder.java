@@ -20,27 +20,37 @@ public final class WatchOrderBuilder {
     private WatchOrderBuilder() {
     }
 
-    /** Every node in the graphs, keyed by id, preferring the copy that includes its relations. */
+    /**
+     * Every node in the graphs, keyed by id. A show can appear several times in a nested response, and
+     * some copies come back with fewer (or zero) relations, so the relations of all copies are merged.
+     * A node keeps null relations only when no copy had any (it's at the edge of the query).
+     */
     public static Map<Long, Node> index(Collection<Node> roots) {
-        Map<Long, Node> byId = new HashMap<>();
+        Map<Long, Node> firstCopy = new LinkedHashMap<>();
+        Map<Long, LinkedHashMap<String, Edge>> edges = new HashMap<>();
         Deque<Node> stack = new ArrayDeque<>(roots);
         while (!stack.isEmpty()) {
             Node n = stack.pop();
             if (n == null || n.id() == null) {
                 continue;
             }
-            Node known = byId.get(n.id());
-            if (known == null || (known.relations() == null && n.relations() != null)) {
-                byId.put(n.id(), n);
-            }
+            firstCopy.putIfAbsent(n.id(), n);
             if (n.relations() != null && n.relations().edges() != null) {
+                LinkedHashMap<String, Edge> merged = edges.computeIfAbsent(n.id(), k -> new LinkedHashMap<>());
                 for (Edge e : n.relations().edges()) {
-                    if (e != null && e.node() != null) {
+                    if (e != null && e.node() != null && e.node().id() != null) {
+                        merged.putIfAbsent(e.relationType() + ":" + e.node().id(), e);
                         stack.push(e.node());
                     }
                 }
             }
         }
+        Map<Long, Node> byId = new HashMap<>();
+        firstCopy.forEach((id, n) -> {
+            LinkedHashMap<String, Edge> merged = edges.get(id);
+            byId.put(id, new Node(n.id(), n.type(), n.format(), n.status(), n.episodes(), n.startDate(), n.title(),
+                    n.coverImage(), merged == null ? null : new RelationGraph.Relations(new ArrayList<>(merged.values()))));
+        });
         return byId;
     }
 
