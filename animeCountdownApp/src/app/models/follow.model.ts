@@ -17,6 +17,8 @@ export interface AniListStatus {
   connected: boolean;
   userName: string | null;
   lastSyncedAt: string | null;
+  /** Follows and watched episodes are pushed to the AniList list. */
+  syncEnabled: boolean;
 }
 
 export interface AniListImportResult {

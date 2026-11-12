@@ -24,7 +24,7 @@ export class AniListPanelComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   protected status = signal<AniListStatus | null>(null);
-  protected busy = signal<'connect' | 'import' | 'disconnect' | null>(null);
+  protected busy = signal<'connect' | 'import' | 'disconnect' | 'sync' | null>(null);
   protected result = signal<AniListImportResult | null>(null);
   protected message = signal<string>('');
   protected isError = signal(false);
@@ -80,6 +80,21 @@ export class AniListPanelComponent implements OnInit {
           this.status.update((s) => (s ? { ...s, connected: false } : s));
         }
         this.show(error.error?.error || "Couldn't import from AniList. Try again in a minute.", true);
+      },
+    });
+  }
+
+  toggleSync(enabled: boolean): void {
+    this.busy.set('sync');
+    this.aniList.setSync(enabled).subscribe({
+      next: (status) => {
+        this.busy.set(null);
+        this.status.set(status);
+        this.show(enabled ? 'Your AniList list will follow along from now on.' : 'AniList sync is off. Re-sync still imports from AniList.', false);
+      },
+      error: () => {
+        this.busy.set(null);
+        this.show("Couldn't change AniList sync. Try again.", true);
       },
     });
   }
