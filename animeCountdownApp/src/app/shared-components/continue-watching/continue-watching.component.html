@@ -1,0 +1,26 @@
+@if (following.continueWatching().length > 0) {
+<section class="continue" aria-labelledby="continue-heading">
+  <h2 id="continue-heading" class="continue-title">Continue watching</h2>
+  <ul class="continue-row">
+    @for (item of following.continueWatching(); track item.media.id) {
+    <li class="continue-item">
+      <a class="poster-link" [routerLink]="['/media', item.media.id]">
+        <img class="poster" [src]="item.media.cover_Image_Url" [alt]="title(item)" width="96" height="136" loading="lazy" />
+        <span class="behind-badge">{{ item.behind }} behind</span>
+      </a>
+      <div class="details">
+        <a class="show-title" [routerLink]="['/media', item.media.id]">{{ title(item) }}</a>
+        <span class="progress-text">Watched {{ item.watchedEpisode }} of {{ item.latestAiredEpisode }} aired</span>
+        <button
+          type="button"
+          class="watch-button"
+          [disabled]="saving().has(item.media.id)"
+          (click)="markWatched(item)">
+          Mark ep {{ item.watchedEpisode + 1 }} watched
+        </button>
+      </div>
+    </li>
+    }
+  </ul>
+</section>
+}

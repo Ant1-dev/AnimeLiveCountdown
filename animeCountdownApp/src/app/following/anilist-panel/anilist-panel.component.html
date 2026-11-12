@@ -1,0 +1,43 @@
+@if (status(); as s) { @if (s.enabled) {
+<section class="anilist" aria-label="AniList">
+  @if (!s.connected) {
+  <div class="row">
+    <p class="lead">Import the shows you're watching and planning on AniList, with your episode progress.</p>
+    <button type="button" class="primary" [disabled]="busy() !== null" (click)="connect()">
+      {{ busy() === 'connect' ? 'Opening AniList…' : 'Import from AniList' }}
+    </button>
+  </div>
+  } @else {
+  <div class="row">
+    <p class="lead">
+      Connected to AniList as <strong>{{ s.userName }}</strong>
+      @if (s.lastSyncedAt) {
+      <span class="muted">· last synced {{ s.lastSyncedAt | date : 'MMM d, h:mm a' }}</span>
+      }
+    </p>
+    <div class="actions">
+      <button type="button" class="primary" [disabled]="busy() !== null" (click)="runImport()">
+        {{ busy() === 'import' ? 'Syncing…' : 'Re-sync from AniList' }}
+      </button>
+      <button type="button" class="secondary" [disabled]="busy() !== null" (click)="disconnect()">
+        Disconnect AniList
+      </button>
+    </div>
+  </div>
+  }
+
+  @if (result(); as r) {
+  <p class="result" role="status">
+    Synced {{ r.entries }} AniList entries: {{ r.followed }} newly followed, {{ r.progressUpdated }} with
+    progress updated.
+    @if (r.skippedNotAiring > 0) {
+    {{ r.skippedNotAiring }} finished or paused {{ r.skippedNotAiring === 1 ? 'show was' : 'shows were' }} skipped
+    because they don't air anymore.
+    }
+  </p>
+  }
+  @if (message()) {
+  <p class="result" [class.error]="isError()" role="status">{{ message() }}</p>
+  }
+</section>
+} }

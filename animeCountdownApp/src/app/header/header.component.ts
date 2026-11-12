@@ -1,6 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { SearchbarComponent } from './searchbar/searchbar.component';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
@@ -16,6 +16,7 @@ import { NotificationBellComponent } from './notification-bell/notification-bell
   imports: [
     SearchbarComponent,
     RouterLink,
+    RouterLinkActive,
     SelectButtonModule,
     ReactiveFormsModule,
     MatIcon,

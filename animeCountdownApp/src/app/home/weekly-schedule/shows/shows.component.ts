@@ -18,6 +18,7 @@ import { MediaStoreService } from '../../../services/media-store.service';
 import { timer, interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
+import { FollowingService } from '../../../services/following.service';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
@@ -31,6 +32,8 @@ type RenderPriority = 'high' | 'medium' | 'low';
 export class ShowsComponent implements OnInit {
   weekDay = input<string>('');
   renderPriority = input<RenderPriority>('low');
+  // 'mine' = My Schedule: only shows the signed-in user follows
+  mode = input<'all' | 'mine'>('all');
 
   media = signal<Media[]>([]);
   isLoading = signal(false);
@@ -39,6 +42,7 @@ export class ShowsComponent implements OnInit {
   private scheduleService = inject(ScheduleService);
   private destroyRef = inject(DestroyRef);
   private mediaStoreService = inject(MediaStoreService);
+  private followingService = inject(FollowingService);
 
   // Check if this is the "Airing Soon" tab
   isAiringSoon = computed(() => this.weekDay() === 'soon');
@@ -105,7 +109,9 @@ export class ShowsComponent implements OnInit {
     // Start immediately (0ms), then poll every 60 seconds (60000ms)
     const subscription = timer(0, 60000)
       .pipe(
-        switchMap(() => this.scheduleService.renderWeekDay(this.weekDay(), this.error()))
+        switchMap(() => this.mode() === 'mine'
+          ? this.followingService.airingOn(this.weekDay())
+          : this.scheduleService.renderWeekDay(this.weekDay(), this.error()))
       )
       .subscribe({
         next: (media) => {

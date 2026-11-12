@@ -42,10 +42,15 @@ export class AuthService {
     }
 
     this.removeLegacyTokens();
-    this.refresh().subscribe({
-      error: () => this.sessionChecked.next(),
-      complete: () => this.sessionChecked.next(),
-    });
+    // Deferred so the request runs after this constructor returns: the HTTP interceptor injects
+    // AuthService, and calling it during construction fails with a circular-DI error (which the
+    // error handler below would swallow, leaving every visitor signed out on page load).
+    queueMicrotask(() =>
+      this.refresh().subscribe({
+        error: () => this.sessionChecked.next(),
+        complete: () => this.sessionChecked.next(),
+      })
+    );
   }
 
   /** Resolves once the app knows whether the visitor is signed in. */

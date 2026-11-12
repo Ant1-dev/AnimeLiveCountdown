@@ -31,6 +31,13 @@ public class FavoriteMediaEntity {
     @Column(name = "added_date")
     private Instant addedDate = Instant.now();
 
+    // Highest episode the user has watched. Null on rows created before progress tracking, read as 0.
+    @Column(name = "watched_episode")
+    private Integer watchedEpisode;
+
+    @Column(name = "progress_updated_at")
+    private Instant progressUpdatedAt;
+
     public Long getId() {
         return id;
     }
@@ -65,5 +72,21 @@ public class FavoriteMediaEntity {
 
     public void setAddedDate(Instant addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public int getWatchedEpisode() {
+        return watchedEpisode == null ? 0 : watchedEpisode;
+    }
+
+    public void setWatchedEpisode(Integer watchedEpisode) {
+        this.watchedEpisode = watchedEpisode;
+    }
+
+    public Instant getProgressUpdatedAt() {
+        return progressUpdatedAt;
+    }
+
+    public void setProgressUpdatedAt(Instant progressUpdatedAt) {
+        this.progressUpdatedAt = progressUpdatedAt;
     }
 }

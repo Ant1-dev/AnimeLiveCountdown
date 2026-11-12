@@ -51,6 +51,7 @@
         <h3 class="romaji-title">{{ mediaDetails().romtitle }}</h3>
         <app-share-button class="share" [mediaId]="mediaDetails().id" [title]="mediaDetails().engtitle || mediaDetails().romtitle" />
       </div>
+      <app-follow-controls [mediaId]="mediaDetails().id" />
 
       @if (scheduleNote(); as note) {
       <div class="schedule-note">
