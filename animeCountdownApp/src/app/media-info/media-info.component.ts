@@ -17,12 +17,13 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Skeleton } from 'primeng/skeleton';
-import { ShareButtonComponent } from '../shared-components/share-button/share-button.component';
-import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions.component';
+import { ScheduleNote } from '../models/schedule-note.model';
+import { ScheduleNoteService } from '../services/schedule-note.service';
+import { ScheduleNoteBadgeComponent } from '../shared-components/schedule-note-badge/schedule-note-badge.component';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton, NgOptimizedImage, ShareButtonComponent, EpisodeReactionsComponent],
+  imports: [CommonModule, Skeleton, NgOptimizedImage, ScheduleNoteBadgeComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +31,8 @@ import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions
 export class MediaInfoComponent implements OnInit {
   private mediaInfoService = inject(MediaInfoService);
   private mediaTimeService = inject(MediaTimeService);
+  private scheduleNoteService = inject(ScheduleNoteService);
+  protected scheduleNote = signal<ScheduleNote | null>(null);
   private destroyRef = inject(DestroyRef);
   public mediaDetails = signal<MediaInfo>({} as MediaInfo);
   private error = signal<string>('');
@@ -49,6 +52,11 @@ export class MediaInfoComponent implements OnInit {
         filter((params: ParamMap) => params.has('id')),
         switchMap((params: ParamMap) => {
           const id = Number(params.get('id'));
+          this.scheduleNote.set(null);
+          this.scheduleNoteService
+            .getNote(id)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((note) => this.scheduleNote.set(note));
           this.mediaInfoService.getMediaId(id);
           this.isLoading.set(true);
           return this.mediaInfoService.getMedia();
