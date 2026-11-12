@@ -1,6 +1,17 @@
 {
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "https://api.animelivecountdown.com/sitemap.xml" },
+    {
+      "source": "/media/:id(\\d+)",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Discordbot|Twitterbot|Slackbot|facebookexternalhit|Facebot|WhatsApp|TelegramBot|LinkedInBot|SkypeUriPreview|redditbot|Embedly|Iframely|Mastodon|Bluesky|vkShare|Pinterest).*"
+        }
+      ],
+      "destination": "https://api.animelivecountdown.com/api/share/media/:id"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "builds": [
