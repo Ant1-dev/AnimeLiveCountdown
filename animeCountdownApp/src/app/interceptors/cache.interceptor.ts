@@ -12,7 +12,8 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   // Don't cache auth-related requests
-  if (req.url.includes('/auth/') || req.url.includes('/login/')) {
+  // Reaction counts include the viewer's own reaction and change when they react
+  if (req.url.includes('/auth/') || req.url.includes('/login/') || req.url.includes('/reactions/')) {
     return next(req);
   }
 

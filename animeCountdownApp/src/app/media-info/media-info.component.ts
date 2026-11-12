@@ -17,10 +17,12 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Skeleton } from 'primeng/skeleton';
+import { ShareButtonComponent } from '../shared-components/share-button/share-button.component';
+import { EpisodeReactionsComponent } from './episode-reactions/episode-reactions.component';
 
 @Component({
   selector: 'app-media-info',
-  imports: [CommonModule, Skeleton, NgOptimizedImage],
+  imports: [CommonModule, Skeleton, NgOptimizedImage, ShareButtonComponent, EpisodeReactionsComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

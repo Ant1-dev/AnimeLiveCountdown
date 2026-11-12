@@ -18,7 +18,8 @@ raw HTML and never run JS, so every `/media/:id` link shows the generic site pre
   Browsers and search engines (Googlebot renders JS) keep getting the SPA unchanged.
   This is the same mechanism the site already uses for `/sitemap.xml`.
 - **Backend `GET /api/share/media/{id}`** returns a tiny HTML page with per-show
-  `og:*` / `twitter:*` tags: title, description ("Episode 5 airs in 2d 4h · …"), canonical URL
+  `og:*` / `twitter:*` tags: title with the countdown ("Frieren — Ep 5 airs in 2d 4h", so small
+  previews like Slack's still show it), description (countdown, UTC airing time, synopsis), canonical URL
   (`https://animelivecountdown.com/media/{id}`) and `og:image`.
 - **Backend `GET /api/share/media/{id}/card.jpg`** renders a 1200×630 card with Java2D (no new
   dependency): darkened banner background, cover art, title, and the countdown line

@@ -20,6 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TooltipModule, Tooltip } from 'primeng/tooltip';
 import { FavoriteMediaService } from '../../../../services/favorite.media.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { ShareService } from '../../../../services/share.service';
 
 @Component({
   selector: 'app-show',
@@ -46,6 +47,7 @@ export class ShowComponent implements OnInit, OnChanges {
   private favMediaService = inject(FavoriteMediaService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private shareService = inject(ShareService);
 
   protected user = this.authService.user;
 
@@ -71,6 +73,11 @@ export class ShowComponent implements OnInit, OnChanges {
     if (mediaData) {
       this.mediaInfoService.getMediaId(mediaData.id);
     }
+  }
+
+  share(): void {
+    const mediaData = this.media();
+    if (mediaData) this.shareService.shareMedia(mediaData.id, this.getDisplayTitle());
   }
 
   saveMedia(): void {
