@@ -262,7 +262,10 @@
   }
 
   .poster {
-    max-width: 200px;
+    /* A definite width: with only max-width + auto margins the grid item shrank to fit the image, so
+       the poster (and everything below it) changed size as the cover loaded */
+    width: 200px;
+    max-width: 100%;
     margin: 0 auto;
   }
 
@@ -304,3 +307,11 @@
   display: inline-block;
   margin-top: 12px;
 }
+
+/* Section headings (were h4; h2 keeps the outline valid with the same look) */
+.info-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.33em 0 0.5em;
+}
+

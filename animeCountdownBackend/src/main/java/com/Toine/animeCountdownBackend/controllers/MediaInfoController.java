@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,10 +40,13 @@ public class MediaInfoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MediaInfoEntity> getMediaInfoById(@PathVariable Long id) {
-        return mediaInfoRepository.findByIdWithGenres(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getMediaInfoById(@PathVariable Long id) {
+        var media = mediaInfoRepository.findByIdWithGenres(id);
+        if (media.isPresent()) {
+            return ResponseEntity.ok(media.get());
+        }
+        // The explicit body lets the site tell "no such show" (404 page) from "API unreachable" (503)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(java.util.Map.of("error", "not_found"));
     }
 
     @GetMapping("/trending")

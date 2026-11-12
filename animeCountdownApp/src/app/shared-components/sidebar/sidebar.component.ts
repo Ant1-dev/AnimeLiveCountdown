@@ -4,10 +4,12 @@ import { ScheduleService } from '../../services/schedule.service';
 import { Media } from '../../models/schedule.model';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { AnimePathPipe } from '../../seo/anime-path.pipe';
+import { optimizedImageUrl } from '../../shared/images';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterLink],
+  imports: [AnimePathPipe, CommonModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -19,7 +21,8 @@ export class SidebarComponent implements OnInit {
   error = signal<string>('');
 
   getBackgroundImage(banner: string | undefined): SafeStyle {
-    const imageUrl = banner || '/images/defaultBanner.png';
+    // The sidebar is narrow: a 640px banner is plenty (instead of AniList's 1900px original)
+    const imageUrl = banner ? optimizedImageUrl(banner, 640) : '/images/defaultBanner.png';
     return this.sanitizer.bypassSecurityTrustStyle(`url("${imageUrl}")`);
   }
 

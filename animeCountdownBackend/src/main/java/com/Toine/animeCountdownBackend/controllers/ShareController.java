@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.controllers;
 
+import com.Toine.animeCountdownBackend.utils.Slugs;
 import com.Toine.animeCountdownBackend.services.share.ShareCard;
 import com.Toine.animeCountdownBackend.services.share.ShareCardRenderer;
 import com.Toine.animeCountdownBackend.services.share.ShareCardService;
@@ -22,7 +23,7 @@ import java.util.Optional;
  * Link previews for show pages.
  *
  * The site is a client-rendered SPA, so link-preview bots (Discord, X, Slack, iMessage, …) never see
- * per-show tags. Vercel rewrites /media/:id requests from those bots to {@code /api/share/media/:id}
+ * per-show tags. Vercel routes /anime/:id/:slug (and old /media/:id) requests from those bots to {@code /api/share/media/:id}
  * (see animeCountdownApp/vercel.json), which returns a small HTML page with Open Graph / Twitter
  * tags. Its og:image is {@code card.jpg}, drawn on the fly with the current countdown.
  */
@@ -76,7 +77,7 @@ public class ShareController {
     }
 
     String html(ShareCard card) {
-        String pageUrl = siteUrl + "/media/" + card.mediaId();
+        String pageUrl = siteUrl + Slugs.animePath(card.mediaId(), card.title());
         // A new image URL every 5 minutes, so platforms that cache by URL pick up the new countdown
         long version = shareCardService.now().getEpochSecond() / TTL.toSeconds();
         String imageUrl = apiUrl + "/api/share/media/" + card.mediaId() + "/card.jpg?v=" + version;

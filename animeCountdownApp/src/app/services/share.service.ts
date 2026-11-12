@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { animePath } from '../seo/slug';
 
 /**
  * Shares a show page. Uses the native share sheet (Web Share API) where the browser has one,
  * otherwise copies the link. Link previews for the shared URL come from the backend
- * (/api/share/media/:id) via the bot rewrite in vercel.json.
+ * (/api/share/media/:id) via the bot route in scripts/vercel-build.mjs.
  */
 @Injectable({ providedIn: 'root' })
 export class ShareService {
@@ -12,7 +13,7 @@ export class ShareService {
 
   async shareMedia(mediaId: number, title?: string): Promise<void> {
     if (typeof window === 'undefined') return;
-    const url = `${window.location.origin}/media/${mediaId}`;
+    const url = `${window.location.origin}${animePath(mediaId, title)}`;
     const text = title ? `${title} — live countdown to the next episode` : 'Live countdown to the next episode';
 
     if (typeof navigator.share === 'function') {

@@ -4,12 +4,12 @@
   <ul class="continue-row">
     @for (item of following.continueWatching(); track item.media.id) {
     <li class="continue-item">
-      <a class="poster-link" [routerLink]="['/media', item.media.id]">
-        <img class="poster" [src]="item.media.cover_Image_Url" [alt]="title(item)" width="96" height="136" loading="lazy" />
+      <a class="poster-link" [routerLink]="item.media | animePath">
+        <img class="poster" [src]="item.media.cover_Image_Url | optimizedImage: 192" [alt]="title(item)" width="96" height="136" loading="lazy" />
         <span class="behind-badge">{{ item.behind }} behind</span>
       </a>
       <div class="details">
-        <a class="show-title" [routerLink]="['/media', item.media.id]">{{ title(item) }}</a>
+        <a class="show-title" [routerLink]="item.media | animePath">{{ title(item) }}</a>
         <span class="progress-text">Watched {{ item.watchedEpisode }} of {{ item.latestAiredEpisode }} aired</span>
         <button
           type="button"

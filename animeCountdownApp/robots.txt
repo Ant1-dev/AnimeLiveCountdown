@@ -1,4 +1,0 @@
-user-agent: *
-allow: /
-
-sitemap: https://animelivecountdown.com/sitemap.xml

@@ -13,6 +13,8 @@ export interface MediaInfo {
   coverimage: string;
   banner: string;
   airingat?: Date;
+  season?: string;
+  seasonYear?: number;
   streamingLinks?: StreamingLink[];
 }
 

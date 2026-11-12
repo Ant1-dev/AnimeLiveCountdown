@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AnimePathPipe } from '../seo/anime-path.pipe';
 import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { SeasonMedia } from '../models/season.model';
 import { timeUntil } from '../services/season.service';
 
 @Component({
   selector: 'app-season-card',
-  imports: [RouterLink, NgOptimizedImage, NgTemplateOutlet],
+  imports: [AnimePathPipe, RouterLink, NgOptimizedImage, NgTemplateOutlet],
   template: `
     @let m = media();
     <ng-template #body>
@@ -35,7 +36,7 @@ import { timeUntil } from '../services/season.service';
         <ng-container *ngTemplateOutlet="body" />
       </a>
     } @else {
-      <a class="card" [routerLink]="['/media', m.id]">
+      <a class="card" [routerLink]="m | animePath">
         <ng-container *ngTemplateOutlet="body" />
       </a>
     }

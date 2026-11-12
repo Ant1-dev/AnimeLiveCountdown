@@ -13,15 +13,30 @@
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGKZ0BCMWD"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-    
       gtag("config", "G-ZGKZ0BCMWD", { anonymize_ip: true });
+
+      // Load Google Analytics after the page has loaded and gone idle, so its ~75 KB script doesn't
+      // compete with the page itself. Calls made before then queue in dataLayer and are sent once
+      // it loads.
+      window.addEventListener("load", function () {
+        var loadGa = function () {
+          var s = document.createElement("script");
+          s.async = true;
+          s.src = "https://www.googletagmanager.com/gtag/js?id=G-ZGKZ0BCMWD";
+          document.head.appendChild(s);
+        };
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(loadGa, { timeout: 4000 });
+        } else {
+          setTimeout(loadGa, 2000);
+        }
+      });
     </script>
 
     <!-- Organization Schema for Google Search -->
@@ -37,35 +52,18 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://animelivecountdown.com/"
-        }]
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Anime Live Countdown",
-        "url": "https://animelivecountdown.com/",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://animelivecountdown.com/search?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
+        "alternateName": "AniCountdown",
+        "url": "https://animelivecountdown.com/"
       }
     </script>
 
     <meta charset="utf-8" />
-    <title>Upcoming Anime Releases - Live Countdown & Reminders | animelivecountdown.com</title>
+    <title>Anime Airing Schedule & Episode Countdowns | Anime Live Countdown</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Track real-time anime countdowns with precision! See exactly when new episodes air, set alerts for releases, and never miss your favorite shows. The ultimate anime countdown tracker for seasonal releases." />
-    <meta name="keywords" content="release date, anime releases, anime countdown, upcoming anime, airing anime, anime reminders, anime schedule, anime premiere dates, countdown, live, release" />
+    <meta name="description" content="See exactly when every new anime episode airs, with live countdowns in your time zone, this season’s schedule, and reminders so you never miss a release." />
     <meta name="robots" content="index, follow" />
     <meta property="og:site_name" content="Anime Live Countdown" />
     <meta name="theme-color" content="#101116" />
@@ -73,20 +71,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="AniCountdown" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <!-- Open Graph (Facebook, LinkedIn, Discord) -->
-    <meta property="og:title" content="Upcoming Anime Releases - Live Countdown & Reminders" />
-    <meta property="og:description" content="Track upcoming anime releases with live countdowns and reminders. Never miss an episode again!" />
-    <meta property="og:image" content="https://animelivecountdown.com/images/preview-image.jpg" />
-    <meta property="og:url" content="https://animelivecountdown.com/" />
-    <meta property="og:type" content="website" />
-    
-    <!-- Twitter (X) Card -->
+    <!-- Open Graph / Twitter defaults; SeoService sets per-page values during server rendering -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Upcoming Anime Releases - Live Countdown & Reminders" />
-    <meta name="twitter:description" content="Track upcoming anime releases with live countdowns and reminders. Never miss an episode again!" />
-    <meta name="twitter:image" content="https://animelivecountdown.com/images/preview-image.jpg" />
-    <meta name="twitter:url" content="https://animelivecountdown.com/" />
+    <meta property="og:image" content="https://animelivecountdown.com/images/preview-image.jpg" />
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
@@ -99,15 +86,13 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
 
     <link rel="preconnect" href="https://s4.anilist.co" crossorigin>
     <link rel="dns-prefetch" href="https://s4.anilist.co">
     
     <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    
-    <link rel="canonical" href="https://animelivecountdown.com/" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet" />
   </head>
   <body>
     <app-root></app-root>

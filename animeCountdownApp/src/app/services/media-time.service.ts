@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Media } from '../models/schedule.model';
 import { MediaInfo } from '../models/media.info.model';
 import { TimeRemaining } from '../models/time-remaining.model';
+import { injectIsBrowser, tickEvery } from '../shared/platform';
 
 interface TimerData {
   airingTime: number;
@@ -34,7 +35,7 @@ export class MediaTimeService {
 
   constructor() {
     // Set up a single interval for all timers
-    interval(1000)
+    tickEvery(1000, injectIsBrowser())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.updateAllTimers());
   }
@@ -97,7 +98,6 @@ export class MediaTimeService {
 
   initializeTimer(media: Media | undefined): void {
     if (
-      typeof window === 'undefined' ||
       !media ||
       !media.next_Airing_At ||
       !media.id

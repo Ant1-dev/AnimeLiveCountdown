@@ -39,7 +39,9 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         String refreshToken = refreshTokenCookie.read(request);
         if (refreshToken == null || refreshToken.isBlank()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No session");
+            // Signed-out visitors: every page load checks for a session, so "none" isn't an error
+            // (a 401 here logged a console error on every page and cost Lighthouse points)
+            return ResponseEntity.noContent().build();
         }
 
         try {

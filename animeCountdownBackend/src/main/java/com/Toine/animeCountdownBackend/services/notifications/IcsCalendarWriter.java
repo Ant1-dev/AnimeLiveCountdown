@@ -1,5 +1,6 @@
 package com.Toine.animeCountdownBackend.services.notifications;
 
+import com.Toine.animeCountdownBackend.utils.Slugs;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -52,7 +53,7 @@ public final class IcsCalendarWriter {
     }
 
     private void writeEvent(StringBuilder out, Episode e, String stamp) {
-        String link = siteUrl + "/media/" + e.mediaId();
+        String link = siteUrl + Slugs.animePath(e.mediaId(), e.title());
         int duration = e.durationMinutes() > 0 ? e.durationMinutes() : 24;
         line(out, "BEGIN:VEVENT");
         line(out, "UID:" + e.mediaId() + "-" + e.episode() + "@" + uidDomain);

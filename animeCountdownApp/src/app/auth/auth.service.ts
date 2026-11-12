@@ -5,6 +5,10 @@ import { Observable, ReplaySubject, finalize, map, shareReplay, take, tap } from
 import { User } from '../models/user.model';
 import { environment } from '../../environments/environment';
 
+/** Set while the browser has a session, so pages can skip "checking your session" placeholders for
+ *  visitors who were never signed in. Not a credential: just a yes/no hint. */
+export const SESSION_HINT_KEY = 'alc.hadSession';
+
 // Keys the old version of the app kept tokens under; removed on startup.
 const LEGACY_STORAGE_KEYS = ['accessToken', 'refreshToken'];
 
@@ -62,9 +66,13 @@ export class AuthService {
   refresh(): Observable<string> {
     if (!this.refreshInFlight) {
       this.refreshInFlight = this.http
-        .post<{ accessToken: string }>(this.authUrl + 'refresh', null, { withCredentials: true })
+        .post<{ accessToken: string } | null>(this.authUrl + 'refresh', null, { withCredentials: true })
         .pipe(
-          map((response) => response.accessToken),
+          // 204 (no body) means "no session": signed-out visitors, not an error worth logging
+          map((response) => {
+            if (!response?.accessToken) throw new Error('No session');
+            return response.accessToken;
+          }),
           tap({
             next: (token) => this.setAccessToken(token),
             error: () => this.clearSession(),
@@ -94,6 +102,7 @@ export class AuthService {
   clearSession(): void {
     this.storedAccessToken.set(null);
     this.storedUser.set(null);
+    writeSessionHint(false);
   }
 
   private setAccessToken(token: string): void {
@@ -102,6 +111,7 @@ export class AuthService {
       this.clearSession();
       return;
     }
+    writeSessionHint(true);
     this.storedAccessToken.set(token);
     this.storedUser.set({
       id: payload.id,
@@ -126,5 +136,23 @@ export class AuthService {
     } catch {
       // Storage can be unavailable (private mode, blocked site data); nothing to clean up then
     }
+  }
+}
+
+/** True if this browser had a session last time (see SESSION_HINT_KEY). */
+export function readSessionHint(): boolean {
+  try {
+    return localStorage.getItem(SESSION_HINT_KEY) === '1';
+  } catch {
+    return false; // server render, or storage blocked
+  }
+}
+
+function writeSessionHint(hadSession: boolean): void {
+  try {
+    if (hadSession) localStorage.setItem(SESSION_HINT_KEY, '1');
+    else localStorage.removeItem(SESSION_HINT_KEY);
+  } catch {
+    // Storage unavailable: the feed just shows its skeleton during the session check
   }
 }
