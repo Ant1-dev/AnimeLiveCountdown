@@ -32,7 +32,7 @@ public class AniListAccountService {
     private static final Logger logger = LoggerFactory.getLogger(AniListAccountService.class);
     static final Duration IMPORT_COOLDOWN = Duration.ofSeconds(30);
 
-    public record Status(boolean enabled, boolean connected, String userName, Instant lastSyncedAt) {
+    public record Status(boolean enabled, boolean connected, String userName, Instant lastSyncedAt, boolean syncEnabled) {
     }
 
     public record ConnectStart(String authorizeUrl, String nonce) {
@@ -107,11 +107,11 @@ public class AniListAccountService {
 
     public Status status(UserEntity user) {
         if (!settings.isEnabled()) {
-            return new Status(false, false, null, null);
+            return new Status(false, false, null, null, false);
         }
         return accountRepository.findByUserId(user.getId())
-                .map(a -> new Status(true, true, a.getAniListUserName(), a.getLastSyncedAt()))
-                .orElse(new Status(true, false, null, null));
+                .map(a -> new Status(true, true, a.getAniListUserName(), a.getLastSyncedAt(), a.isSyncEnabled()))
+                .orElse(new Status(true, false, null, null, false));
     }
 
     /** Builds the AniList authorize URL for this user. The returned nonce must be set as the flow cookie. */
@@ -163,6 +163,16 @@ public class AniListAccountService {
         });
         logger.info("Linked AniList account {} to user {}", viewer.id(), user.get().getId());
         return true;
+    }
+
+    /** Turns pushing follows and progress to AniList on or off. */
+    public Status setSyncEnabled(UserEntity user, boolean enabled) {
+        AniListAccountEntity account = accountRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new AniListUnavailableException(
+                        AniListUnavailableException.Reason.NOT_CONNECTED, "AniList isn't connected"));
+        account.setSyncEnabled(enabled);
+        accountRepository.save(account);
+        return status(user);
     }
 
     public void disconnect(UserEntity user) {

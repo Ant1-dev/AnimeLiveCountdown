@@ -3,6 +3,7 @@ package com.Toine.animeCountdownBackend.anilist;
 import com.Toine.animeCountdownBackend.anilist.AniListModels.ListCollection;
 import com.Toine.animeCountdownBackend.anilist.AniListModels.ListEntry;
 import com.Toine.animeCountdownBackend.anilist.AniListModels.ListGroup;
+import com.Toine.animeCountdownBackend.anilist.AniListModels.MediaListEntry;
 import com.Toine.animeCountdownBackend.anilist.AniListModels.TokenResponse;
 import com.Toine.animeCountdownBackend.anilist.AniListModels.Viewer;
 import com.Toine.animeCountdownBackend.components.AniListRateLimiter;
@@ -143,6 +144,58 @@ public class AniListApiClient {
             }
         }
         return entries;
+    }
+
+    static final String LIST_ENTRY_QUERY = """
+            query ($userId: Int, $mediaId: Int) {
+              MediaList(userId: $userId, mediaId: $mediaId, type: ANIME) {
+                id
+                status
+                progress
+              }
+            }
+            """;
+
+    static final String SAVE_ENTRY_MUTATION = """
+            mutation ($mediaId: Int, $status: MediaListStatus, $progress: Int) {
+              SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress) {
+                id
+                status
+                progress
+              }
+            }
+            """;
+
+    /** The user's list entry for a show, or null when it isn't on their list (AniList answers "Not Found"). */
+    public MediaListEntry fetchListEntry(String accessToken, long aniListUserId, long mediaId) {
+        var response = rateLimiter.throttle(client(accessToken).document(LIST_ENTRY_QUERY)
+                        .variable("userId", aniListUserId)
+                        .variable("mediaId", mediaId)
+                        .execute())
+                .block(TIMEOUT);
+        if (response == null) {
+            throw new IllegalStateException("No response from AniList");
+        }
+        if (!response.getErrors().isEmpty()) {
+            boolean notFound = response.getErrors().stream()
+                    .anyMatch(e -> e.getMessage() != null && e.getMessage().toLowerCase().contains("not found"));
+            if (notFound) {
+                return null;
+            }
+            throw new IllegalStateException("AniList error: " + response.getErrors().get(0).getMessage());
+        }
+        return response.field("MediaList").toEntity(MediaListEntry.class);
+    }
+
+    /** Creates or updates the user's list entry. A null progress leaves AniList's value unchanged. */
+    public void saveListEntry(String accessToken, long mediaId, String status, Integer progress) {
+        var request = client(accessToken).document(SAVE_ENTRY_MUTATION)
+                .variable("mediaId", mediaId)
+                .variable("status", status);
+        if (progress != null) {
+            request = request.variable("progress", progress);
+        }
+        rateLimiter.throttle(request.retrieve("SaveMediaListEntry").toEntity(MediaListEntry.class)).block(TIMEOUT);
     }
 
     private HttpGraphQlClient client(String accessToken) {

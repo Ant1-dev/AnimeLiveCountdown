@@ -18,6 +18,10 @@ public final class AniListModels {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    /** One entry on the user's AniList list (MediaList); null when the show isn't on it. */
+    public record MediaListEntry(Long id, String status, Integer progress) {
+    }
+
     public record Viewer(Long id, String name) {
     }
 
