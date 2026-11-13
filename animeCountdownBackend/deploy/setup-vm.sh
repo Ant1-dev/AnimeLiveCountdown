@@ -27,9 +27,11 @@ sudo cp ~/Caddyfile /etc/caddy/Caddyfile
 sudo systemctl reload caddy
 
 echo "==> Opening ports 80/443 in the VM firewall (Oracle images block them by default)"
-for port in 80 443; do
+# Rules must go above the image's catch-all REJECT rule, or they never match
+for port in 443 80; do
   if ! sudo iptables -C INPUT -p tcp --dport "$port" -m state --state NEW -j ACCEPT 2>/dev/null; then
-    sudo iptables -I INPUT 6 -p tcp --dport "$port" -m state --state NEW -j ACCEPT
+    reject_line=$(sudo iptables -L INPUT --line-numbers -n | awk '/REJECT/ {print $1; exit}')
+    sudo iptables -I INPUT "${reject_line:-1}" -p tcp --dport "$port" -m state --state NEW -j ACCEPT
   fi
 done
 sudo netfilter-persistent save
