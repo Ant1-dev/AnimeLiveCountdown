@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-time setup for the Oracle Cloud Ubuntu 24.04 (Ampere A1) VM.
 # Usage (from your machine):
-#   scp animeCountdownBackend/deploy/setup-vm.sh animeCountdownBackend/deploy/Caddyfile ubuntu@<VM_IP>:~
+#   scp animeCountdownBackend/deploy/{setup-vm.sh,Caddyfile,imgproxy.sh} ubuntu@<VM_IP>:~
 #   ssh ubuntu@<VM_IP> 'bash ~/setup-vm.sh'
 set -euo pipefail
 
@@ -39,8 +39,11 @@ sudo netfilter-persistent save
 echo "==> Creating app folder for the .env file"
 mkdir -p ~/AnimeLiveCountdown
 
+echo "==> Starting the image resizer"
+sudo bash ~/imgproxy.sh   # sudo: the docker group only applies after logging in again
+
 echo
 echo "Done. Next:"
 echo "  1. Copy your production .env to ~/AnimeLiveCountdown/.env"
 echo "  2. Log out and back in (so the docker group applies)"
-echo "  3. Make sure the 'api' DNS record points here, then push to main to deploy"
+echo "  3. Make sure the 'api' and 'img' DNS records point here, then push to main to deploy"

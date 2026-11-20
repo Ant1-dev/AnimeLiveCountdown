@@ -21,20 +21,6 @@ const angularApp = new AngularNodeAppEngine();
 app.use(compression());
 
 /**
- * Optimized images. On Vercel, /_vercel/image is served by Vercel's image optimizer before requests
- * reach this server. When running this server directly (local testing), there is no optimizer, so
- * send the browser to the original image instead.
- */
-app.get('/_vercel/image', (req, res) => {
-  const url = typeof req.query['url'] === 'string' ? req.query['url'] : '';
-  if (!/^https:\/\/s4\.anilist\.co\//.test(url)) {
-    res.status(400).send('Unsupported image URL');
-    return;
-  }
-  res.redirect(302, url);
-});
-
-/**
  * sitemap.xml, generated here rather than by the API so it keeps working when the API is down:
  * static and season pages are always listed, show pages whenever the API answers.
  */

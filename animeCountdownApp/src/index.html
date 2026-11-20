@@ -88,8 +88,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
 
-    <link rel="preconnect" href="https://s4.anilist.co" crossorigin>
+    <link rel="preconnect" href="https://img.animelivecountdown.com">
     <link rel="dns-prefetch" href="https://s4.anilist.co">
+    <script>
+      // If our image server can't deliver an image, show the original from AniList instead
+      // (URL format from src/app/shared/images.ts). Runs before the page's images load.
+      document.addEventListener('error', function (event) {
+        var img = event.target;
+        if (!img || img.tagName !== 'IMG') return;
+        var match = /^https:\/\/img\.animelivecountdown\.com\/_\/w\d+\/plain\/(.+)$/.exec(img.currentSrc || img.src);
+        if (!match) return;
+        img.removeAttribute('srcset');
+        img.src = decodeURIComponent(match[1]);
+      }, true);
+    </script>
     
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet" />
