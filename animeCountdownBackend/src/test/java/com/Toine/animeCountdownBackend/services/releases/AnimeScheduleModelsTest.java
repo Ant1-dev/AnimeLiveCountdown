@@ -1,10 +1,12 @@
 package com.Toine.animeCountdownBackend.services.releases;
 
+import com.Toine.animeCountdownBackend.services.releases.AnimeScheduleModels.AnimeDetails;
 import com.Toine.animeCountdownBackend.services.releases.AnimeScheduleModels.TimetableEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,5 +45,19 @@ class AnimeScheduleModelsTest {
     @Test
     void missingStreamsIsEmpty() throws Exception {
         assertTrue(json.readValue("{\"route\":\"show\"}", TimetableEntry.class).streamUrls().isEmpty());
+    }
+
+    /** Shape of a real /anime/{route} response (Nov 2026): websites mixes URL strings with a streams list. */
+    @Test
+    void parsesAnimeDetailsWithStreamListInWebsites() throws Exception {
+        AnimeDetails d = json.readValue("""
+                {"id":"abc","route":"show","title":"Show",
+                 "websites":{"official":"show-anime.com/","mal":"myanimelist.net/anime/63409/Show",
+                             "aniList":"anilist.co/anime/207191/Show/","anidb":"anidb.net/anime/19876",
+                             "streams":[{"platform":"apple","url":"apple.co/4hGRlzf","name":"Apple TV"}]}}
+                """, AnimeDetails.class);
+
+        assertEquals("show", d.route());
+        assertEquals(Optional.of(207191L), ReleaseTimes.aniListId(d.websites()));
     }
 }

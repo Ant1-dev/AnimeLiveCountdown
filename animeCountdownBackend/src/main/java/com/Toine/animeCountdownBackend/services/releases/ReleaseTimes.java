@@ -36,12 +36,8 @@ public final class ReleaseTimes {
     }
 
     /** From an AnimeSchedule websites.aniList value such as "anilist.co/anime/154587". */
-    public static Optional<Long> aniListId(Map<String, String> websites) {
-        if (websites == null) {
-            return Optional.empty();
-        }
-        String value = websites.get("aniList");
-        if (value == null) {
+    public static Optional<Long> aniListId(Map<String, ?> websites) {
+        if (websites == null || !(websites.get("aniList") instanceof String value)) {
             return Optional.empty();
         }
         Matcher m = ANILIST_URL.matcher(value);
