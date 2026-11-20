@@ -1,0 +1,152 @@
+<article class="legal">
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated {{ updated }}</p>
+
+  <p>
+    Anime Live Countdown (“we”, “us”) is an independent, non-commercial fan project at
+    animelivecountdown.com. This policy explains what we collect when you use the site, why, and what
+    you can do about it. You can browse schedules and countdowns without an account. Most of what
+    follows only applies if you sign in.
+  </p>
+
+  <h2>What we collect</h2>
+
+  <h3>When you sign in</h3>
+  <p>
+    You sign in with Google, GitHub or Discord. We never see your password for those services. From
+    the service you choose, we receive and store your <strong>name</strong>, <strong>email
+    address</strong> and <strong>profile picture</strong>, and we keep a record of when your account
+    was created and last updated.
+  </p>
+
+  <h3>What you do on the site</h3>
+  <ul>
+    <li>The shows you follow and the episode you’ve watched up to</li>
+    <li>Your reactions to episodes</li>
+    <li>Episode reminders you set, and the in-site notifications we send you</li>
+  </ul>
+
+  <h3>Optional features you turn on</h3>
+  <ul>
+    <li>
+      <strong>AniList sync:</strong> your AniList user ID and username, an access token that lets us
+      read and update your AniList list (stored encrypted), and when you last synced.
+    </li>
+    <li>
+      <strong>Browser notifications:</strong> the push address and keys your browser creates for this
+      site. They identify your browser to its push service, not you personally.
+    </li>
+    <li><strong>Discord reminders:</strong> the Discord webhook URL you give us.</li>
+    <li><strong>Calendar feed:</strong> a private, random token that makes up your calendar link.</li>
+  </ul>
+
+  <h3>Analytics and technical data</h3>
+  <p>
+    We use Google Analytics, with IP anonymization turned on, to see which pages are visited and
+    roughly how people use the site, such as device type, browser and approximate region. Like any
+    website, our servers also receive standard request information, such as your IP address and
+    browser, which may be recorded briefly to keep the service running and secure.
+  </p>
+
+  <h2>Cookies and local storage</h2>
+  <ul>
+    <li>
+      <strong>Sign-in cookie:</strong> when you sign in, we set an HttpOnly cookie that keeps you
+      signed in for up to 7 days. Page scripts can’t read it, and it is only sent to our sign-in
+      endpoints.
+    </li>
+    <li>
+      <strong>AniList connection cookie:</strong> a short-lived cookie that protects the AniList
+      connect step and is used for nothing else.
+    </li>
+    <li><strong>Analytics cookies:</strong> set by Google Analytics.</li>
+    <li>
+      <strong>Local storage:</strong> your light or dark theme choice is saved in your browser. It
+      never leaves your device.
+    </li>
+  </ul>
+
+  <h2>How we use it</h2>
+  <p>
+    We use this information to run the site: to show your followed shows and progress, send the
+    reminders you ask for, sync with AniList when you connect it, and understand which pages are
+    useful. <strong>We don’t sell your information, we don’t show ads, and we don’t use your data to
+    target you.</strong>
+  </p>
+
+  <h2>Who else handles your data</h2>
+  <p>We only share what each service needs to do its job:</p>
+  <ul>
+    <li><strong>Supabase:</strong> hosts our database.</li>
+    <li><strong>Oracle Cloud:</strong> runs our backend servers.</li>
+    <li><strong>Vercel:</strong> hosts the website.</li>
+    <li><strong>Google Analytics:</strong> receives usage data, as described above.</li>
+    <li>
+      <strong>Google, GitHub or Discord:</strong> handle sign-in when you choose them. Their own
+      privacy policies apply to your accounts there.
+    </li>
+    <li><strong>AniList:</strong> receives your list updates, only if you connect it.</li>
+    <li>
+      <strong>Your browser’s push service</strong> (for example Google, Mozilla or Apple): delivers
+      reminder notifications, only if you turn them on.
+    </li>
+    <li><strong>Discord:</strong> receives reminder messages, only if you add a webhook.</li>
+  </ul>
+  <p>We may also disclose information if the law requires it.</p>
+
+  <h2>How long we keep it</h2>
+  <p>
+    We keep your account data for as long as your account exists. You can remove parts of it at any
+    time: unfollow shows, delete reactions and reminders, disconnect AniList (which deletes the stored
+    token), remove your Discord webhook, reset your calendar link, or turn off browser notifications.
+  </p>
+
+  <h2>Deleting your account</h2>
+  <p>
+    Email <a [href]="'mailto:' + email">{{ email }}</a> from the address on your account and ask us to
+    delete it. We’ll delete your account and everything linked to it (follows, progress, reactions,
+    reminders, notifications and connected services) within 30 days.
+  </p>
+
+  <h2>Your choices</h2>
+  <ul>
+    <li>You can use the site without signing in.</li>
+    <li>
+      You can block or clear cookies in your browser. If you block the sign-in cookie, you’ll be signed
+      out more often.
+    </li>
+    <li>
+      You can opt out of Google Analytics with
+      <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google’s
+      opt-out browser add-on</a>.
+    </li>
+    <li>
+      Depending on where you live, you may have a right to see, correct or delete your data. Email us
+      and we’ll help.
+    </li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>
+    The site is served over HTTPS, AniList tokens are stored encrypted, and the sign-in cookie can’t
+    be read by page scripts. No service is perfectly secure, but we work to protect what we hold.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    The site is not directed at children under 13, and we don’t knowingly collect their information.
+    If you believe a child has signed up, email us and we’ll delete the account.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    If we change this policy, we’ll update the date at the top of this page. If a change is
+    significant, we’ll also point it out on the site.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions or requests: <a [href]="'mailto:' + email">{{ email }}</a>. See also our
+    <a routerLink="/terms">Terms of Service</a>.
+  </p>
+</article>
