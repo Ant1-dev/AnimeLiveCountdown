@@ -3,13 +3,16 @@
 
 # Anime Live Countdown
 
-**A modern web application to track upcoming seasonal anime with real-time countdowns**
+**Track every airing anime this season with live episode countdowns, reminders, and AniList sync**
 
-[![Angular](https://img.shields.io/badge/Angular-20.3-DD0031?logo=angular)](https://angular.dev/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-latest-4169E1?logo=postgresql)](https://www.postgresql.org/)
-[![AWS](https://img.shields.io/badge/AWS-Deployed-FF9900?logo=amazonwebservices)](https://aws.amazon.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?logo=vercel)](https://vercel.com/)
+[animelivecountdown.com](https://animelivecountdown.com)
+
+[![Angular](https://img.shields.io/badge/Angular-20.3_SSR-DD0031?logo=angular)](https://angular.dev/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-25-ED8B00?logo=openjdk)](https://openjdk.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql)](https://supabase.com/)
+[![Oracle Cloud](https://img.shields.io/badge/Oracle_Cloud-Backend-F80000?logo=oracle)](https://www.oracle.com/cloud/)
+[![Vercel](https://img.shields.io/badge/Vercel-Frontend-000000?logo=vercel)](https://vercel.com/)
 
 </div>
 
@@ -23,19 +26,35 @@
 
 <br>
 
-Anime Live Countdown is a user-friendly web application designed to help anime fans track upcoming shows in the current season. What sets this platform apart is its unique **day-of-the-week grouping system**, which gives countdown timers meaningful context by showing when each anime airs throughout the week.
+Anime Live Countdown helps anime fans keep up with the current season. Shows are grouped by the **day of the week they air**, so every countdown has context: you can see at a glance what's coming tonight, tomorrow, and later in the week. Signed-in users can follow shows, track which episodes they've watched, get reminders when new episodes drop, and keep it all in sync with their AniList account.
 
 ### ✨ Key Features
 
-- 📅 **Weekly Schedule View** - Shows organized by day of the week for easy planning
-- ⏱️ **Live Countdowns** - Real-time timers for upcoming episode releases
-- 🔥 **Trending Sidebar** - Top 10 airing anime with quick access
-- 🔍 **Advanced Search** - Search and filter anime from the database
-- 🎭 **Detailed Media Pages** - Comprehensive information about each anime
-- 👤 **User Authentication** - Secure sign-in with user profiles
-- ⭐ **Favorites System** - Save and track your favorite shows
-- 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
-- 🎨 **Modern UI** - Clean, modern design with smooth animations
+**Discover**
+- 📅 **Weekly schedule** with live countdowns, grouped by airing day (each day also has its own page)
+- 🔴 **Live banner** for episodes airing right now, with a celebration when a countdown hits zero
+- 🔥 **Trending sidebar** and a **Most Hyped** ranking based on follows and reactions
+- 🗓️ **Season browser** for the current season and past ones (`/seasons/2026/fall`)
+- 🔍 **Search** with instant results
+- ⏸️ **Break and delay detection**: shows that are on hiatus or delayed are flagged on cards and show pages
+
+**Show pages**
+- 🎬 Trailer, franchise **watch order**, and **where to watch** (streaming links)
+- 🕒 **Streaming and dub release times** from AnimeSchedule.net
+- 😍 **Episode reactions** (🔥 😍 😂 😱 😭 😐)
+- 🔗 **Share button** with generated share-card images
+
+**Personal tracking**
+- ⭐ **Following** with per-show episode progress, a personal schedule, and a "continue watching" row
+- 🔄 **Two-way AniList sync**: import your list, and push follows and watched episodes back to AniList
+- 🔔 **Episode reminders** through an in-app notification bell, browser **Web Push**, **Discord webhooks**, or a personal **calendar feed** (`.ics`)
+- 📲 **Installable PWA**
+
+**Everywhere**
+- 👤 Sign in with **Google, GitHub, or Discord** (OAuth2 + JWT with refresh-token cookies)
+- 🌗 **Light and dark themes**
+- 🚀 **Server-side rendering** with per-page SEO metadata, canonical URLs (`/anime/:id/:slug`), sitemaps, and optimized images
+- 📱 Responsive layout for mobile, tablet, and desktop
 
 ---
 
@@ -43,23 +62,89 @@ Anime Live Countdown is a user-friendly web application designed to help anime f
 
 ### Frontend
 
-- **[Angular 20.3](https://angular.dev/)** - Modern web framework with standalone components
-- **[RxJS 7.8](https://rxjs.dev/)** - Reactive programming with signals
-- **[TypeScript 5.9](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[Angular 20.3](https://angular.dev/)** with standalone components, signals, and **Angular SSR** (Express)
+- **[RxJS 7.8](https://rxjs.dev/)**
+- **[TypeScript 5.9](https://www.typescriptlang.org/)**
+- Service worker for Web Push and PWA install
 
 ### Backend
 
-- **[Spring Boot 3.4](https://spring.io/projects/spring-boot)** - Java backend framework
-- **[Spring Security](https://spring.io/projects/spring-security)** - Authentication & authorization
-- **[Spring Data JPA](https://spring.io/projects/spring-data-jpa)** - Database abstraction layer
-- **[PostgreSQL](https://www.postgresql.org/)** - Relational database
-- **[Maven](https://maven.apache.org/)** - Dependency management
+- **[Spring Boot 3.5](https://spring.io/projects/spring-boot)** on **Java 25**
+- **Spring Security** with OAuth2 client (Google, GitHub, Discord) and JWT (jjwt)
+- **Spring Data JPA** with **PostgreSQL** hosted on **[Supabase](https://supabase.com/)**
+- **Spring GraphQL client** for the [AniList API](https://docs.anilist.co/), with rate limiting and caching
+- **Scheduled jobs** that sync airing schedules, media info, and release times, and send episode reminders
+- **[Maven](https://maven.apache.org/)** (wrapper included)
+
+### External data
+
+- **[AniList](https://anilist.co/)**: schedules, media info, trailers, relations, and user list sync
+- **[AnimeSchedule.net](https://animeschedule.net/)**: streaming and dub release times
 
 ### Infrastructure & Deployment
 
-- **[Vercel](https://vercel.com/)** - Frontend hosting
-- **[AWS](https://aws.amazon.com/)** - Backend hosting and services
-- **[Docker](https://www.docker.com/)** - Containerization
+- **[Vercel](https://vercel.com/)**: frontend and SSR
+- **[Oracle Cloud](https://www.oracle.com/cloud/)** Ampere A1 (arm64) VM: backend in **Docker**, behind **[Caddy](https://caddyserver.com/)** for automatic HTTPS at `api.animelivecountdown.com`
+- **[imgproxy](https://imgproxy.net/)** on the same VM: resizes cover and banner images to WebP at `img.animelivecountdown.com`, falling back to the original AniList image if it can't deliver
+- **GitHub Actions**: builds the backend image on an ARM runner, pushes it to Docker Hub, and redeploys the VM over SSH on every push to `main` that touches `animeCountdownBackend/`
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20.19+ and npm (Angular 20's minimum)
+- JDK 25
+- A PostgreSQL database (local or Supabase)
+
+### Backend
+
+The backend reads its secrets from environment variables. The minimum to start locally:
+
+| Variable | Purpose |
+| --- | --- |
+| `SUPABASE_DB_URL` | JDBC URL (defaults to `jdbc:postgresql://localhost:5432/postgres`) |
+| `SUPABASE_DB_USERNAME` | DB user (defaults to `postgres`) |
+| `SUPABASE_DB_PASSWORD` | DB password |
+| `JWT_SECRET_KEY` | Signing key for access tokens |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google sign-in |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | GitHub sign-in |
+| `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Discord sign-in |
+
+Optional:
+
+| Variable | Purpose |
+| --- | --- |
+| `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` | Web Push notifications |
+| `DISCORD_WEBHOOK_NOTIFICATIONS_ENABLED` | Turn on Discord webhook reminders (default `false`) |
+| `ANIMESCHEDULE_TOKEN` | AnimeSchedule.net API token for release times |
+
+```bash
+cd animeCountdownBackend
+./mvnw spring-boot:run
+```
+
+The `dev` profile is active by default and serves the API at `http://localhost:8080/api/`.
+
+### Frontend
+
+```bash
+cd animeCountdownApp
+npm install
+npm start
+```
+
+Open `http://localhost:4200`. The development environment points at the local backend.
+
+Other scripts:
+
+| Command | What it does |
+| --- | --- |
+| `npm run build` | Production build (browser + server bundles) |
+| `npm run serve:ssr` | Run the built SSR server locally |
+| `npm test` | Unit tests |
+| `npm run test:slugs` | Check the URL slug generator |
 
 ---
 
@@ -67,105 +152,76 @@ Anime Live Countdown is a user-friendly web application designed to help anime f
 
 ```
 AnimeLiveCountdown/
-├── animeCountdownApp/          # Angular Frontend Application
+├── animeCountdownApp/              # Angular frontend (SSR)
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── auth/           # Authentication components
-│   │   │   ├── favorites/      # User favorites page
-│   │   │   ├── footer/         # Footer component
-│   │   │   ├── header/         # Navigation & search
-│   │   │   │   ├── searchbar/  # Search functionality
-│   │   │   │   ├── sign-in/    # Sign-in modal
-│   │   │   │   └── profile-dropdown/
-│   │   │   ├── home/           # Main landing page
-│   │   │   │   ├── hero-carousel/      # Hero banner carousel
-│   │   │   │   └── weekly-schedule/
-│   │   │   │       ├── airing-soon/    # Upcoming releases
-│   │   │   │       ├── shows/          # Weekly schedule grid
-│   │   │   │       └── season-pop/     # Season popularity section
-│   │   │   ├── media-info/     # Detailed anime pages
-│   │   │   ├── shared-components/      # Reusable components
-│   │   │   │   └── sidebar/    # Trending anime sidebar
-│   │   │   ├── models/         # TypeScript interfaces
-│   │   │   ├── services/       # API & business logic
-│   │   │   └── interceptors/   # HTTP interceptors
-│   │   └── public/             # Static assets
-│   ├── vercel.json             # Vercel deployment config
-│   ├── package.json            # Frontend dependencies
-│   └── tsconfig.json           # TypeScript configuration
+│   │   │   ├── auth/               # Auth guard, interceptor, service
+│   │   │   ├── header/             # Search, sign-in, profile menu, notification bell
+│   │   │   ├── home/               # Hero carousel, live banner, most hyped, weekly schedule
+│   │   │   ├── media-info/         # Show page: trailer, watch order, where to watch,
+│   │   │   │                       #   release times, reactions, follow controls
+│   │   │   ├── seasons/            # Season browser
+│   │   │   ├── schedule-day/       # Single-day schedule page
+│   │   │   ├── most-hyped-page/
+│   │   │   ├── following/          # Followed shows, progress, AniList panel
+│   │   │   ├── notification-settings/
+│   │   │   ├── shared-components/  # Sidebar, reminder dialog, share button, etc.
+│   │   │   ├── seo/                # Meta tags, slugs, sitemap, SSR helpers
+│   │   │   ├── theme/              # Light/dark theme
+│   │   │   ├── services/           # API clients and state
+│   │   │   └── models/
+│   │   ├── server.ts               # Express SSR server
+│   │   └── environments/
+│   ├── public/                     # Icons, images, service worker, manifest
+│   ├── scripts/                    # Vercel build and slug checks
+│   └── vercel.json
 │
-├── animeCountdownBackend/      # Spring Boot Backend API
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/           # Java source code
-│   │   │   └── resources/      # Application configs
-│   │   └── test/               # Backend tests
-│   ├── Dockerfile              # Backend containerization
-│   ├── docker-compose.yml      # Local development setup
-│   └── pom.xml                 # Maven dependencies
+├── animeCountdownBackend/          # Spring Boot API
+│   ├── src/main/java/.../
+│   │   ├── controllers/            # REST endpoints
+│   │   ├── services/               # Schedule sync, discovery, notifications,
+│   │   │                           #   release times, share cards, watch order
+│   │   ├── anilist/                # AniList OAuth, import, and two-way sync
+│   │   ├── config/                 # Security, caching, GraphQL client
+│   │   ├── components/             # JWT filter, OAuth success handler, rate limiter
+│   │   ├── models/                 # JPA entities and AniList GraphQL models
+│   │   └── repositories/
+│   ├── deploy/                     # Oracle VM setup, Caddyfile, and imgproxy script
+│   ├── Dockerfile
+│   └── pom.xml
 │
-├── .github/                    # GitHub workflows & configs
-├── LICENSE                     # MIT License
-└── README.md                   # This file
+├── .github/workflows/              # Backend deploy pipeline
+├── LICENSE
+└── README.md
 ```
-
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Completed Features
+### ✅ Shipped
 
-- [x] **Search Functionality**
-  - [x] Real-time search bar with autocomplete
-  - [x] Database filtering and query optimization
-  - [x] Detailed media information pages
-- [x] **User Authentication**
-  - [x] Secure sign-in/sign-up system
-  - [x] JWT-based authentication
-  - [x] User profile management
-- [x] **Weekly Schedule**
-  - [x] Day-of-week organization
-  - [x] Live countdown timers
-  - [x] Airing soon section
-  - [x] Hero carousel for featured shows
-  - [x] Season popularity rankings
-- [x] **Trending Sidebar**
-  - [x] Top 10 currently airing anime
-  - [x] Live episode countdowns
-  - [x] Click-to-navigate functionality
-  - [x] Responsive design (hidden on mobile)
-- [x] **Favorites System**
-  - [x] Save favorite anime
-  - [x] Personal favorites page
-- [x] **Responsive Design**
-  - [x] Mobile-first approach
-  - [x] Dynamic navbar (hides on scroll down, shows on scroll up)
-  - [x] Adaptive grid layouts for all screen sizes
-  - [x] Optimized breakpoints (mobile, tablet, desktop)
+- [x] Weekly schedule with live countdowns, airing soon, and season popularity
+- [x] Search and detailed show pages
+- [x] Sign-in with Google, GitHub, and Discord
+- [x] Following with episode progress (replaced Favorites)
+- [x] Two-way AniList sync
+- [x] Episode reminders: in-app, Web Push, Discord webhooks, calendar feed
+- [x] Installable PWA
+- [x] Season browser and seasonal archive
+- [x] Break and delay detection
+- [x] Episode reactions and Most Hyped ranking
+- [x] Share cards
+- [x] Trailers, watch order, where to watch, streaming and dub release times
+- [x] Light and dark themes
+- [x] Server-side rendering and SEO
 
-### 🚧 In Progress
+### 🔮 Ideas
 
-- [ ] **Push Notifications**
-  - [ ] Email notifications for new episodes
-  - [ ] Browser push notification support
-  - [ ] Customizable notification preferences
-
-### 🔮 Future Enhancements
-
-- [ ] **Advanced Filtering**
-  - [ ] Genre-based filters
-  - [ ] Studio and producer filters
-  - [ ] Seasonal archive browsing
-  - [ ] English dub availability filter
-- [ ] **Personalization**
-  - [ ] Theme customization (dark/light mode)
-  - [ ] Customizable dashboard layouts
-  - [ ] Watch history tracking
-- [ ] **Social Features**
-  - [ ] User reviews and ratings
-  - [ ] Episode tracking
-  - [ ] Community discussion boards
+- [ ] Email reminders
+- [ ] Genre, studio, and dub-availability filters
+- [ ] User reviews and ratings
+- [ ] Community discussion
 
 ---
 
@@ -177,7 +233,7 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+Contributions, issues, and feature requests are welcome. Feel free to open an issue.
 
 ---
 
