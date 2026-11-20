@@ -51,8 +51,11 @@ public final class AnimeScheduleModels {
         }
     }
 
-    /** A show (GET /anime/{route}); websites.aniList is how we map to AniList ids. */
+    /**
+     * A show (GET /anime/{route}); websites.aniList is how we map to AniList ids. Most websites values
+     * are URL strings, but some aren't (websites.streams is a list), so values are left untyped.
+     */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record AnimeDetails(String route, Map<String, String> websites) {
+    public record AnimeDetails(String route, Map<String, ?> websites) {
     }
 }
