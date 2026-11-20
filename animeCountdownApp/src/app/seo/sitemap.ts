@@ -33,6 +33,8 @@ export function buildSitemap(shows: SitemapShow[], now: Date): string {
     '/',
     '/seasons',
     '/most-hyped',
+    '/privacy',
+    '/terms',
     ...WEEK_DAYS.map((d) => `/schedule/${d}`),
     ...seasonPaths(now),
     ...shows.map((s) => animePath(s.id, preferredTitle(s.engtitle, s.romtitle))),

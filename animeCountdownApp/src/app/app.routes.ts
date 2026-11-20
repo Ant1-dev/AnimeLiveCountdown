@@ -30,6 +30,14 @@ export const routes: Routes = [
         loadComponent: () => import('./following/following.component').then(m => m.FollowingComponent),
         canActivate: [authGuard]
     },
+    {
+        path: 'privacy',
+        loadComponent: () => import('./legal/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+    },
+    {
+        path: 'terms',
+        loadComponent: () => import('./legal/terms.component').then(m => m.TermsComponent)
+    },
     // Favorites were renamed to Following
     { path: 'favorites', redirectTo: 'following' },
     {
