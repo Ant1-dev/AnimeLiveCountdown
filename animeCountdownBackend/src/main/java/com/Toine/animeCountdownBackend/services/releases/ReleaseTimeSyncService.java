@@ -84,7 +84,7 @@ public class ReleaseTimeSyncService {
             row.setAirType(type.get());
             row.setEpisode(e.episodeNumber());
             row.setReleaseAt(at.get());
-            row.setStreamsJson(ReleaseTimes.streamsToJson(ReleaseTimes.normalizeStreams(e.streams())));
+            row.setStreamsJson(ReleaseTimes.streamsToJson(ReleaseTimes.normalizeStreams(e.streamUrls())));
             row.setDelayedUntil(ReleaseTimes.instant(e.delayedUntil()).orElse(null));
             row.setDelayNote(e.delayedText() == null || e.delayedText().isBlank() ? null
                     : e.delayedText().substring(0, Math.min(255, e.delayedText().length())));

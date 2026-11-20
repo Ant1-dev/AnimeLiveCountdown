@@ -6,6 +6,7 @@ import com.Toine.animeCountdownBackend.repositories.AnimeScheduleLinkRepository;
 import com.Toine.animeCountdownBackend.repositories.ReleaseTimeRepository;
 import com.Toine.animeCountdownBackend.services.releases.AnimeScheduleModels.AnimeDetails;
 import com.Toine.animeCountdownBackend.services.releases.AnimeScheduleModels.TimetableEntry;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +42,9 @@ class ReleaseTimeSyncServiceTest {
 
     private static TimetableEntry entry(String route, String airType, int episode, String date) {
         return new TimetableEntry(route, route, null, null, date, episode, airType,
-                Map.of("crunchyroll", "crunchyroll.com/series/" + route), null, null, null);
+                JsonNodeFactory.instance.arrayNode().add(JsonNodeFactory.instance.objectNode()
+                        .put("platform", "crunchyroll").put("url", "crunchyroll.com/series/" + route).put("name", "Crunchyroll")),
+                null, null, null);
     }
 
     @Test
