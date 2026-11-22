@@ -22,4 +22,30 @@ public interface ReleaseTimeRepository extends JpaRepository<ReleaseTimeEntity, 
     @Transactional
     @Query("DELETE FROM ReleaseTimeEntity r WHERE r.releaseAt < :before")
     int deleteOlderThan(@Param("before") Instant before);
+
+    @Query("SELECT r FROM ReleaseTimeEntity r WHERE r.delayAlertPending = true")
+    List<ReleaseTimeEntity> findPendingDelayAlerts();
+
+    /** Marks the alert sent, unless the sync changed delayed_until in the meantime. */
+    @Modifying
+    @Transactional
+    @Query("""
+            UPDATE ReleaseTimeEntity r SET r.delayAlertPending = false
+            WHERE r.id = :id AND (r.delayedUntil IS NULL OR r.delayedUntil = :delayedUntil)
+            """)
+    int clearDelayAlertPending(@Param("id") Long id, @Param("delayedUntil") Instant delayedUntil);
+
+    /** The next release of one type for a show, counting a delayed one at its delayed_until. */
+    @Query("""
+            SELECT r FROM ReleaseTimeEntity r
+            WHERE r.mediaId = :mediaId AND r.airType = :airType
+              AND (r.releaseAt >= :since OR r.delayedUntil >= :since)
+            ORDER BY r.releaseAt
+            """)
+    List<ReleaseTimeEntity> findUpcoming(@Param("mediaId") Long mediaId, @Param("airType") String airType,
+                                         @Param("since") Instant since);
+
+    /** Which air types (SUB, DUB, ...) have any release rows for each of these shows. */
+    @Query("SELECT DISTINCT r.mediaId, r.airType FROM ReleaseTimeEntity r WHERE r.mediaId IN :mediaIds")
+    List<Object[]> findAirTypes(@Param("mediaIds") java.util.Collection<Long> mediaIds);
 }

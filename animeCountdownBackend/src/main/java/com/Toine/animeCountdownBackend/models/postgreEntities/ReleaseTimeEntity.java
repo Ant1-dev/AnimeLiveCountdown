@@ -1,6 +1,7 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
@@ -38,6 +39,15 @@ public class ReleaseTimeEntity {
     @Column(name = "delay_note", length = 255)
     private String delayNote;
 
+    /** Set when delayed_until is newly set or changes; DelayAlertService alerts followers and clears it. */
+    @Column(name = "delay_alert_pending", nullable = false)
+    @ColumnDefault("false")
+    private boolean delayAlertPending;
+
+    /** When the sync last saw delayed_until change. Only people following by then are alerted. */
+    @Column(name = "delay_changed_at")
+    private Instant delayChangedAt;
+
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -56,6 +66,10 @@ public class ReleaseTimeEntity {
     public void setDelayedUntil(Instant delayedUntil) { this.delayedUntil = delayedUntil; }
     public String getDelayNote() { return delayNote; }
     public void setDelayNote(String delayNote) { this.delayNote = delayNote; }
+    public boolean isDelayAlertPending() { return delayAlertPending; }
+    public void setDelayAlertPending(boolean delayAlertPending) { this.delayAlertPending = delayAlertPending; }
+    public Instant getDelayChangedAt() { return delayChangedAt; }
+    public void setDelayChangedAt(Instant delayChangedAt) { this.delayChangedAt = delayChangedAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -1,6 +1,7 @@
 package com.Toine.animeCountdownBackend.models.postgreEntities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +18,14 @@ import java.time.Instant;
 public class ReminderEntity {
     /** Longest lead time a reminder may use, in minutes (one day). */
     public static final int MAX_LEAD_MINUTES = 1440;
+
+    /** Remind for the Japanese broadcast (AniList's next airing). The default. */
+    public static final String TYPE_JAPAN = "JAPAN";
+    /** Remind for the subtitled stream (release_time, air_type SUB). */
+    public static final String TYPE_SUB = "SUB";
+    /** Remind for the English dub (release_time, air_type DUB). */
+    public static final String TYPE_DUB = "DUB";
+    public static final java.util.Set<String> RELEASE_TYPES = java.util.Set.of(TYPE_JAPAN, TYPE_SUB, TYPE_DUB);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +49,11 @@ public class ReminderEntity {
 
     @Column(name = "discord_enabled", nullable = false)
     private boolean discordEnabled;
+
+    /** Which release to remind for: JAPAN, SUB or DUB. Rows from before this column default to JAPAN. */
+    @Column(name = "release_type", nullable = false, length = 8)
+    @ColumnDefault("'JAPAN'")
+    private String releaseType = TYPE_JAPAN;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
@@ -86,6 +100,14 @@ public class ReminderEntity {
 
     public void setDiscordEnabled(boolean discordEnabled) {
         this.discordEnabled = discordEnabled;
+    }
+
+    public String getReleaseType() {
+        return releaseType;
+    }
+
+    public void setReleaseType(String releaseType) {
+        this.releaseType = releaseType;
     }
 
     public Instant getCreatedAt() {

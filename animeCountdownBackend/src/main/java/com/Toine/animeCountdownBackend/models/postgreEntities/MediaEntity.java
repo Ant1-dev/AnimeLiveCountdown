@@ -4,6 +4,7 @@ package com.Toine.animeCountdownBackend.models.postgreEntities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
 import java.util.List;
 
@@ -58,6 +59,11 @@ public class MediaEntity {
     // When the most recent episode aired, so a break can be measured once AniList adds the next date.
     @Column(name = "last_aired_at")
     private Instant lastAiredAt;
+    // Set when a break/delay note is newly set or its date moves later; DelayAlertService alerts
+    // followers and clears it.
+    @Column(name = "schedule_note_alert_pending", nullable = false)
+    @ColumnDefault("false")
+    private boolean scheduleNoteAlertPending;
 
     public Integer getSeasonYear() {
         return seasonYear;
@@ -215,5 +221,14 @@ public class MediaEntity {
 
     public void setLastAiredAt(Instant lastAiredAt) {
         this.lastAiredAt = lastAiredAt;
+    }
+
+    @JsonIgnore
+    public boolean isScheduleNoteAlertPending() {
+        return scheduleNoteAlertPending;
+    }
+
+    public void setScheduleNoteAlertPending(boolean scheduleNoteAlertPending) {
+        this.scheduleNoteAlertPending = scheduleNoteAlertPending;
     }
 }

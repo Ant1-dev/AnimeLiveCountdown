@@ -123,12 +123,22 @@
                   @if (!reminder.following) {
                     Paused: not in your favorites
                   } @else if (reminder.nextAiringAt) {
-                    Episode {{ reminder.nextEpisode }} · {{ reminder.nextAiringAt | date: 'EEE d MMM, h:mm a' }}
+                    {{ typeLabel(reminder.releaseType) }} · Episode {{ reminder.nextEpisode }} · {{ reminder.nextAiringAt | date: 'EEE d MMM, h:mm a' }}
                   } @else {
-                    No upcoming episode scheduled
+                    {{ typeLabel(reminder.releaseType) }} · No upcoming episode scheduled
                   }
                 </span>
                 <div class="reminder-controls">
+                  <label class="sr-only" [for]="'type-' + reminder.mediaId">Remind me for</label>
+                  <select [id]="'type-' + reminder.mediaId" [ngModel]="reminder.releaseType"
+                          (ngModelChange)="updateReminder(reminder, { releaseType: $event })">
+                    @for (option of releaseTypeOptions; track option.type) {
+                      <option [ngValue]="option.type"
+                              [disabled]="option.type !== reminder.releaseType && !hasTimes(reminder, option.type)">
+                        {{ option.label }}{{ hasTimes(reminder, option.type) ? '' : ' (no times yet)' }}
+                      </option>
+                    }
+                  </select>
                   <label class="sr-only" [for]="'lead-' + reminder.mediaId">Remind me</label>
                   <select [id]="'lead-' + reminder.mediaId" [ngModel]="reminder.leadMinutes"
                           (ngModelChange)="updateReminder(reminder, { leadMinutes: $event })">

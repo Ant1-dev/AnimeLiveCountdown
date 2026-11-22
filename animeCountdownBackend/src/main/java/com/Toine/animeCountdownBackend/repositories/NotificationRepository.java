@@ -32,18 +32,19 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     int markAllRead(@Param("userId") Long userId, @Param("now") Instant now);
 
     /**
-     * Records an episode notification unless this user was already notified about this episode.
-     * Returns 1 if the row was inserted (the caller should deliver it) and 0 if it already existed.
-     * Atomic in the database, so concurrent job runs or several backend instances can't double-send.
+     * Records an episode notification unless this user was already notified about this episode in
+     * this kind (Japanese airing, sub or dub). Returns 1 if the row was inserted (the caller should
+     * deliver it) and 0 if it already existed. Atomic in the database, so concurrent job runs or
+     * several backend instances can't double-send.
      */
     @Modifying
     @Transactional
     @Query(value = """
             INSERT INTO notification_entity
-                (id, user_id, media_id, episode, airing_at, notif_date, title, message, image_url, kind)
+                (id, user_id, media_id, episode, airing_at, notif_date, title, message, image_url, kind, link)
             VALUES (nextval('notification_entity_seq'), :userId, :mediaId, :episode, :airingAt, :now,
-                    :title, :message, :imageUrl, 'EPISODE')
-            ON CONFLICT (user_id, media_id, episode) DO NOTHING
+                    :title, :message, :imageUrl, :kind, :link)
+            ON CONFLICT (user_id, media_id, episode, kind) DO NOTHING
             """, nativeQuery = true)
     int insertEpisodeIfAbsent(@Param("userId") Long userId,
                               @Param("mediaId") Long mediaId,
@@ -52,7 +53,9 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
                               @Param("now") Instant now,
                               @Param("title") String title,
                               @Param("message") String message,
-                              @Param("imageUrl") String imageUrl);
+                              @Param("imageUrl") String imageUrl,
+                              @Param("kind") String kind,
+                              @Param("link") String link);
 
     @Modifying
     @Transactional

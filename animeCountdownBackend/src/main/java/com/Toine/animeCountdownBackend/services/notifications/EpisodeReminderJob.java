@@ -20,17 +20,20 @@ public class EpisodeReminderJob {
     private static final Logger logger = LoggerFactory.getLogger(EpisodeReminderJob.class);
 
     private final ReminderDispatchService dispatchService;
+    private final DelayAlertService delayAlertService;
     private final PushSubscriptionRepository subscriptionRepository;
     private final NotificationRepository notificationRepository;
     private final boolean enabled;
     private final Duration retention;
 
     public EpisodeReminderJob(ReminderDispatchService dispatchService,
+                              DelayAlertService delayAlertService,
                               PushSubscriptionRepository subscriptionRepository,
                               NotificationRepository notificationRepository,
                               @Value("${app.notifications.enabled:true}") boolean enabled,
                               @Value("${app.notifications.retention:P90D}") Duration retention) {
         this.dispatchService = dispatchService;
+        this.delayAlertService = delayAlertService;
         this.subscriptionRepository = subscriptionRepository;
         this.notificationRepository = notificationRepository;
         this.enabled = enabled;
@@ -47,6 +50,20 @@ public class EpisodeReminderJob {
             dispatchService.dispatchDue(Instant.now());
         } catch (RuntimeException e) {
             logger.error("Episode reminder run failed", e);
+        }
+    }
+
+    /** Tells followers about delays and breaks the AniList and AnimeSchedule syncs flagged. */
+    @Scheduled(fixedDelayString = "${app.notifications.delay-alerts.interval:PT1M}",
+               initialDelayString = "${app.notifications.delay-alerts.initial-delay:PT1M}")
+    public void sendDelayAlerts() {
+        if (!enabled) {
+            return;
+        }
+        try {
+            delayAlertService.alertPending(Instant.now());
+        } catch (RuntimeException e) {
+            logger.error("Delay alert run failed", e);
         }
     }
 

@@ -10,6 +10,13 @@ export interface AppNotification {
   airingAt: string | null;
   createdAt: string;
   read: boolean;
+  /** Streaming platform URL for sub/dub reminders, when known. */
+  link?: string | null;
+}
+
+/** Bell entries about a delay or break (DELAY, DELAY_DUB); airingAt is the new date. */
+export function isDelayKind(kind: string | null | undefined): boolean {
+  return !!kind && kind.startsWith('DELAY');
 }
 
 export interface NotificationList {
@@ -24,6 +31,19 @@ export interface NotificationConfig {
   discordEnabled: boolean;
 }
 
+/** Which release a reminder follows: the Japanese broadcast, the subbed stream or the English dub. */
+export type ReleaseType = 'JAPAN' | 'SUB' | 'DUB';
+
+export const RELEASE_TYPE_OPTIONS: { type: ReleaseType; label: string; hint: string }[] = [
+  { type: 'JAPAN', label: 'Japan broadcast', hint: 'Original TV airing' },
+  { type: 'SUB', label: 'Subtitled', hint: 'Streaming with English subtitles' },
+  { type: 'DUB', label: 'English dub', hint: 'Dubbed release' },
+];
+
+export function releaseTypeLabel(type: ReleaseType | null | undefined): string {
+  return RELEASE_TYPE_OPTIONS.find((o) => o.type === (type ?? 'JAPAN'))?.label ?? 'Japan broadcast';
+}
+
 export interface Reminder {
   mediaId: number;
   leadMinutes: number;
@@ -32,14 +52,19 @@ export interface Reminder {
   following: boolean;
   title: string | null;
   coverImageUrl: string | null;
+  /** For the reminder's release type: the Japanese airing or the next sub/dub release. */
   nextAiringAt: string | null;
   nextEpisode: number | null;
+  releaseType: ReleaseType;
+  /** Release types this show has times for (JAPAN always). */
+  availableTypes: ReleaseType[];
 }
 
 export interface ReminderRequest {
   leadMinutes: number;
   push: boolean;
   discord: boolean;
+  releaseType?: ReleaseType;
 }
 
 export interface NotificationSettings {

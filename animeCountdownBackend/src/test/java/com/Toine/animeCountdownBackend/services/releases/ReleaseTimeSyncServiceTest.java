@@ -93,4 +93,47 @@ class ReleaseTimeSyncServiceTest {
         verify(releases).save(same(existing));
         assertEquals(Instant.parse("2026-11-21T15:30:00Z"), existing.getReleaseAt());
     }
+
+    private static TimetableEntry delayed(String delayedUntil) {
+        return new TimetableEntry("frieren", "frieren", null, null, "2026-11-14T15:30:00Z", 5, "dub",
+                null, null, delayedUntil, "Delayed");
+    }
+
+    @Test
+    void newDelayIsFlaggedForAnAlert() {
+        when(links.findAllById(any())).thenReturn(List.of(new AnimeScheduleLinkEntity("frieren", 154587L, NOW)));
+        ReleaseTimeEntity existing = new ReleaseTimeEntity();
+        when(releases.findByMediaIdAndAirTypeAndEpisode(154587L, "DUB", 5)).thenReturn(Optional.of(existing));
+
+        service.apply(List.of(delayed("2026-11-21T15:30:00Z")), NOW);
+
+        assertTrue(existing.isDelayAlertPending());
+        assertEquals(NOW, existing.getDelayChangedAt());
+        assertEquals(Instant.parse("2026-11-21T15:30:00Z"), existing.getDelayedUntil());
+    }
+
+    @Test
+    void unchangedDelayIsNotFlaggedAgainButAMovedOneIs() {
+        when(links.findAllById(any())).thenReturn(List.of(new AnimeScheduleLinkEntity("frieren", 154587L, NOW)));
+        ReleaseTimeEntity existing = new ReleaseTimeEntity();
+        existing.setDelayedUntil(Instant.parse("2026-11-21T15:30:00Z"));
+        when(releases.findByMediaIdAndAirTypeAndEpisode(154587L, "DUB", 5)).thenReturn(Optional.of(existing));
+
+        service.apply(List.of(delayed("2026-11-21T15:30:00Z")), NOW);
+        assertFalse(existing.isDelayAlertPending());
+
+        service.apply(List.of(delayed("2026-11-28T15:30:00Z")), NOW);
+        assertTrue(existing.isDelayAlertPending());
+    }
+
+    @Test
+    void pastOrMissingDelayIsNotFlagged() {
+        when(links.findAllById(any())).thenReturn(List.of(new AnimeScheduleLinkEntity("frieren", 154587L, NOW)));
+        ReleaseTimeEntity existing = new ReleaseTimeEntity();
+        when(releases.findByMediaIdAndAirTypeAndEpisode(154587L, "DUB", 5)).thenReturn(Optional.of(existing));
+
+        service.apply(List.of(delayed("2026-11-01T15:30:00Z"), delayed("0001-01-01T00:00:00Z")), NOW);
+
+        assertFalse(existing.isDelayAlertPending());
+    }
 }

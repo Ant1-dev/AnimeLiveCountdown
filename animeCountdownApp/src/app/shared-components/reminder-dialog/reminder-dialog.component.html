@@ -7,6 +7,28 @@
   @if (loading()) {
     <p class="muted">Loading…</p>
   } @else {
+    <fieldset class="channels versions">
+      <legend class="label">Remind me for</legend>
+      @for (option of typeOptions(); track option.type) {
+        <label class="check" [class.disabled]="option.disabled">
+          <input type="radio" name="releaseType" [value]="option.type" [disabled]="option.disabled"
+                 [ngModel]="releaseType()" (ngModelChange)="releaseType.set($event)" />
+          <span class="version">
+            <span>{{ option.label }}</span>
+            <span class="version-detail">
+              @if (option.release && option.at) {
+                Episode {{ option.release.episode }} · {{ option.at | date: 'EEE, MMM d, h:mm a' }}
+              } @else if (option.note) {
+                {{ option.note }}
+              } @else {
+                {{ option.hint }}
+              }
+            </span>
+          </span>
+        </label>
+      }
+    </fieldset>
+
     <label class="field">
       <span class="label">Remind me</span>
       <select [ngModel]="leadMinutes()" (ngModelChange)="leadMinutes.set($event)" name="lead">
