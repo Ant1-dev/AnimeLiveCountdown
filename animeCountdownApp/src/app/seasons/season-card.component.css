@@ -42,7 +42,15 @@
   color: #ffffff;
 }
 
-.score { top: 0.5rem; left: 0.5rem; }
+.score {
+  top: 0.5rem;
+  left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.score app-icon { color: #ffd166; }
 
 .chip {
   left: 0.5rem;

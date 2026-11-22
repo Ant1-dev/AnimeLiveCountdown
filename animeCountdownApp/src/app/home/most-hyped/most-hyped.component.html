@@ -10,7 +10,7 @@
     @for (entry of entries(); track entry.media.id; let i = $index) {
     <div class="hype-item">
       <app-show [media]="entry.media" [showAiringNow]="true" />
-      <p class="hype-caption"><span class="rank">#{{ i + 1 }}</span> {{ caption(entry) }}</p>
+      <p class="hype-caption"><span class="rank">#{{ i + 1 }}</span>@if (entry.recentReactions > 0) {<app-icon class="hype-flame" name="flame" [size]="14" />}{{ caption(entry) }}</p>
     </div>
     }
   </div>

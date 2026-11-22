@@ -17,7 +17,7 @@
         [disabled]="pending()"
         (click)="toggle(option.type)"
       >
-        <span class="emoji" aria-hidden="true">{{ option.emoji }}</span>
+        <app-icon class="reaction-icon" [name]="option.icon" [size]="20" />
         <span class="count">{{ option.count }}</span>
       </button>
       }

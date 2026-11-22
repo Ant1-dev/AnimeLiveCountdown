@@ -67,9 +67,12 @@
   background: rgb(var(--accent-rgb) / 0.18);
 }
 
-.emoji {
-  font-size: 1.3rem;
-  line-height: 1;
+.reaction-icon {
+  color: var(--text-secondary);
+}
+
+.reaction.mine .reaction-icon {
+  color: var(--accent);
 }
 
 .count {

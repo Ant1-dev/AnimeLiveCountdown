@@ -36,13 +36,14 @@ import { injectIsBrowser } from '../shared/platform';
 import { seasonLabel } from '../services/season.service';
 import { SeasonName } from '../models/season.model';
 import { OptimizedImagePipe } from '../shared/optimized-image.pipe';
+import { IconComponent } from '../shared-components/icon/icon.component';
 
 /** What the page shows when the show can't be loaded. */
 type LoadState = 'loading' | 'ready' | 'not-found' | 'unavailable';
 
 @Component({
   selector: 'app-media-info',
-  imports: [OptimizedImagePipe, CommonModule, Skeleton, NgOptimizedImage, RouterLink, FollowControlsComponent, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent, TrailerComponent, WatchOrderComponent, ReleaseTimesComponent],
+  imports: [OptimizedImagePipe, CommonModule, Skeleton, NgOptimizedImage, RouterLink, FollowControlsComponent, WhereToWatchComponent, ScheduleNoteBadgeComponent, ShareButtonComponent, EpisodeReactionsComponent, TrailerComponent, WatchOrderComponent, ReleaseTimesComponent, IconComponent],
   templateUrl: './media-info.component.html',
   styleUrl: './media-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

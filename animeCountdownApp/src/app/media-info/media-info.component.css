@@ -196,6 +196,12 @@
   color: var(--text-strong);
 }
 
+.detail-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* Countdown section */
 .countdown-container {
   background-color: var(--bg-card);
