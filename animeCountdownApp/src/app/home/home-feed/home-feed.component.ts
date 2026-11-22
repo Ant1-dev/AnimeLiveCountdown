@@ -10,6 +10,7 @@ import { SeasonPopComponent } from '../weekly-schedule/season-pop/season-pop.com
 import { ContinueWatchingComponent } from '../../shared-components/continue-watching/continue-watching.component';
 import { MostHypedComponent } from '../most-hyped/most-hyped.component';
 import { AuthService, readSessionHint } from '../../auth/auth.service';
+import { MyServicesToggleComponent } from '../../shared-components/my-services-toggle/my-services-toggle.component';
 
 export type ScheduleView = 'mine' | 'all';
 const VIEW_STORAGE_KEY = 'alc.scheduleView';
@@ -24,7 +25,7 @@ const VIEW_STORAGE_KEY = 'alc.scheduleView';
 @Component({
   selector: 'app-home-feed',
   imports: [AiringSoonComponent, WeeklyScheduleComponent, MediaSkeletonComponent, SeasonPopComponent,
-    ContinueWatchingComponent, NgTemplateOutlet, MostHypedComponent],
+    ContinueWatchingComponent, NgTemplateOutlet, MostHypedComponent, MyServicesToggleComponent],
   templateUrl: './home-feed.component.html',
   styleUrl: './home-feed.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -25,6 +25,8 @@ import { ScheduleNoteBadgeComponent } from '../../../../shared-components/schedu
 import { ShareService } from '../../../../services/share.service';
 import { ReminderDialogService } from '../../../../services/notifications/reminder-dialog.service';
 import { AnimePathPipe } from '../../../../seo/anime-path.pipe';
+import { MyServicesService } from '../../../../services/my-services.service';
+import { WatchLinksComponent } from '../../../../shared-components/watch-links/watch-links.component';
 
 @Component({
   selector: 'app-show',
@@ -36,6 +38,7 @@ import { AnimePathPipe } from '../../../../seo/anime-path.pipe';
     Tooltip,
     NgOptimizedImage,
     ScheduleNoteBadgeComponent,
+    WatchLinksComponent,
   ],
   templateUrl: './show.component.html',
   styleUrl: './show.component.css',
@@ -56,6 +59,12 @@ export class ShowComponent implements OnInit, OnChanges {
   private reminderDialog = inject(ReminderDialogService);
 
   protected user = this.authService.user;
+  protected myServices = inject(MyServicesService);
+
+  /** With "My services only" on, shows without streaming data stay visible, labelled unknown. */
+  protected streamingUnknown = computed(
+    () => this.myServices.filterActive() && this.myServices.status(this.media()?.id) === 'unknown'
+  );
 
   // The viewer's follow of this show (with episode progress), if they follow it
   protected follow = computed(() => this.following.get(this.media()?.id));

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,10 @@ public interface MediaInfoRepository extends JpaRepository<MediaInfoEntity, Long
                    "ORDER BY media_popularity DESC LIMIT 5",
             nativeQuery = true)
     List<MediaInfoEntity> searchByFields(@Param("searchTerm") String searchTerm);
+
+    /** Id and AniList streaming links (a List of StreamingLink, may be null) of the given shows. */
+    @Query("SELECT m.id, m.streamingLinks FROM MediaInfoEntity m WHERE m.id IN :ids")
+    List<Object[]> findStreamingLinksByIds(@Param("ids") Collection<Long> ids);
 
     @Query("SELECT m.id FROM MediaInfoEntity m")
     List<Long> findAllIds();

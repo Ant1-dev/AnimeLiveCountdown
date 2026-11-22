@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:slugs": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-slugs.ts",
+    "test:my-services": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-my-services.ts",
     "build:vercel": "node scripts/vercel-build.mjs",
     "serve:ssr": "node dist/anime-countdown-app/server/server.mjs"
   },

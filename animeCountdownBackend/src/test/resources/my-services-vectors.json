@@ -1,0 +1,32 @@
+{
+  "names": [
+    ["Disney+", "disneyplus"],
+    ["Disney Plus", "disneyplus"],
+    ["Amazon Prime Video", "amazonprimevideo"],
+    ["Ani-One Asia", "anioneasia"],
+    ["HIDIVE", "hidive"],
+    ["iQ", "iq"],
+    ["Apple TV+", "appletvplus"],
+    ["  Tubi TV ", "tubitv"]
+  ],
+  "urls": [
+    ["https://example.com", true],
+    ["http://example.com/watch/{title}", true],
+    ["HTTPS://Example.com/path?a=1&q={title}", true],
+    ["https://app.plex.tv/desktop#!/search?query={title}", true],
+    ["http://localhost:8080/library", true],
+    [" https://example.com/trimmed ", true],
+    ["javascript:alert(1)", false],
+    ["ftp://example.com", false],
+    ["example.com", false],
+    ["https://", false],
+    ["https://{title}.com", false],
+    ["https://user:pass@example.com", false],
+    ["https://example.com/a b", false],
+    ["https://example.com/{other}", false],
+    ["https://example.com/<script>", false],
+    ["data:text/html,hi", false],
+    ["https://example.com:99999/", false],
+    ["", false]
+  ]
+}

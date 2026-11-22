@@ -172,3 +172,16 @@
   text-overflow: ellipsis;
 }
 }
+/* "My services only" on and no streaming data for this show (bottom-left is the break badge) */
+.streaming-unknown {
+  position: absolute;
+  right: 6px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+}

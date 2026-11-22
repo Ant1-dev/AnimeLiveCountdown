@@ -24,6 +24,9 @@
       <span class="behind-badge">{{ follow()!.behind }} behind</span>
       }
       <app-schedule-note-badge variant="overlay" [note]="media()?.scheduleNote" />
+      @if (streamingUnknown()) {
+      <span class="streaming-unknown" title="No streaming info for this show yet">Streaming unknown</span>
+      }
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
@@ -39,6 +42,7 @@
           }
           <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
           <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
+          <app-watch-links class="show-info-item" [mediaId]="media()?.id" [title]="getDisplayTitle()" />
         </div>
       </ng-template>
     </div>
@@ -65,6 +69,9 @@
       @if (follow()?.behind) {
       <span class="behind-badge">{{ follow()!.behind }} behind</span>
       }
+      @if (streamingUnknown()) {
+      <span class="streaming-unknown" title="No streaming info for this show yet">Streaming unknown</span>
+      }
       <mat-icon
         [tooltipOptions]="tooltipOptions"
         [pTooltip]="showInfo"
@@ -84,6 +91,7 @@
           }
           <div class="show-info-item">Add reminder -<mat-icon class="add-icon" role="button" aria-label="Add reminder" (click)="addReminder($event)">add_circle</mat-icon></div>
           <div class="show-info-item">Share -<mat-icon class="add-icon" (click)="share()">share</mat-icon></div>
+          <app-watch-links class="show-info-item" [mediaId]="media()?.id" [title]="getDisplayTitle()" />
         </div>
       </ng-template>
     </div>

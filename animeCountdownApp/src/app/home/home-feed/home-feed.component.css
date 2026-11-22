@@ -41,3 +41,10 @@
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
+
+.schedule-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
