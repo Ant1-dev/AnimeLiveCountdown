@@ -95,6 +95,23 @@ public final class ReleaseTimes {
         }
     }
 
+    /** Platforms tried first when a notification can link to only one. */
+    private static final List<String> PREFERRED_PLATFORMS = List.of(
+            "crunchyroll", "netflix", "hidive", "amazon", "hulu", "youtube");
+
+    /** The stream to link from a notification: a well-known platform first, otherwise the first listed. */
+    public static Optional<Stream> primaryStream(String json) {
+        List<Stream> streams = streamsFromJson(json);
+        for (String platform : PREFERRED_PLATFORMS) {
+            for (Stream s : streams) {
+                if (platform.equals(s.platform())) {
+                    return Optional.of(s);
+                }
+            }
+        }
+        return streams.stream().findFirst();
+    }
+
     static List<Stream> streamsFromJson(String json) {
         if (json == null || json.isBlank()) {
             return List.of();

@@ -209,6 +209,82 @@ class ScheduleNoteDetectorTest {
         assertNull(ScheduleNote.activeOf(stored, EP5.plus(WEEK.multipliedBy(2))));
     }
 
+    // Delay alerts: the detector flags rows for DelayAlertService
+
+    @Test
+    void newDelayIsFlaggedForAnAlert() {
+        MediaEntity stored = media("RELEASING", 6, EP5.plus(WEEK));
+
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, EP5.plus(WEEK.multipliedBy(2))), EP5);
+
+        assertTrue(stored.isScheduleNoteAlertPending());
+    }
+
+    @Test
+    void newBreakIsFlaggedForAnAlert() {
+        MediaEntity stored = media("RELEASING", 5, EP5);
+
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, EP5.plus(WEEK.multipliedBy(2))), EP5.plusSeconds(60));
+
+        assertTrue(stored.isScheduleNoteAlertPending());
+    }
+
+    @Test
+    void unchangedDelayIsNotFlaggedAgain() {
+        Instant newTime = EP5.plus(WEEK.multipliedBy(2));
+        MediaEntity stored = media("RELEASING", 6, EP5.plus(WEEK));
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, newTime), EP5);
+        stored.setNext_Airing_At(newTime);
+        stored.setScheduleNoteAlertPending(false); // DelayAlertService sent it
+
+        // Next sync sees the same date (e.g. only the popularity changed)
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, newTime), EP5.plus(Duration.ofHours(1)));
+
+        assertFalse(stored.isScheduleNoteAlertPending());
+    }
+
+    @Test
+    void delayPushedFurtherIsFlaggedAgain() {
+        Instant original = EP5.plus(WEEK);
+        MediaEntity stored = media("RELEASING", 6, original);
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, original.plus(WEEK)), EP5);
+        stored.setNext_Airing_At(original.plus(WEEK));
+        stored.setScheduleNoteAlertPending(false);
+
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, original.plus(WEEK.multipliedBy(2))), EP5.plus(Duration.ofDays(1)));
+
+        assertTrue(stored.isScheduleNoteAlertPending());
+    }
+
+    @Test
+    void breakReturnPulledForwardIsNotFlagged() {
+        MediaEntity stored = media("RELEASING", 5, EP5);
+        Instant returns = EP5.plus(WEEK.multipliedBy(3));
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, returns), EP5.plusSeconds(60));
+        stored.setNext_Airing_At(returns);
+        stored.setNext_Airing_Episode(6);
+        stored.setScheduleNoteAlertPending(false);
+
+        // Comes back a week sooner than announced: still a break, but good news
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, returns.minus(WEEK)), EP5.plus(Duration.ofDays(2)));
+
+        assertEquals(ScheduleNote.Type.ON_BREAK, stored.getScheduleNoteType());
+        assertFalse(stored.isScheduleNoteAlertPending());
+    }
+
+    @Test
+    void clearedNoteClearsAPendingAlert() {
+        MediaEntity stored = media("RELEASING", 6, EP5.plus(WEEK));
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, EP5.plus(WEEK.multipliedBy(2))), EP5);
+        stored.setNext_Airing_At(EP5.plus(WEEK.multipliedBy(2)));
+
+        // Reversed before the alert went out
+        ScheduleNoteDetector.detect(stored, media("RELEASING", 6, EP5.plus(WEEK)), EP5.plus(Duration.ofMinutes(5)));
+
+        assertNull(stored.getScheduleNoteType());
+        assertFalse(stored.isScheduleNoteAlertPending());
+    }
+
     private static MediaEntity media(String status, Integer episode, Instant nextAiring) {
         MediaEntity m = new MediaEntity();
         m.setId(1L);

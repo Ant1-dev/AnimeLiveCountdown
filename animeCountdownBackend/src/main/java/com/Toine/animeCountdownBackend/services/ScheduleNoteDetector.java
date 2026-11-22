@@ -13,6 +13,9 @@ import java.time.Instant;
  *
  * <p>Call {@link #detect} with the stored row before the fresh values are copied onto it. It only
  * touches the note and tracking fields.
+ *
+ * <p>When a note is newly set, or the date it points at moves later, it also marks the row
+ * {@code scheduleNoteAlertPending} so DelayAlertService tells the show's followers.
  */
 public final class ScheduleNoteDetector {
 
@@ -30,7 +33,26 @@ public final class ScheduleNoteDetector {
 
     public static void detect(MediaEntity stored, MediaEntity fresh, Instant now) {
         clearIfExpired(stored, now);
+        ScheduleNote.Type typeBefore = stored.getScheduleNoteType();
+        Instant detectedBefore = stored.getScheduleNoteDetectedAt();
+        Instant expiresBefore = stored.getScheduleNoteExpiresAt();
 
+        compare(stored, fresh, now);
+
+        ScheduleNote.Type type = stored.getScheduleNoteType();
+        Instant expires = stored.getScheduleNoteExpiresAt();
+        if (type == null) {
+            stored.setScheduleNoteAlertPending(false);
+            return;
+        }
+        boolean newNote = type != typeBefore || !java.util.Objects.equals(detectedBefore, stored.getScheduleNoteDetectedAt());
+        boolean movedLater = expires != null && expiresBefore != null && expires.isAfter(expiresBefore);
+        if (newNote || movedLater) {
+            stored.setScheduleNoteAlertPending(true);
+        }
+    }
+
+    private static void compare(MediaEntity stored, MediaEntity fresh, Instant now) {
         Instant oldAt = stored.getNext_Airing_At();
         Integer oldEpisode = stored.getNext_Airing_Episode();
         Instant newAt = fresh.getNext_Airing_At();

@@ -85,7 +85,13 @@ public class ReleaseTimeSyncService {
             row.setEpisode(e.episodeNumber());
             row.setReleaseAt(at.get());
             row.setStreamsJson(ReleaseTimes.streamsToJson(ReleaseTimes.normalizeStreams(e.streamUrls())));
-            row.setDelayedUntil(ReleaseTimes.instant(e.delayedUntil()).orElse(null));
+            Instant delayedUntil = ReleaseTimes.instant(e.delayedUntil()).orElse(null);
+            if (delayedUntil != null && delayedUntil.isAfter(now) && !delayedUntil.equals(row.getDelayedUntil())) {
+                // Newly delayed, or the delay moved: DelayAlertService tells followers
+                row.setDelayAlertPending(true);
+                row.setDelayChangedAt(now);
+            }
+            row.setDelayedUntil(delayedUntil);
             row.setDelayNote(e.delayedText() == null || e.delayedText().isBlank() ? null
                     : e.delayedText().substring(0, Math.min(255, e.delayedText().length())));
             row.setUpdatedAt(now);

@@ -65,4 +65,15 @@ class DueEpisodeSelectorTest {
         assertEquals("Episode 5 is out now", DueEpisodeSelector.describe(5, AIRS, AIRS.minusSeconds(30)));
         assertEquals("Episode 5 is out now", DueEpisodeSelector.describe(5, AIRS, AIRS.plusSeconds(300)));
     }
+
+    @Test
+    void describesSubAndDubReleasesWithPlatform() {
+        assertEquals("Episode 5 (English dub) is out now on Crunchyroll",
+                DueEpisodeSelector.describe(5, AIRS, AIRS, "English dub", "Crunchyroll"));
+        assertEquals("Episode 5 (subbed) is out in 15 minutes",
+                DueEpisodeSelector.describe(5, AIRS, AIRS.minus(Duration.ofMinutes(15)), "subbed", null));
+        assertEquals("subbed", DueEpisodeSelector.versionLabel("SUB"));
+        assertEquals("English dub", DueEpisodeSelector.versionLabel("DUB"));
+        assertNull(DueEpisodeSelector.versionLabel("JAPAN"));
+    }
 }

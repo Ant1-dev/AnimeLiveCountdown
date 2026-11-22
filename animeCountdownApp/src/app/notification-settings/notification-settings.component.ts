@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { LEAD_TIME_OPTIONS, NotificationConfig, NotificationSettings, Reminder } from '../models/notification.model';
+import { LEAD_TIME_OPTIONS, NotificationConfig, NotificationSettings, RELEASE_TYPE_OPTIONS, ReleaseType, Reminder, releaseTypeLabel } from '../models/notification.model';
 import { NotificationService } from '../services/notifications/notification.service';
 import { PushService } from '../services/notifications/push.service';
 import { PwaInstallService } from '../services/notifications/pwa-install.service';
@@ -36,6 +36,16 @@ export class NotificationSettingsComponent implements OnInit {
   protected install = inject(PwaInstallService);
 
   protected readonly leadOptions = LEAD_TIME_OPTIONS;
+  protected readonly releaseTypeOptions = RELEASE_TYPE_OPTIONS;
+
+  /** Whether the show has release times for this type (JAPAN always does). */
+  protected hasTimes(reminder: Reminder, type: ReleaseType): boolean {
+    return type === 'JAPAN' || reminder.availableTypes.includes(type);
+  }
+
+  protected typeLabel(type: ReleaseType | null | undefined): string {
+    return releaseTypeLabel(type);
+  }
   protected config = signal<NotificationConfig | null>(null);
   protected settings = signal<NotificationSettings | null>(null);
   protected reminders = signal<Reminder[]>([]);
@@ -158,14 +168,16 @@ export class NotificationSettingsComponent implements OnInit {
 
   // ---- Reminders ----
 
-  async updateReminder(reminder: Reminder, change: Partial<Pick<Reminder, 'leadMinutes' | 'push' | 'discord'>>): Promise<void> {
+  async updateReminder(reminder: Reminder, change: Partial<Pick<Reminder, 'leadMinutes' | 'push' | 'discord' | 'releaseType'>>): Promise<void> {
     const next = { ...reminder, ...change };
     this.reminders.update((list) => list.map((r) => (r.mediaId === reminder.mediaId ? next : r)));
     try {
       if (change.push && this.push.state() !== 'on' && this.config()?.pushEnabled) await this.push.enable();
-      await firstValueFrom(this.reminderService.save(reminder.mediaId, {
-        leadMinutes: Number(next.leadMinutes), push: next.push, discord: next.discord,
+      const saved = await firstValueFrom(this.reminderService.save(reminder.mediaId, {
+        leadMinutes: Number(next.leadMinutes), push: next.push, discord: next.discord, releaseType: next.releaseType,
       }));
+      // The next episode/time shown depends on the release type
+      if (change.releaseType) this.reminders.update((list) => list.map((r) => (r.mediaId === reminder.mediaId ? saved : r)));
     } catch {
       this.reminders.update((list) => list.map((r) => (r.mediaId === reminder.mediaId ? reminder : r)));
       this.toast("Couldn't update the reminder. Try again in a moment.");

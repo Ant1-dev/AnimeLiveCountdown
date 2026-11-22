@@ -45,14 +45,20 @@
                 <span class="thumb" aria-hidden="true"></span>
               }
               <span class="text">
+                @if (isDelay(item)) {
+                  <span class="tag">Schedule change</span>
+                }
                 <span class="title">{{ item.title }}</span>
-                <span class="message">{{ item.message }}</span>
+                <span class="message">{{ messageOf(item) }}</span>
                 <span class="time">{{ timeAgo(item.createdAt) }}</span>
               </span>
               @if (!item.read) {
                 <span class="dot" aria-label="Unread"></span>
               }
             </button>
+            @if (item.link) {
+              <a class="watch" [href]="item.link" target="_blank" rel="noopener" (click)="notifications.markRead(item)">Watch now</a>
+            }
           </li>
         }
       </ul>

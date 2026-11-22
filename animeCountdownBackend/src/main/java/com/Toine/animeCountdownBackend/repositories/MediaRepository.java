@@ -37,4 +37,20 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long>, JpaSp
     @Query("SELECT m.id FROM MediaEntity m WHERE m.next_Airing_At > :from AND m.next_Airing_At <= :to")
     List<Long> findIdsAiringBetween(@Param("from") Instant from, @Param("to") Instant to);
 
+
+    /** Shows whose break/delay note DelayAlertService hasn't told followers about yet. */
+    @Query("SELECT m FROM MediaEntity m WHERE m.scheduleNoteAlertPending = true")
+    List<MediaEntity> findPendingDelayAlerts();
+
+    /**
+     * Marks the alert sent, unless the sync moved the note's date in the meantime (then the next run
+     * picks up the new date).
+     */
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query("""
+            UPDATE MediaEntity m SET m.scheduleNoteAlertPending = false
+            WHERE m.id = :id AND (m.scheduleNoteExpiresAt IS NULL OR m.scheduleNoteExpiresAt = :expiresAt)
+            """)
+    int clearDelayAlertPending(@Param("id") Long id, @Param("expiresAt") Instant expiresAt);
 }

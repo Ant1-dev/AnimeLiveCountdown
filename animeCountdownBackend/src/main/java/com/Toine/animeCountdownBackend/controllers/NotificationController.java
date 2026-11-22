@@ -20,10 +20,11 @@ import java.util.Map;
 public class NotificationController {
 
     public record NotificationDto(Long id, String kind, String title, String message, Long mediaId, Integer episode,
-                                  String imageUrl, Instant airingAt, Instant createdAt, boolean read) {
+                                  String imageUrl, Instant airingAt, Instant createdAt, boolean read, String link) {
         static NotificationDto of(NotificationEntity n) {
             return new NotificationDto(n.getId(), n.getKind(), n.getTitle(), n.getMessage(), n.getMediaId(),
-                    n.getEpisode(), n.getImageUrl(), n.getAiringAt(), n.getNotifDate(), n.getReadAt() != null);
+                    n.getEpisode(), n.getImageUrl(), n.getAiringAt(), n.getNotifDate(), n.getReadAt() != null,
+                    n.getLink());
         }
     }
 

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, LOCALE_ID, signal } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,7 +7,7 @@ import { AuthService } from '../../auth/auth.service';
 import { NotificationService } from '../../services/notifications/notification.service';
 import { PushService } from '../../services/notifications/push.service';
 import { PwaInstallService } from '../../services/notifications/pwa-install.service';
-import { AppNotification } from '../../models/notification.model';
+import { AppNotification, isDelayKind } from '../../models/notification.model';
 import { SignInComponent } from '../sign-in/sign-in.component';
 
 @Component({
@@ -24,6 +25,7 @@ export class NotificationBellComponent {
   private host = inject(ElementRef<HTMLElement>);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private locale = inject(LOCALE_ID);
   protected notifications = inject(NotificationService);
   protected install = inject(PwaInstallService);
   protected user = inject(AuthService).user;
@@ -44,6 +46,21 @@ export class NotificationBellComponent {
     this.notifications.markRead(notification);
     this.open.set(false);
     if (notification.mediaId) this.router.navigate(['/media', notification.mediaId]);
+  }
+
+  isDelay(notification: AppNotification): boolean {
+    return isDelayKind(notification.kind);
+  }
+
+  /** Delay alerts carry the new date in airingAt; show it in the viewer's time zone. */
+  messageOf(notification: AppNotification): string {
+    if (!isDelayKind(notification.kind) || !notification.airingAt) return notification.message;
+    const when = formatDate(notification.airingAt, 'EEE, MMM d, h:mm a', this.locale);
+    if (notification.message.startsWith('On break')) {
+      return `On break until ${when}` + (notification.episode ? ` (episode ${notification.episode})` : '');
+    }
+    const cut = notification.message.indexOf(' delayed to ');
+    return cut >= 0 ? `${notification.message.slice(0, cut)} delayed to ${when}` : notification.message;
   }
 
   signIn(): void {

@@ -25,6 +25,9 @@ select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .check { display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-primary); }
 .check input { width: 18px; height: 18px; accent-color: var(--accent); }
 .check.disabled { cursor: default; color: var(--text-muted); }
+.versions { margin-bottom: 16px; }
+.version { display: flex; flex-direction: column; }
+.version-detail { font-size: 13px; color: var(--text-muted); }
 
 .hint { margin: 0 0 4px 28px; font-size: 13px; line-height: 1.4; color: var(--text-muted); }
 .hint a { color: var(--accent); }

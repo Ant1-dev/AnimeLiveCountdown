@@ -1,11 +1,13 @@
 package com.Toine.animeCountdownBackend.services.notifications;
 
 import com.Toine.animeCountdownBackend.utils.Slugs;
+import com.Toine.animeCountdownBackend.models.postgreEntities.NotificationEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.NotificationSettingsEntity;
 import com.Toine.animeCountdownBackend.models.postgreEntities.ReminderEntity;
 import com.Toine.animeCountdownBackend.repositories.NotificationRepository;
 import com.Toine.animeCountdownBackend.repositories.NotificationSettingsRepository;
 import com.Toine.animeCountdownBackend.repositories.ReminderRepository;
+import com.Toine.animeCountdownBackend.services.releases.ReleaseTimes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,13 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Finds reminders that are due and delivers each one once.
  *
- * For every due (user, show, episode) the notification row is inserted first with
+ * JAPAN reminders follow AniList's next airing; SUB and DUB reminders follow the matching
+ * release_time rows synced from AnimeSchedule. For every due (user, show, episode, kind) the
+ * notification row is inserted first with
  * ON CONFLICT DO NOTHING; push and Discord are only sent when that insert created the row. The
  * database's unique key is therefore the dedupe, and a crash between insert and send loses at most
  * one delivery instead of repeating it.
@@ -55,8 +60,10 @@ public class ReminderDispatchService {
 
     /** Sends every reminder due at {@code now}. Returns how many new notifications were created. */
     public int dispatchDue(Instant now) {
-        List<ReminderCandidate> candidates = reminderRepository.findCandidates(
-                selector.windowStart(now), selector.windowEnd(now, ReminderEntity.MAX_LEAD_MINUTES));
+        Instant from = selector.windowStart(now);
+        Instant to = selector.windowEnd(now, ReminderEntity.MAX_LEAD_MINUTES);
+        List<ReminderCandidate> candidates = new ArrayList<>(reminderRepository.findCandidates(from, to));
+        candidates.addAll(reminderRepository.findReleaseCandidates(from, to));
         int created = 0;
         for (ReminderCandidate candidate : candidates) {
             if (!selector.isDue(candidate, now)) {
@@ -67,8 +74,8 @@ public class ReminderDispatchService {
                     created++;
                 }
             } catch (RuntimeException e) {
-                logger.error("Reminder for user {} media {} episode {} failed", candidate.userId(),
-                        candidate.mediaId(), candidate.episode(), e);
+                logger.error("{} reminder for user {} media {} episode {} failed", candidate.releaseType(),
+                        candidate.userId(), candidate.mediaId(), candidate.episode(), e);
             }
         }
         if (created > 0) {
@@ -79,12 +86,17 @@ public class ReminderDispatchService {
 
     private boolean deliver(ReminderCandidate c, Instant now) {
         String title = c.displayTitle();
-        String message = DueEpisodeSelector.describe(c.episode(), c.airingAt(), now);
+        ReleaseTimes.Stream stream = ReleaseTimes.primaryStream(c.streamsJson()).orElse(null);
+        String message = DueEpisodeSelector.describe(c.episode(), c.airingAt(), now,
+                DueEpisodeSelector.versionLabel(c.releaseType()), stream == null ? null : stream.label());
+        String kind = NotificationEntity.episodeKind(c.releaseType());
+        String streamUrl = stream == null ? null : truncate(stream.url(), 1024);
 
         int inserted = notificationRepository.insertEpisodeIfAbsent(c.userId(), c.mediaId(), c.episode(),
-                c.airingAt(), now, truncate(title, 255), truncate(message, 255), truncate(c.coverImageUrl(), 1024));
+                c.airingAt(), now, truncate(title, 255), truncate(message, 255), truncate(c.coverImageUrl(), 1024),
+                kind, streamUrl);
         if (inserted == 0) {
-            return false; // Already notified about this episode
+            return false; // Already notified about this episode in this version
         }
 
         String path = Slugs.animePath(c.mediaId(), title);
@@ -94,11 +106,17 @@ public class ReminderDispatchService {
             if (ttl.compareTo(Duration.ofMinutes(5)) < 0) {
                 ttl = Duration.ofMinutes(5);
             }
-            webPushService.sendToUser(c.userId(),
-                    new PushMessage(title, message, path, c.coverImageUrl(), "m" + c.mediaId() + "e" + c.episode()), ttl);
+            String tag = "m" + c.mediaId() + "e" + c.episode() + switch (kind) {
+                case NotificationEntity.KIND_EPISODE_SUB -> "s";
+                case NotificationEntity.KIND_EPISODE_DUB -> "d";
+                default -> "";
+            };
+            webPushService.sendToUser(c.userId(), new PushMessage(title, message, path, c.coverImageUrl(), tag), ttl);
         }
         if (c.discordEnabled() && discordWebhookService.isEnabled()) {
-            sendDiscord(c.userId(), title, message, frontendUrl + path, c.coverImageUrl(), c.airingAt());
+            String description = stream == null ? message
+                    : message + "\n[Watch on " + stream.label() + "](" + stream.url() + ")";
+            sendDiscord(c.userId(), title, description, frontendUrl + path, c.coverImageUrl(), c.airingAt());
         }
         return true;
     }
@@ -120,7 +138,7 @@ public class ReminderDispatchService {
         return result;
     }
 
-    private static String truncate(String value, int max) {
+    static String truncate(String value, int max) {
         if (value == null) {
             return null;
         }

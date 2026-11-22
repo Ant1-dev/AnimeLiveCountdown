@@ -50,7 +50,7 @@ class ReminderDispatchServiceTest {
     void sendsDueReminderOnceOnEveryChannel() {
         ReminderCandidate due = candidate(1L, 10L, 15, NOW.plus(Duration.ofMinutes(15)), true, true);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(due));
-        when(notifications.insertEpisodeIfAbsent(eq(1L), eq(10L), eq(5), any(), eq(NOW), any(), any(), any())).thenReturn(1);
+        when(notifications.insertEpisodeIfAbsent(eq(1L), eq(10L), eq(5), any(), eq(NOW), any(), any(), any(), any(), any())).thenReturn(1);
         NotificationSettingsEntity userSettings = new NotificationSettingsEntity();
         userSettings.setDiscordWebhookUrl(WEBHOOK);
         when(settings.findById(1L)).thenReturn(Optional.of(userSettings));
@@ -73,7 +73,7 @@ class ReminderDispatchServiceTest {
         ReminderCandidate due = candidate(1L, 10L, 0, NOW.plusSeconds(10), true, true);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(due));
         // The unique (user, media, episode) row exists from an earlier run
-        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any())).thenReturn(0);
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(0);
 
         assertEquals(0, service.dispatchDue(NOW));
 
@@ -85,7 +85,7 @@ class ReminderDispatchServiceTest {
     void repeatedRunsDeliverEachEpisodeOnce() {
         ReminderCandidate due = candidate(1L, 10L, 0, NOW.plusSeconds(10), true, false);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(due));
-        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any()))
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(1).thenReturn(0);
 
         service.dispatchDue(NOW);
@@ -101,7 +101,7 @@ class ReminderDispatchServiceTest {
 
         assertEquals(0, service.dispatchDue(NOW));
 
-        verify(notifications, never()).insertEpisodeIfAbsent(any(), any(), any(), any(), any(), any(), any(), any());
+        verify(notifications, never()).insertEpisodeIfAbsent(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
         verifyNoInteractions(discord);
     }
 
@@ -110,7 +110,7 @@ class ReminderDispatchServiceTest {
         ReminderCandidate pushOnly = candidate(1L, 10L, 0, NOW.plusSeconds(10), true, false);
         ReminderCandidate discordOnly = candidate(2L, 11L, 0, NOW.plusSeconds(10), false, true);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(pushOnly, discordOnly));
-        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any())).thenReturn(1);
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
         when(discord.isEnabled()).thenReturn(false);
 
         assertEquals(2, service.dispatchDue(NOW));
@@ -124,7 +124,7 @@ class ReminderDispatchServiceTest {
     void goneDiscordWebhookIsForgotten() {
         ReminderCandidate due = candidate(1L, 10L, 0, NOW.plusSeconds(10), false, true);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(due));
-        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any())).thenReturn(1);
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
         NotificationSettingsEntity userSettings = new NotificationSettingsEntity();
         userSettings.setDiscordWebhookUrl(WEBHOOK);
         when(settings.findById(1L)).thenReturn(Optional.of(userSettings));
@@ -141,11 +141,83 @@ class ReminderDispatchServiceTest {
         ReminderCandidate broken = candidate(1L, 10L, 0, NOW.plusSeconds(10), true, false);
         ReminderCandidate fine = candidate(2L, 11L, 0, NOW.plusSeconds(10), true, false);
         when(reminders.findCandidates(any(), any())).thenReturn(List.of(broken, fine));
-        when(notifications.insertEpisodeIfAbsent(eq(1L), anyLong(), anyInt(), any(), any(), any(), any(), any()))
+        when(notifications.insertEpisodeIfAbsent(eq(1L), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any()))
                 .thenThrow(new RuntimeException("db hiccup"));
-        when(notifications.insertEpisodeIfAbsent(eq(2L), anyLong(), anyInt(), any(), any(), any(), any(), any())).thenReturn(1);
+        when(notifications.insertEpisodeIfAbsent(eq(2L), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
 
         assertEquals(1, service.dispatchDue(NOW));
         verify(push).sendToUser(eq(2L), any(), any());
+    }
+
+    private static ReminderCandidate release(long userId, String type, Instant releaseAt, Instant delayedUntil, String streams) {
+        return new ReminderCandidate(userId, 10L, 0, true, true, releaseAt, delayedUntil, 5, "Frieren",
+                "Sousou no Frieren", "https://img/1.png", type, streams);
+    }
+
+    @Test
+    void dubReminderSaysWhichVersionAndLinksThePlatform() {
+        ReminderCandidate dub = release(1L, "DUB", NOW.plusSeconds(10), null,
+                "{\"hidive\":\"https://hidive.com/f\",\"crunchyroll\":\"https://crunchyroll.com/f\"}");
+        when(reminders.findReleaseCandidates(any(), any())).thenReturn(List.of(dub));
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
+        NotificationSettingsEntity userSettings = new NotificationSettingsEntity();
+        userSettings.setDiscordWebhookUrl(WEBHOOK);
+        when(settings.findById(1L)).thenReturn(Optional.of(userSettings));
+        when(discord.send(any(), any(), any(), any(), any(), any())).thenReturn(DiscordWebhookService.Result.SENT);
+
+        assertEquals(1, service.dispatchDue(NOW));
+
+        verify(notifications).insertEpisodeIfAbsent(eq(1L), eq(10L), eq(5), any(), eq(NOW), eq("Frieren"),
+                eq("Episode 5 (English dub) is out now on Crunchyroll"), any(), eq("EPISODE_DUB"),
+                eq("https://crunchyroll.com/f"));
+        ArgumentCaptor<PushMessage> message = ArgumentCaptor.forClass(PushMessage.class);
+        verify(push).sendToUser(eq(1L), message.capture(), any());
+        assertEquals("m10e5d", message.getValue().tag());
+        assertEquals("/anime/10/frieren", message.getValue().url());
+        verify(discord).send(eq(WEBHOOK), eq("Frieren"),
+                eq("Episode 5 (English dub) is out now on Crunchyroll\n[Watch on Crunchyroll](https://crunchyroll.com/f)"),
+                eq("https://animelivecountdown.com/anime/10/frieren"), any(), any());
+    }
+
+    @Test
+    void subReminderWithoutStreamsHasNoLink() {
+        ReminderCandidate sub = release(1L, "SUB", NOW.plus(Duration.ofMinutes(30)), null, null);
+        ReminderCandidate early = new ReminderCandidate(1L, 10L, 30, true, false, sub.airingAt(), null, 5,
+                "Frieren", null, null, "SUB", null);
+        when(reminders.findReleaseCandidates(any(), any())).thenReturn(List.of(early));
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
+
+        assertEquals(1, service.dispatchDue(NOW));
+
+        verify(notifications).insertEpisodeIfAbsent(eq(1L), eq(10L), eq(5), any(), any(), any(),
+                eq("Episode 5 (subbed) is out in 30 minutes"), any(), eq("EPISODE_SUB"), isNull());
+    }
+
+    @Test
+    void delayedReleaseIsDueAtItsDelayedTime() {
+        // Listed as out now, but AnimeSchedule says it's delayed by three hours
+        ReminderCandidate delayed = release(1L, "SUB", NOW, NOW.plus(Duration.ofHours(3)), null);
+        when(reminders.findReleaseCandidates(any(), any())).thenReturn(List.of(delayed));
+
+        assertEquals(NOW.plus(Duration.ofHours(3)), delayed.airingAt());
+        assertEquals(0, service.dispatchDue(NOW));
+        verify(notifications, never()).insertEpisodeIfAbsent(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void japanAndDubRemindersForTheSameEpisodeUseSeparateKinds() {
+        ReminderCandidate japan = candidate(1L, 10L, 0, NOW.plusSeconds(10), false, false);
+        ReminderCandidate dub = new ReminderCandidate(2L, 10L, 0, false, false, NOW.plusSeconds(10), null, 5,
+                "Frieren", null, null, "DUB", null);
+        when(reminders.findCandidates(any(), any())).thenReturn(List.of(japan));
+        when(reminders.findReleaseCandidates(any(), any())).thenReturn(List.of(dub));
+        when(notifications.insertEpisodeIfAbsent(anyLong(), anyLong(), anyInt(), any(), any(), any(), any(), any(), any(), any())).thenReturn(1);
+
+        assertEquals(2, service.dispatchDue(NOW));
+
+        verify(notifications).insertEpisodeIfAbsent(eq(1L), eq(10L), eq(5), any(), any(), any(),
+                eq("Episode 5 is out now"), any(), eq("EPISODE"), isNull());
+        verify(notifications).insertEpisodeIfAbsent(eq(2L), eq(10L), eq(5), any(), any(), any(),
+                eq("Episode 5 (English dub) is out now"), any(), eq("EPISODE_DUB"), isNull());
     }
 }

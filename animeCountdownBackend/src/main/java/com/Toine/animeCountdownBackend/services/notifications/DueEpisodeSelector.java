@@ -48,9 +48,19 @@ public final class DueEpisodeSelector {
 
     /** Text for the notification, worded for before or after airing. */
     public static String describe(int episode, Instant airingAt, Instant now) {
+        return describe(episode, airingAt, now, null, null);
+    }
+
+    /**
+     * Text for the notification. {@code version} ("subbed", "English dub") marks a streamed release,
+     * which is "out" rather than "airing"; {@code platform} names where to watch it.
+     */
+    public static String describe(int episode, Instant airingAt, Instant now, String version, String platform) {
+        String what = "Episode " + episode + (version == null ? "" : " (" + version + ")");
+        String where = platform == null ? "" : " on " + platform;
         long secondsLeft = Duration.between(now, airingAt).getSeconds();
         if (secondsLeft <= 60) {
-            return "Episode " + episode + " is out now";
+            return what + " is out now" + where;
         }
         // Reminders go out up to one run (30 s) early, so round to the nearest minute, halves down:
         // a 15-minute reminder sent with 15:30 left still says 15 minutes
@@ -62,6 +72,18 @@ public final class DueEpisodeSelector {
             long hours = Math.round(minutes / 60.0);
             in = hours + (hours == 1 ? " hour" : " hours");
         }
-        return "Episode " + episode + " airs in " + in;
+        return what + (version == null ? " airs in " : " is out in ") + in + where;
+    }
+
+    /** How a reminder release type is named in notification text, or null for the Japanese airing. */
+    public static String versionLabel(String releaseType) {
+        if (releaseType == null) {
+            return null;
+        }
+        return switch (releaseType) {
+            case "SUB" -> "subbed";
+            case "DUB" -> "English dub";
+            default -> null;
+        };
     }
 }
