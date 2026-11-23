@@ -46,6 +46,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        // Works signed out too (picks are kept in the browser)
+        path: 'my-services',
+        loadComponent: () => import('./my-services/my-services.component').then(m => m.MyServicesComponent)
+    },
+    {
         path: '**',
         loadComponent: () => import('./not-found/not-found.component').then(m => m.NotFoundComponent)
     },

@@ -6,12 +6,13 @@ import { ShowsComponent } from '../home/weekly-schedule/shows/shows.component';
 import { SeoService, breadcrumbs } from '../seo/seo.service';
 import { injectResponseStatus } from '../seo/http-status';
 import { WEEK_DAYS, WeekDay, dayLabel } from '../shared/week-days';
+import { MyServicesToggleComponent } from '../shared-components/my-services-toggle/my-services-toggle.component';
 
 
 /** /schedule/monday etc.: every episode airing that weekday, a landing page for "monday anime" searches. */
 @Component({
   selector: 'app-schedule-day',
-  imports: [ShowsComponent, RouterLink],
+  imports: [ShowsComponent, RouterLink, MyServicesToggleComponent],
   template: `
     @if (day(); as d) {
     <section class="page">
@@ -22,6 +23,7 @@ import { WEEK_DAYS, WeekDay, dayLabel } from '../shared/week-days';
         <a [routerLink]="['/schedule', other]" [class.active]="other === d" [attr.aria-current]="other === d ? 'page' : null">{{ label(other) }}</a>
         }
       </nav>
+      <app-my-services-toggle class="filter" />
       <!-- Recreated per day: app-shows loads its list once on init -->
       @for (current of [d]; track current) {
       <app-shows [weekDay]="current" renderPriority="high" />
@@ -35,6 +37,7 @@ import { WEEK_DAYS, WeekDay, dayLabel } from '../shared/week-days';
     .days { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
     .days a { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-subtle); color: var(--text-primary); text-decoration: none; font-size: 0.9rem; }
     .days a:hover { border-color: var(--accent); }
+    .filter { margin: 0 0 16px; }
     .days a.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

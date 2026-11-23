@@ -10,5 +10,6 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 export const serverRoutes: ServerRoute[] = [
   { path: 'following', renderMode: RenderMode.Client },
   { path: 'notifications', renderMode: RenderMode.Client },
+  { path: 'my-services', renderMode: RenderMode.Client },
   { path: '**', renderMode: RenderMode.Server },
 ];

@@ -1,4 +1,4 @@
-import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, computed, effect, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FollowingService } from '../services/following.service';
 import { ShowComponent } from '../home/weekly-schedule/shows/show/show.component';
@@ -6,13 +6,15 @@ import { MediaSkeletonComponent } from '../home/shared-home/media-skeleton/media
 import { ContinueWatchingComponent } from '../shared-components/continue-watching/continue-watching.component';
 import { AniListPanelComponent } from './anilist-panel/anilist-panel.component';
 import { SeoService } from '../seo/seo.service';
+import { MyServicesService } from '../services/my-services.service';
+import { MyServicesToggleComponent } from '../shared-components/my-services-toggle/my-services-toggle.component';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
 /** The shows the signed-in user follows (formerly "Favorites"). */
 @Component({
   selector: 'app-following',
-  imports: [ShowComponent, MediaSkeletonComponent, ContinueWatchingComponent, AniListPanelComponent, RouterLink],
+  imports: [ShowComponent, MediaSkeletonComponent, ContinueWatchingComponent, AniListPanelComponent, RouterLink, MyServicesToggleComponent],
   templateUrl: './following.component.html',
   styleUrl: './following.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +29,7 @@ export class FollowingComponent {
   });
 
   protected following = inject(FollowingService);
+  protected myServices = inject(MyServicesService);
 
   // Next to air first; finished and unscheduled shows last
   protected media = computed(() =>
@@ -35,6 +38,13 @@ export class FollowingComponent {
       .map((f) => f.media)
       .sort((a, b) => time(a.next_Airing_At) - time(b.next_Airing_At))
   );
+
+  /** Honours "My services only": shows with no streaming data stay visible. */
+  protected visibleMedia = computed(() => this.media().filter((m) => this.myServices.passesFilter(m.id)));
+
+  constructor() {
+    effect(() => this.myServices.ensureAvailability(this.media().map((m) => m.id)));
+  }
 
   getShowPriority(index: number): RenderPriority {
     if (index < 8) {

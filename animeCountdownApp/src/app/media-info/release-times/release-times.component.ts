@@ -7,6 +7,9 @@ import { environment } from '../../../environments/environment';
 import { Release, ReleasesView } from '../../models/release.model';
 import { timeUntil } from '../../services/season.service';
 import { injectIsBrowser, tickEvery } from '../../shared/platform';
+import { MyServicesService } from '../../services/my-services.service';
+
+type Stream = Release['streams'][number];
 
 interface Row {
   label: string;
@@ -14,6 +17,10 @@ interface Row {
   episode: number;
   at: Date;
   release?: Release;
+  /** The viewer's services first. */
+  streams: (Stream & { mine: boolean })[];
+  /** Labels of the viewer's services carrying this release. */
+  mine: string[];
 }
 
 /**
@@ -43,10 +50,31 @@ interface Row {
                   <span class="delay" role="note">{{ row.release!.delayNote }}</span>
                 }
               </div>
-              @if (row.release?.streams?.length) {
+              @if (row.release?.type === 'SUB' && row.mine.length) {
+                <p class="on-yours">
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+                    <path d="M8 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                  <span>
+                    Episode {{ row.episode }} {{ isOut(row) ? 'came out' : 'comes out' }} on your
+                    {{ row.mine.join(' and ') }}
+                    <time [attr.datetime]="row.at.toISOString()">{{ row.at | date: 'EEE, MMM d, h:mm a' }}</time>
+                  </span>
+                </p>
+              }
+              @if (row.streams.length) {
                 <div class="where">
-                  @for (s of row.release!.streams; track s.platform) {
-                    <a [href]="s.url" target="_blank" rel="noopener">{{ s.label }}</a>
+                  @for (s of row.streams; track s.platform) {
+                    <a [href]="s.url" target="_blank" rel="noopener" [class.mine]="s.mine"
+                       [attr.aria-label]="s.label + (s.mine ? ', one of your services' : '') + ', opens in a new tab'">
+                      @if (s.mine) {
+                        <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+                          <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      }
+                      {{ s.label }}
+                    </a>
                   }
                 </div>
               }
@@ -71,7 +99,12 @@ interface Row {
     .delay { flex-basis: 100%; font-size: 0.85rem; color: var(--danger); }
     .where { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
     .where a { padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-subtle); color: var(--text-primary); text-decoration: none; font-size: 0.85rem; }
+    .where a { display: inline-flex; align-items: center; gap: 4px; }
     .where a:hover { border-color: var(--accent); color: var(--accent); }
+    .where a.mine { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--text-strong); font-weight: 600; }
+    .on-yours { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.85rem; color: var(--text-strong); font-weight: 600; }
+    .on-yours svg { flex: none; color: var(--accent); }
+    .on-yours time { font-weight: 400; color: var(--text-secondary); }
     .source { margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted); }
     .source a { color: inherit; }
     @media (max-width: 600px) { li { grid-template-columns: 1fr; } }
@@ -80,6 +113,7 @@ interface Row {
 })
 export class ReleaseTimesComponent {
   private http = inject(HttpClient);
+  private services = inject(MyServicesService);
 
   mediaId = input.required<number>();
   /** The Japanese broadcast (from AniList), shown as the first row. */
@@ -96,12 +130,12 @@ export class ReleaseTimesComponent {
     const at = this.broadcastAt();
     const episode = this.broadcastEpisode();
     if (at && episode) {
-      rows.push({ label: 'Japan broadcast', hint: 'Original TV airing', episode, at: new Date(at) });
+      rows.push({ label: 'Japan broadcast', hint: 'Original TV airing', episode, at: new Date(at), streams: [], mine: [] });
     }
     const sub = view.releases.SUB;
-    if (sub) rows.push({ label: 'Subtitled', hint: 'Streaming with English subtitles', episode: sub.episode, at: new Date(sub.releaseAt), release: sub });
+    if (sub) rows.push({ label: 'Subtitled', hint: 'Streaming with English subtitles', episode: sub.episode, at: new Date(sub.releaseAt), release: sub, ...this.streamsOf(sub) });
     const dub = view.releases.DUB;
-    if (dub) rows.push({ label: 'English dub', hint: 'Dubbed release', episode: dub.episode, at: new Date(dub.releaseAt), release: dub });
+    if (dub) rows.push({ label: 'English dub', hint: 'Dubbed release', episode: dub.episode, at: new Date(dub.releaseAt), release: dub, ...this.streamsOf(dub) });
     return rows;
   });
 
@@ -116,6 +150,12 @@ export class ReleaseTimesComponent {
         .subscribe((view) => this.view.set(view));
       onCleanup(() => sub.unsubscribe());
     });
+  }
+
+  private streamsOf(release: Release): Pick<Row, 'streams' | 'mine'> {
+    const streams = (release.streams ?? []).map((s) => ({ ...s, mine: this.services.isMine(s.platform) }));
+    const mine = streams.filter((s) => s.mine);
+    return { streams: [...mine, ...streams.filter((s) => !s.mine)], mine: mine.map((s) => s.label) };
   }
 
   protected isOut(row: Row): boolean {

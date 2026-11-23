@@ -18,12 +18,18 @@
   @if (signedIn()) {
   <div class="schedule-bar">
     <h2 class="schedule-title">{{ view() === 'mine' ? 'My Schedule' : 'All shows this week' }}</h2>
-    <div class="view-toggle" role="group" aria-label="Weekly schedule">
-      <button type="button" [attr.aria-pressed]="view() === 'mine'" (click)="setView('mine')">My shows</button>
-      <button type="button" [attr.aria-pressed]="view() === 'all'" (click)="setView('all')">All shows</button>
+    <div class="schedule-controls">
+      <app-my-services-toggle />
+      <div class="view-toggle" role="group" aria-label="Weekly schedule">
+        <button type="button" [attr.aria-pressed]="view() === 'mine'" (click)="setView('mine')">My shows</button>
+        <button type="button" [attr.aria-pressed]="view() === 'all'" (click)="setView('all')">All shows</button>
+      </div>
     </div>
   </div>
   } @else {
-  <h2 class="schedule-title">This week’s schedule</h2>
+  <div class="schedule-bar">
+    <h2 class="schedule-title">This week’s schedule</h2>
+    <app-my-services-toggle />
+  </div>
   }
 </ng-template>

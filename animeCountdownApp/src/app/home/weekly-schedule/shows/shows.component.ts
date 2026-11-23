@@ -7,6 +7,7 @@ import {
   signal,
   computed,
   ChangeDetectionStrategy,
+  effect,
 } from '@angular/core';
 import { ShowComponent } from './show/show.component';
 import { CommonModule } from '@angular/common';
@@ -20,6 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
 import { FollowingService } from '../../../services/following.service';
 import { injectIsBrowser, pollEvery, tickEvery } from '../../../shared/platform';
+import { MyServicesService } from '../../../services/my-services.service';
 
 type RenderPriority = 'high' | 'medium' | 'low';
 
@@ -45,6 +47,7 @@ export class ShowsComponent implements OnInit {
   private isBrowser = injectIsBrowser();
   private mediaStoreService = inject(MediaStoreService);
   private followingService = inject(FollowingService);
+  protected myServices = inject(MyServicesService);
 
   // Check if this is the "Airing Soon" tab
   isAiringSoon = computed(() => this.weekDay() === 'soon');
@@ -59,6 +62,22 @@ export class ShowsComponent implements OnInit {
       return this.media();
     }
   });
+
+  /**
+   * What the cards render. Weekday lists honour "My services only" (shows known to stream only
+   * elsewhere are hidden; shows with no streaming data stay). "Airing Soon" keeps its own queue.
+   */
+  visibleMedia = computed(() =>
+    this.isAiringSoon() ? this.activeMedia() : this.activeMedia().filter((m) => this.myServices.passesFilter(m.id))
+  );
+
+  /** Shown on a weekday when the filter hid every show. */
+  hiddenByFilter = computed(() => this.activeMedia().length > 0 && this.visibleMedia().length === 0);
+
+  constructor() {
+    // Which services carry these shows: for the filter and the cards' Watch links
+    effect(() => this.myServices.ensureAvailability(this.activeMedia().map((m) => m.id)));
+  }
 
   ngOnInit(): void {
     if (this.isAiringSoon()) {

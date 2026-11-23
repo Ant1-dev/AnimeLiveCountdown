@@ -10,9 +10,13 @@
   </div>
 } @else if (activeMedia().length <= 0) {
   <h2>{{ mode() === 'mine' ? 'None of your shows air this day' : 'No shows airing this day' }}</h2>
+} @else if (hiddenByFilter()) {
+  <p class="filtered-empty">None of these shows stream on your services.
+    <button type="button" class="link-btn" (click)="myServices.setOnlyMine(false)">Show all</button>
+  </p>
 } @else {
   <div class="cardContainer">
-    @for (show of activeMedia(); track show.id; let i = $index) {
+    @for (show of visibleMedia(); track show.id; let i = $index) {
       <app-show
         [media]="show"
         [renderPriority]="getShowPriority(i)"

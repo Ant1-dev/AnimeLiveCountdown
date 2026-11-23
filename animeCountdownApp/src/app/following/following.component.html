@@ -19,9 +19,17 @@
     <a class="empty-cta" routerLink="/" [queryParams]="{ view: 'all' }">Browse this week's shows</a>
   </div>
 } @else {
-  <h2 class="grid-title">All followed shows</h2>
+  <div class="grid-head">
+    <h2 class="grid-title">All followed shows</h2>
+    <app-my-services-toggle />
+  </div>
+  @if (!visibleMedia().length) {
+    <p class="filtered-empty">None of the shows you follow stream on your services.
+      <button type="button" class="link-btn" (click)="myServices.setOnlyMine(false)">Show all</button>
+    </p>
+  }
   <div class="cardContainer">
-    @for (show of media(); track show.id; let i = $index) {
+    @for (show of visibleMedia(); track show.id; let i = $index) {
       <app-show
         [media]="show"
         [renderPriority]="getShowPriority(i)"

@@ -97,7 +97,7 @@
         [mediaId]="mediaDetails().id"
         [broadcastAt]="mediaDetails().airingat"
         [broadcastEpisode]="mediaDetails().nextepisode" />
-      <app-where-to-watch [links]="mediaDetails().streamingLinks" />
+      <app-where-to-watch [links]="mediaDetails().streamingLinks" [title]="displayTitle()" />
       <h2 class="info-heading">Description</h2>
       <div class="description" [innerHTML]="mediaDetails().description"></div>
 
