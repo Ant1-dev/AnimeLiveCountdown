@@ -5,22 +5,12 @@ import java.util.Optional;
 
 /** The fixed set of reactions a user can leave on an episode. */
 public enum ReactionType {
-    FIRE("🔥"),
-    LOVE("😍"),
-    LOL("😂"),
-    SHOCK("😱"),
-    SAD("😭"),
-    MEH("😐");
-
-    private final String emoji;
-
-    ReactionType(String emoji) {
-        this.emoji = emoji;
-    }
-
-    public String getEmoji() {
-        return emoji;
-    }
+    FIRE,
+    LOVE,
+    LOL,
+    SHOCK,
+    SAD,
+    MEH;
 
     /** Case-insensitive lookup; empty for null or unknown names. */
     public static Optional<ReactionType> parse(String name) {

@@ -5,6 +5,7 @@ import { catchError, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { ReactionSummary, ReactionType } from '../../models/reaction.model';
 import { ReactionService } from '../../services/reaction.service';
+import { IconComponent, IconName } from '../../shared-components/icon/icon.component';
 
 const ORDER: ReactionType[] = ['FIRE', 'LOVE', 'LOL', 'SHOCK', 'SAD', 'MEH'];
 const LABELS: Record<ReactionType, string> = {
@@ -15,10 +16,19 @@ const LABELS: Record<ReactionType, string> = {
   SAD: 'Sad',
   MEH: 'Meh',
 };
+const ICONS: Record<ReactionType, IconName> = {
+  FIRE: 'flame',
+  LOVE: 'heart',
+  LOL: 'laugh',
+  SHOCK: 'shock',
+  SAD: 'sad',
+  MEH: 'meh',
+};
 
 /** Reactions to the latest aired episode of a show. Counts are public; reacting needs sign-in. */
 @Component({
   selector: 'app-episode-reactions',
+  imports: [IconComponent],
   templateUrl: './episode-reactions.component.html',
   styleUrl: './episode-reactions.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +50,7 @@ export class EpisodeReactionsComponent {
     if (!s) return [];
     return ORDER.map((type) => ({
       type,
-      emoji: s.emojis[type],
+      icon: ICONS[type],
       label: LABELS[type],
       count: s.counts[type] ?? 0,
       mine: s.mine === type,

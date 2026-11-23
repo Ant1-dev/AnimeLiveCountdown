@@ -9,7 +9,6 @@ export interface ReactionSummary {
   counts: Record<ReactionType, number>;
   total: number;
   mine: ReactionType | null;
-  emojis: Record<ReactionType, string>;
 }
 
 export interface HypeEntry {

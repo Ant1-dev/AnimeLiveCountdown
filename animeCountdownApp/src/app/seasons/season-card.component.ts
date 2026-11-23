@@ -4,10 +4,11 @@ import { AnimePathPipe } from '../seo/anime-path.pipe';
 import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { SeasonMedia } from '../models/season.model';
 import { timeUntil } from '../services/season.service';
+import { IconComponent } from '../shared-components/icon/icon.component';
 
 @Component({
   selector: 'app-season-card',
-  imports: [AnimePathPipe, RouterLink, NgOptimizedImage, NgTemplateOutlet],
+  imports: [AnimePathPipe, RouterLink, NgOptimizedImage, NgTemplateOutlet, IconComponent],
   template: `
     @let m = media();
     <ng-template #body>
@@ -16,7 +17,9 @@ import { timeUntil } from '../services/season.service';
           <img [ngSrc]="m.coverimage" [alt]="title()" width="230" height="325" [priority]="priority()" />
         }
         @if (m.avgscore) {
-          <span class="score" [attr.aria-label]="'Score ' + m.avgscore + ' percent'">★ {{ m.avgscore }}%</span>
+          <span class="score" [attr.aria-label]="'Score ' + m.avgscore + ' percent'">
+            <app-icon name="star" [size]="12" />{{ m.avgscore }}%</span
+          >
         }
         @if (airingChip(); as chip) {
           <span class="chip" [class.soon]="chip.soon">{{ chip.text }}</span>

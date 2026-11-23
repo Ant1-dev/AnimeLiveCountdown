@@ -32,14 +32,6 @@ import java.util.Optional;
 @Service
 public class ReactionService {
 
-    private static final Map<ReactionType, String> EMOJIS = new EnumMap<>(ReactionType.class);
-
-    static {
-        for (ReactionType type : ReactionType.values()) {
-            EMOJIS.put(type, type.getEmoji());
-        }
-    }
-
     private final EpisodeReactionRepository reactionRepository;
     private final MediaRepository mediaRepository;
     private final MediaInfoRepository mediaInfoRepository;
@@ -64,7 +56,7 @@ public class ReactionService {
     public ReactionSummary latestSummary(Long mediaId, UserEntity viewer) {
         Optional<Integer> latest = latestAiredEpisode(mediaId);
         return latest.map(episode -> buildSummary(mediaId, episode, viewer))
-                .orElseGet(() -> new ReactionSummary(mediaId, null, zeroCounts(), 0, null, EMOJIS));
+                .orElseGet(() -> new ReactionSummary(mediaId, null, zeroCounts(), 0, null));
     }
 
     /** Counts for a specific aired episode. */
@@ -145,7 +137,7 @@ public class ReactionService {
                 : reactionRepository.findByUserAndEpisode(viewer.getId(), mediaId, episode)
                         .map(EpisodeReactionEntity::getReaction)
                         .orElse(null);
-        return new ReactionSummary(mediaId, episode, counts, total, mine, EMOJIS);
+        return new ReactionSummary(mediaId, episode, counts, total, mine);
     }
 
     private static Map<ReactionType, Long> zeroCounts() {
